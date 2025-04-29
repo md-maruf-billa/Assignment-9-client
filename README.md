@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+### 1. Clone the Repository
 
-## Getting Started
+```bash
+git clone https://github.com/md-maruf-billa/Assignment-9-client.git
+cd Assignment-9-client
+```
 
-First, run the development server:
+### 2. Install Dependencies
+
+Using `npm`:
+
+```bash
+npm install
+```
+
+Or using `yarn`:
+
+```bash
+yarn add
+```
+
+### 3. Run the Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ⚙️ Environment Setup
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Create a `.env` file by copying the contents of `.env.example`:
 
-## Learn More
+### For Windows (CMD):
 
-To learn more about Next.js, take a look at the following resources:
+```cmd
+copy .env.example .env
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### For Windows (PowerShell):
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```powershell
+Copy-Item .env.example .env
+```
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🛠️ Git Workflow for Contribution
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 1. Create a New Branch
+
+```bash
+git branch yourName/what_you_are_working_on
+git switch yourName/what_you_are_working_on
+```
+
+Replace `yourName` with your actual name and `what_you_are_working_on` with a short description of the task you're handling.
+
+### 2. Make Changes and Commit
+
+```bash
+git add .
+git commit -m "Give a proper commit message"
+```
+
+### 3. Sync with Main Branch
+
+```bash
+git pull --rebase origin main
+```
+
+✅ If any conflicts appear, resolve them manually.
+
+### 4. Push Your Work
+
+```bash
+git push --force-with-lease origin yourName/what_you_are_working_on
+```
