@@ -8,8 +8,6 @@ import Image from "next/image";
 import Link from "next/link";
 
 
-
-
 function Login() {
 
     const [showPassword, setShowPassword] = useState(false);
@@ -19,7 +17,6 @@ function Login() {
         console.log("clicked");
         // Handle registration logic here
     };
-
 
   return (
     <>
