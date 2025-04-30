@@ -1,6 +1,6 @@
 import CountrySelector from "./CountrySelector";
 
-const Footer = () => {
+function Footer() {
   return (
     <>
       <footer className="bg-black text-white px-6 md:px-16 py-10">
@@ -82,6 +82,5 @@ const Footer = () => {
       </footer>
     </>
   );
-};
 
 export default Footer;
