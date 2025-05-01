@@ -73,7 +73,6 @@ export default function ContactPage() {
             </button>
           </form>
         </div>
-
         {/* Right Side - Image & Contact Info */}
         <div className="relative p-10 flex flex-col items-center justify-center">
           <Image
