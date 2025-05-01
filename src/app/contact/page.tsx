@@ -1,6 +1,7 @@
 "use client";
-
+import Image from "next/image";
 import { useState } from "react";
+import contactImg from "@/assets/contact-img.png";
 
 export default function ContactPage() {
   const [isChecked, setIsChecked] = useState(false);
@@ -74,16 +75,18 @@ export default function ContactPage() {
         </div>
 
         {/* Right Side - Image & Contact Info */}
-        <div className="relative bg-blue-100 p-10 flex flex-col items-center justify-center">
-          {/* <img
-            src="/contact-person.png" // Make sure this image exists in your /public folder
+        <div className="relative p-10 flex flex-col items-center justify-center">
+          <Image
+            src={contactImg}
             alt="Contact person"
-            className="w-64 h-auto mb-8 rounded-xl"
-          /> */}
-          <div className="bg-white w-full p-4 rounded-xl shadow-md space-y-4">
+            className="w-100 h-auto mb-8 rounded-xl"
+          />
+
+          {/* Contact Info Box with background */}
+          <div className="bg-blue-100 w-full p-4 rounded-xl shadow-md space-y-4">
             {/* Email Info */}
             <div className="flex items-center space-x-4">
-              <div className="bg-blue-100 p-2 rounded-full">
+              <div className="bg-white p-2 rounded-full">
                 <svg
                   className="w-6 h-6 text-blue-600"
                   fill="none"
@@ -105,7 +108,7 @@ export default function ContactPage() {
 
             {/* Phone Info */}
             <div className="flex items-center space-x-4">
-              <div className="bg-blue-100 p-2 rounded-full">
+              <div className="bg-white p-2 rounded-full">
                 <svg
                   className="w-6 h-6 text-blue-600"
                   fill="none"
