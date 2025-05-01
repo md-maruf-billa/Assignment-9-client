@@ -4,6 +4,7 @@ import ReviewBanner from '@/components/home/ReviewBanner';
 import SearchHero from '@/components/home/SearchHero';
 import SiteBanner from '@/components/home/SiteBanner';
 import SiteComparison from '@/components/home/SiteComparison';
+import SiteReview from '@/components/home/SiteReview';
 import React from 'react';
 
 const HomePage = () => {
@@ -15,6 +16,7 @@ const HomePage = () => {
         <BusinessPromo />
         <SiteComparison />
         <ReviewBanner />
+        <SiteReview />
         <SiteBanner />
       </div>
     </main>
