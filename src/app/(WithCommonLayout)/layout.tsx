@@ -7,10 +7,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <>
+    <div className="bg-[#FAF8F5]">
       <Navbar />
       <main className="min-h-screen">{children}</main>
       <Footer />
-    </>
+    </div>
   );
 }
