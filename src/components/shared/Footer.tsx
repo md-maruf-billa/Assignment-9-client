@@ -1,5 +1,6 @@
 import CountrySelector from "./CountrySelector";
 
+
 function Footer() {
   return (
     <>
@@ -82,6 +83,7 @@ function Footer() {
       </footer>
     </>
   );
-}
+
+};
 
 export default Footer;
