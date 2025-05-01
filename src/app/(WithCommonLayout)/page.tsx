@@ -1,10 +1,10 @@
-
-import React from "react";
+import SearchHero from '@/components/home/SearchHero';
+import React from 'react';
 
 const HomePage = () => {
   return (
     <div>
-      <h1>this is home</h1>
+      <SearchHero />
     </div>
   );
 };
