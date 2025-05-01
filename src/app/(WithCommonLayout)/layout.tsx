@@ -8,11 +8,9 @@ export default function RootLayout({
 }>) {
   return (
     <>
-      <div className="bg-gradient-to-br from-[#f8f9fa] via-[#f1f3f5] to-[#e9ecef] min-h-screen">
-        <Navbar />
-        <main className="min-h-screen">{children}</main>
-        <Footer />
-      </div>
+      <Navbar />
+      <main className="min-h-screen">{children}</main>
+      <Footer />
     </>
   );
 }
