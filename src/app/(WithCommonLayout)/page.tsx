@@ -3,6 +3,7 @@ import CategorySlider from '@/components/home/CategorySlider';
 import ReviewBanner from '@/components/home/ReviewBanner';
 import SearchHero from '@/components/home/SearchHero';
 import SiteBanner from '@/components/home/SiteBanner';
+import SiteComparison from '@/components/home/SiteComparison';
 import React from 'react';
 
 const HomePage = () => {
@@ -12,6 +13,7 @@ const HomePage = () => {
       <div className="container mx-auto">
         <CategorySlider />
         <BusinessPromo />
+        <SiteComparison />
         <ReviewBanner />
         <SiteBanner />
       </div>
