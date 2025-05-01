@@ -60,6 +60,8 @@ const Navbar = () => {
           <a href="#" className="hover:underline">
             Blog
           </a>
+          <Link href="/services">Services</Link>
+          <Link href="/plans">Plans</Link>
           <Link href="/login">Join us</Link>
         </div>
       </div>
