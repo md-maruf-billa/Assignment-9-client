@@ -57,8 +57,8 @@ const Navbar = () => {
           <a href="#" className="hover:underline">
             Categories
           </a>
-
           <Link href="/blogs">Blog&apos;s</Link>
+
           <Link href="/services">Services</Link>
           <Link href="/plans">Plans</Link>
           <Link href="/login">Join us</Link>
