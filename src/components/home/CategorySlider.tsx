@@ -1,43 +1,43 @@
-'use client';
+"use client";
 
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useRef } from 'react';
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useRef } from "react";
 
 const categories = [
-  { name: 'Pet Store', icon: '🐾' },
-  { name: 'Energy Supplier', icon: '⚡' },
-  { name: 'Real Estate Agents', icon: '🏠' },
-  { name: 'Insurance Agency', icon: '☂️' },
-  { name: 'Bedroom Furniture Store', icon: '🛏️' },
-  { name: 'Activewear Store', icon: '🛍️' },
-  { name: "Women's Clothing Store", icon: '👗' },
-  { name: "Men's Clothing Store", icon: '👔' },
-  { name: 'Electronics', icon: '💻' },
-  { name: 'Grocery', icon: '🛒' },
-  { name: 'Pet Store', icon: '🐾' },
-  { name: 'Energy Supplier', icon: '⚡' },
-  { name: 'Real Estate Agents', icon: '🏠' },
-  { name: 'Insurance Agency', icon: '☂️' },
-  { name: 'Bedroom Furniture Store', icon: '🛏️' },
-  { name: 'Activewear Store', icon: '🛍️' },
-  { name: "Women's Clothing Store", icon: '👗' },
-  { name: "Men's Clothing Store", icon: '👔' },
-  { name: 'Electronics', icon: '💻' },
-  { name: 'Grocery', icon: '🛒' },
+  { name: "Pet Store", icon: "🐾" },
+  { name: "Energy Supplier", icon: "⚡" },
+  { name: "Real Estate Agents", icon: "🏠" },
+  { name: "Insurance Agency", icon: "☂️" },
+  { name: "Bedroom Furniture Store", icon: "🛏️" },
+  { name: "Activewear Store", icon: "🛍️" },
+  { name: "Women's Clothing Store", icon: "👗" },
+  { name: "Men's Clothing Store", icon: "👔" },
+  { name: "Electronics", icon: "💻" },
+  { name: "Grocery", icon: "🛒" },
+  { name: "Pet Store", icon: "🐾" },
+  { name: "Energy Supplier", icon: "⚡" },
+  { name: "Real Estate Agents", icon: "🏠" },
+  { name: "Insurance Agency", icon: "☂️" },
+  { name: "Bedroom Furniture Store", icon: "🛏️" },
+  { name: "Activewear Store", icon: "🛍️" },
+  { name: "Women's Clothing Store", icon: "👗" },
+  { name: "Men's Clothing Store", icon: "👔" },
+  { name: "Electronics", icon: "💻" },
+  { name: "Grocery", icon: "🛒" },
 ];
 
 export default function CategorySlider() {
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const scroll = (direction: 'left' | 'right') => {
+  const scroll = (direction: "left" | "right") => {
     if (!scrollRef.current) return;
     const { scrollLeft, clientWidth } = scrollRef.current;
     scrollRef.current.scrollTo({
       left:
-        direction === 'left'
+        direction === "left"
           ? scrollLeft - clientWidth
           : scrollLeft + clientWidth,
-      behavior: 'smooth',
+      behavior: "smooth",
     });
   };
 
@@ -47,14 +47,14 @@ export default function CategorySlider() {
         <h2 className="text-xl font-semibold">What are you looking for?</h2>
         <div className="flex items-center gap-2">
           <button
-            onClick={() => scroll('left')}
+            onClick={() => scroll("left")}
             className="p-2 rounded-full border border-gray-300 hover:bg-gray-100"
             aria-label="Scroll left"
           >
             <ChevronLeft size={18} />
           </button>
           <button
-            onClick={() => scroll('right')}
+            onClick={() => scroll("right")}
             className="p-2 rounded-full border border-gray-300 hover:bg-gray-100"
             aria-label="Scroll right"
           >
