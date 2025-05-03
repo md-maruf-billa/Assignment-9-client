@@ -1,13 +1,14 @@
 "use client"
 
 import React from 'react';
-import {useParams} from "next/navigation";
-import {get_company_by_id} from "@/services/company";
+import { useParams } from "next/navigation";
+import { get_company_by_id } from "@/services/company";
 import CompanyDetails from "@/components/CompanyDetails/CompanyDetails";
-import { CompanyResponse} from "@/types/company";
+import { CompanyResponse } from "@/types/company";
 import Link from "next/link";
-import {FaBuilding} from "react-icons/fa";
-import {FaArrowLeftLong} from "react-icons/fa6";
+import { FaBuilding } from "react-icons/fa";
+import { FaArrowLeftLong } from "react-icons/fa6";
+import Loading from '@/components/shared/loading';
 
 const CompanyDetailsPage = () => {
 
@@ -20,7 +21,7 @@ const CompanyDetailsPage = () => {
     const [isLoading, setIsLoading] = React.useState(true);
     const [error, setError] = React.useState(null);
 
-    const {id} = useParams();
+    const { id } = useParams();
     console.log(id);
 
     React.useEffect(() => {
@@ -39,18 +40,7 @@ const CompanyDetailsPage = () => {
         loadData();
     }, [id]);
 
-
-
-    console.log(company);
-
-    if (isLoading) {
-        return (
-            <div className="min-h-screen bg-[#FAF8F5] flex flex-col items-center justify-center p-4">
-                <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-amber-500 mb-4"></div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">Loading Company Details</h2>
-            </div>
-        );
-    }
+    if (isLoading) return <Loading />
 
     if (error || !company) {
         return (
