@@ -3,8 +3,11 @@ import Companies from "@/components/Companies/Companies";
 
 const Company = async () => {
     const result = await get_all_company()
-        <Companies companiesData={result} />
-    </>
+
+    return (
+        <>
+            <Companies companiesData={result} />
+        </>)
 }
 
 
