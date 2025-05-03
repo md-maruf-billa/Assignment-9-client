@@ -58,6 +58,7 @@ const Navbar = () => {
             Categories
           </a>
           <Link href="/company">Company</Link>
+
           <Link href="/blogs">Blog&apos;s</Link>
 
           <Link href="/services">Services</Link>
