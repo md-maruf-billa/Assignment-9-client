@@ -32,7 +32,7 @@ const Navbar = () => {
                 <input
                   type="text"
                   placeholder="Search hare..."
-                  className="w-full rounded-md pl-10 pr-4 py-2 border border-gray-300 text-gray-700 placeholder-gray-500 focus:outline-none"
+                  className="w-full rounded-md pl-10 pr-4 py-2 border border-gray-500 text-gray-700 placeholder-gray-500 focus:outline-none"
                 />
                 <svg
                   className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"

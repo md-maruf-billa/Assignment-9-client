@@ -17,9 +17,9 @@ const HomePage = () => {
         <WriteReviewBanner />
         <CategorySlider />
         <BusinessPromo />
+        <SiteReview />
         <SiteComparison />
         <ReviewBanner />
-        <SiteReview />
         <SiteBanner />
         <RecentReview />
       </div>
