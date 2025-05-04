@@ -12,7 +12,7 @@ export const register_user_action = async (userData: {
   console.log("registerUser", userData);
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_API}/auth/register`,
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/register`,
       {
         method: "POST",
         headers: {
@@ -40,9 +40,7 @@ export const login_user_action = async (userData: {
   email: string;
   password: string;
 }) => {
-  console.log("loginUser", userData);
   try {
-    console.log(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/login`)
     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/login`, {
       method: "POST",
       headers: {

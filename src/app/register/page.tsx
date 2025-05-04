@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import Link from "next/link";
@@ -6,64 +7,35 @@ import { GoCodeReview } from "react-icons/go";
 import Image from "next/image";
 import { HiOutlineEye } from "react-icons/hi2";
 import { FaArrowRightLong } from "react-icons/fa6";
-import Tab from "@/components/Auth/Tab";
 import { ACCOUNT_TYPE } from "@/types/user";
-import { useUser } from "@/context/UserContext";
 import { toast } from "sonner";
-import { registerUser } from "@/services/AuthService";
-
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { IRegisterPayload } from "@/types/auth";
+import { register_user_action } from "@/services/AuthService";
+import { IResponse } from "@/types/respones";
+import { useRouter } from "next/navigation";
 const Register = () => {
+  const router = useRouter()
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [accountType, setAccountType] = useState(ACCOUNT_TYPE.USER);
+  const [accountType, setAccountType] = useState<string>(ACCOUNT_TYPE.USER);
 
-  const [formState, setFormState] = useState({
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
-
-  const { isLoading, setIsLoading } = useUser();
-
-  const handleSubmit = async () => {
-    try {
-      setIsLoading(true);
-
-      const res = await registerUser({
-        email: "",
-        password: "",
-        role: accountType,
-      });
-      if (res.success) {
-        toast.success("Registration successful! Please check your email.");
-        setTimeout(() => {
-          window.location.href = "/login";
-        }, 2000);
-      } else {
-        toast.error(res.message || "An unknown error occurred");
-      }
-    } catch (err) {
-      console.error(err as Error);
-      if (err instanceof Error) {
-        toast.error(err.message || "An unknown error occurred");
-      } else {
-        toast.error("An unknown error occurred");
-      }
+  const handleSubmit = async (e: any) => {
+    const id = toast.loading("Verifying information ....")
+    e.preventDefault();
+    const userInfo: IRegisterPayload = { name: "", email: "", password: "", role: accountType }
+    userInfo.name = e.target.name.value;
+    userInfo.email = e.target.email.value;
+    userInfo.password = e.target.password.value;
+    userInfo.role = accountType;
+    const res = await register_user_action(userInfo) as IResponse;
+    if (res.success) {
+      toast.success(res.message, { id })
+      router.push("/login")
+    } else {
+      toast.error(res.message, { id })
     }
   };
-
-  const tabData = [
-    {
-      id: "1",
-      tabName: "User",
-      type: ACCOUNT_TYPE.USER,
-    },
-    {
-      id: "2",
-      tabName: "Company",
-      type: ACCOUNT_TYPE.COMPANY,
-    },
-  ];
 
   return (
     <>
@@ -121,15 +93,24 @@ const Register = () => {
             <p className="text-gray-600 mb-8">Register a new account</p>
 
             <form action="" onSubmit={handleSubmit}>
-              {/* Username Input */}
+
+              {/* Name Input */}
               <div className="mb-5">
-                <Tab
-                  tabData={tabData}
-                  field={accountType}
-                  setField={setAccountType}
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Name
+                </label>
+                <input
+                  required
+                  type="text"
+                  id="name"
+                  name="name"
+                  className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition duration-200"
+                  placeholder="Jon Doe"
                 />
               </div>
-
               {/* Email Input */}
               <div className="mb-5">
                 <label
@@ -139,16 +120,10 @@ const Register = () => {
                   Email Address
                 </label>
                 <input
+                  required
                   type="email"
                   id="email"
                   name="email"
-                  value={formState.email}
-                  onChange={(e) =>
-                    setFormState((prev) => ({
-                      ...prev,
-                      email: e.target.value,
-                    }))
-                  }
                   className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition duration-200"
                   placeholder="you@example.com"
                 />
@@ -164,16 +139,10 @@ const Register = () => {
                 </label>
                 <div className="relative">
                   <input
+                    required
                     type={showPassword ? "text" : "password"}
                     id="password"
                     name="password"
-                    value={formState.password}
-                    onChange={(e) =>
-                      setFormState((prev) => ({
-                        ...prev,
-                        password: e.target.value,
-                      }))
-                    }
                     className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition duration-200 pr-10" // Added pr-10 for icon spacing
                     placeholder="Enter your password"
                   />
@@ -191,85 +160,38 @@ const Register = () => {
                 </div>
               </div>
 
-              {/* Confirm Password Input */}
-              <div className="mb-5">
+              <div className="mb-5 flex justify-between items-center">
                 <label
-                  htmlFor="password"
+                  htmlFor=""
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Confirm Password
+                  Account Type ?
                 </label>
-                <div className="relative">
-                  <input
-                    type={showConfirmPassword ? "text" : "password"}
-                    id="password"
-                    name="password"
-                    value={formState.confirmPassword}
-                    onChange={(e) =>
-                      setFormState((prev) => ({
-                        ...prev,
-                        confirmPassword: e.target.value,
-                      }))
-                    }
-                    className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition duration-200 pr-10" // Added pr-10 for icon spacing
-                    placeholder="Enter your password again"
-                  />
-                  {/* Password visibility toggle button */}
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute inset-y-0 right-0 px-3 flex items-center text-sm leading-5"
-                    aria-label={
-                      showPassword ? "Hide password" : "Show password"
-                    }
-                  >
-                    <HiOutlineEye className="ml-4 text-gray-500" size={20} />
-                  </button>
-                </div>
+                <RadioGroup onValueChange={setAccountType} defaultValue={ACCOUNT_TYPE.USER} className="flex gap-4">
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value={ACCOUNT_TYPE.USER} id="r1" />
+                    <Label htmlFor="r1">{ACCOUNT_TYPE.USER}</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value={ACCOUNT_TYPE.COMPANY} id="r2" />
+                    <Label htmlFor="r2">{ACCOUNT_TYPE.COMPANY}</Label>
+                  </div>
+                </RadioGroup>
+
               </div>
 
-              {/* Remember Me & Forgot Password */}
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center">
-                  {/* Using a custom styled radio/checkbox appearance */}
-                  <input
-                    id="remember-me"
-                    name="remember-me"
-                    type="checkbox"
-                    className="h-4 w-4 text-yellow-600 border-gray-300 rounded focus:ring-yellow-500 mr-2 cursor-pointer"
-                  />
-                  <label
-                    htmlFor="remember-me"
-                    className="text-sm text-gray-700 cursor-pointer"
-                  >
-                    Remember me
-                  </label>
-                </div>
-                <a
-                  href="#"
-                  className="text-sm font-medium text-black-600 hover:underline"
-                >
-                  Forgot password?
-                </a>
-              </div>
 
               {/* Login Button */}
               <button
                 type="submit"
                 className="w-full bg-gray-900 text-white py-3 px-4 rounded-md font-semibold hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition duration-200 flex items-center justify-center"
               >
-                {isLoading ? (
-                  "Loading..."
-                ) : (
-                  <>
-                    Register to ReviewHub
-                    <FaArrowRightLong className="ml-4" />
-                  </>
-                )}
+                Register to ReviewHub
+                <FaArrowRightLong className="ml-4" />
               </button>
             </form>
 
-            <div className="mt-12">
+            <div className="mt-6 text-center">
               Already have an account?{" "}
               <Link
                 href="/login"

@@ -10,10 +10,7 @@ import { login_user_action } from "@/services/AuthService";
 import { IResponse } from "@/types/respones";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-interface UserData {
-    email: string;
-    password: string;
-}
+import { ILoginPayload } from "@/types/auth";
 
 
 function Login() {
@@ -22,7 +19,7 @@ function Login() {
     const handleSubmit = async (e: any) => {
         const toastId = toast.loading("Information verifying ...")
         e.preventDefault();
-        const userData: UserData = { email: "", password: "" }
+        const userData: ILoginPayload = { email: "", password: "" }
         userData.email = e.target.username.value;
         userData.password = e.target.password.value;
         const res = await login_user_action(userData) as IResponse
