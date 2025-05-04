@@ -18,8 +18,8 @@ const HomePage = () => {
         <CategorySlider />
         <BusinessPromo />
         <SiteReview />
-        <SiteComparison />
         <ReviewBanner />
+        <SiteComparison />
         <SiteBanner />
         <RecentReview />
       </div>
