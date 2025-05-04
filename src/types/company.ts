@@ -1,12 +1,4 @@
-
-
-
-
-
-
-
-
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface Account {
     id: string;
     email: string;

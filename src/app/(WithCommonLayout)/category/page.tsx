@@ -168,7 +168,7 @@ export default function CategoryPage() {
 
                 <p className="text-sm mb-4">
                   These headphones have incredible sound quality and battery
-                  life. The noise cancellation is top-notch and they're...
+                  life. The noise cancellation is top-notch and they&#96;re...
                 </p>
 
                 <div className="flex items-center justify-between text-sm text-gray-500">
@@ -469,8 +469,9 @@ export default function CategoryPage() {
                 </div>
 
                 <p className="text-sm mb-4">
-                  This kitchen appliance has made meal prep so much easier. It's
-                  versatile, easy to clean, and looks great on my countertop.
+                  This kitchen appliance has made meal prep so much easier.
+                  It&#96;s versatile, easy to clean, and looks great on my
+                  countertop.
                 </p>
 
                 <div className="flex items-center justify-between text-sm text-gray-500">

@@ -1,9 +1,10 @@
 "use server";
 
+import { IResponse } from "@/types/respones";
 import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";
 
-export const registerUser = async (userData: {
+export const register_user_action = async (userData: {
   role: string;
   email: string;
   password: string;
@@ -26,7 +27,6 @@ export const registerUser = async (userData: {
       (await cookies()).set("accessToken", result.data.accessToken);
       (await cookies()).set("refreshToken", result.data.refreshToken);
     }
-
     return result;
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -36,12 +36,14 @@ export const registerUser = async (userData: {
   }
 };
 
-export const loginUser = async (userData: {
+export const login_user_action = async (userData: {
   email: string;
   password: string;
 }) => {
+  console.log("loginUser", userData);
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/auth/login`, {
+    console.log(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/login`)
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -55,8 +57,7 @@ export const loginUser = async (userData: {
       (await cookies()).set("accessToken", result.data.accessToken);
       (await cookies()).set("refreshToken", result.data.refreshToken);
     }
-
-    return result;
+    return result as IResponse;
   } catch (error: unknown) {
     if (error instanceof Error) {
       return Error(error.message);
