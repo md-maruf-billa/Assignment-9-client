@@ -1,13 +1,13 @@
-import BusinessPromo from '@/components/home/BusinessPromo';
-import CategorySlider from '@/components/home/CategorySlider';
-import RecentReview from '@/components/home/RecentReview';
-import ReviewBanner from '@/components/home/ReviewBanner';
-import SearchHero from '@/components/home/SearchHero';
-import SiteBanner from '@/components/home/SiteBanner';
-import SiteComparison from '@/components/home/SiteComparison';
-import SiteReview from '@/components/home/SiteReview';
-import WriteReviewBanner from '@/components/home/WriteReviewBanner';
-import React from 'react';
+import BusinessPromo from "@/components/home/BusinessPromo";
+import CategorySlider from "@/components/home/CategorySlider";
+import RecentReview from "@/components/home/RecentReview";
+import ReviewBanner from "@/components/home/ReviewBanner";
+import SearchHero from "@/components/home/SearchHero";
+import SiteBanner from "@/components/home/SiteBanner";
+import SiteComparison from "@/components/home/SiteComparison";
+import SiteReview from "@/components/home/SiteReview";
+import WriteReviewBanner from "@/components/home/WriteReviewBanner";
+import React from "react";
 
 const HomePage = () => {
   return (
@@ -18,8 +18,8 @@ const HomePage = () => {
         <CategorySlider />
         <BusinessPromo />
         <SiteReview />
-        <SiteComparison />
         <ReviewBanner />
+        <SiteComparison />
         <SiteBanner />
         <RecentReview />
       </div>

@@ -1,5 +1,10 @@
-import Image from 'next/image';
-import { Button } from '@/components/ui/button';
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { FcGoogle } from "react-icons/fc";
+import { FaApple, FaFacebookF } from "react-icons/fa";
+import banner1 from "@/assets/ReviewBanner/banner-1.jpg";
+import banner2 from "@/assets/ReviewBanner/banner-2.jpg";
+import banner3 from "@/assets/ReviewBanner/banner-3.jpg";
 
 export default function ReviewBanner() {
   return (
@@ -19,31 +24,21 @@ export default function ReviewBanner() {
             </Button>
             <div className="flex gap-2">
               <Button variant="outline" size="icon" className="rounded-full">
-                <Image
-                  src="/placeholder.svg?height=24&width=24"
-                  alt="Google"
-                  width={24}
-                  height={24}
-                  className="w-5 h-5"
-                />
+                <FcGoogle className="w-5 h-5" />
               </Button>
-              <Button variant="outline" size="icon" className="rounded-full">
-                <Image
-                  src="/placeholder.svg?height=24&width=24"
-                  alt="Facebook"
-                  width={24}
-                  height={24}
-                  className="w-5 h-5"
-                />
+              <Button
+                variant="outline"
+                size="icon"
+                className="rounded-full text-[#1877F2]"
+              >
+                <FaFacebookF className="w-5 h-5" />
               </Button>
-              <Button variant="outline" size="icon" className="rounded-full">
-                <Image
-                  src="/placeholder.svg?height=24&width=24"
-                  alt="Apple"
-                  width={24}
-                  height={24}
-                  className="w-5 h-5"
-                />
+              <Button
+                variant="outline"
+                size="icon"
+                className="rounded-full text-black"
+              >
+                <FaApple className="w-5 h-5" />
               </Button>
             </div>
           </div>
@@ -51,7 +46,7 @@ export default function ReviewBanner() {
         <div className="grid grid-cols-3 gap-4">
           <div className="rounded-lg overflow-hidden">
             <Image
-              src="/placeholder.svg?height=300&width=200"
+              src={banner1}
               alt="Person in garden"
               width={200}
               height={300}
@@ -60,7 +55,7 @@ export default function ReviewBanner() {
           </div>
           <div className="rounded-lg overflow-hidden">
             <Image
-              src="/placeholder.svg?height=300&width=200"
+              src={banner2}
               alt="People walking"
               width={200}
               height={300}
@@ -69,7 +64,7 @@ export default function ReviewBanner() {
           </div>
           <div className="rounded-lg overflow-hidden">
             <Image
-              src="/placeholder.svg?height=300&width=200"
+              src={banner3}
               alt="Person enjoying coffee"
               width={200}
               height={300}

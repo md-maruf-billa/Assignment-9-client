@@ -1,6 +1,5 @@
 import CountrySelector from "./CountrySelector";
 
-
 function Footer() {
   return (
     <>
@@ -8,13 +7,13 @@ function Footer() {
         <div className="grid md:grid-cols-5 gap-10">
           {/* Logo and About */}
           <div>
-            <h2 className="text-white text-xl font-bold mb-4">★ Trustpilot</h2>
+            <h2 className="text-white text-xl font-bold mb-4">★ ReviewHub</h2>
             <div className="space-y-2 text-sm text-gray-300">
               <p>About us</p>
               <p>Jobs</p>
               <p>Contact</p>
               <p>Blog</p>
-              <p>How Trustpilot works</p>
+              <p>How ★ReviewHub works</p>
               <p>Transparency Report</p>
               <p>Press</p>
               <p>Investor Relations</p>
@@ -40,7 +39,7 @@ function Footer() {
           <div>
             <h3 className="text-gray-400 font-semibold mb-4">Businesses</h3>
             <ul className="space-y-2 text-sm text-gray-300">
-              <li>Trustpilot Business</li>
+              <li>ReviewHub Business</li>
               <li>Products</li>
               <li>Plans & Pricing</li>
               <li>Business Login</li>
@@ -78,12 +77,11 @@ function Footer() {
             <span>Cookie preferences</span>
             <span>Modern Slavery Statement</span>
           </div>
-          <div>© 2025 Trustpilot, Inc. All rights reserved.</div>
+          <div>© 2025 ★ReviewHub, Inc. All rights reserved.</div>
         </div>
       </footer>
     </>
   );
-
-};
+}
 
 export default Footer;
