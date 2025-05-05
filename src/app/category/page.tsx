@@ -7,7 +7,6 @@ export default function CategoryPage() {
 
   const toggleFilterModal = () => {
     setIsFilterModalOpen(!isFilterModalOpen);
-    // Prevent body scroll when modal is open
     if (!isFilterModalOpen) {
       document.body.style.overflow = 'hidden';
     } else {

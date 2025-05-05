@@ -6,7 +6,7 @@ export default function SiteBanner() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
         <div className="space-y-6">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-            We're Trustpilot
+            We're Review Hub
           </h2>
           <p className="text-gray-900 text-lg">
             We're a review platform that's open to everyone. Our vision is to
@@ -18,8 +18,9 @@ export default function SiteBanner() {
           </Button>
         </div>
 
-        <div className="bg-green-900 text-white p-6 md:p-8 rounded-2xl">
-          <div className="space-y-4">
+        <div className="bg-green-900 text-white p-6 md:p-8 rounded-2xl flex gap-6">
+          {/* Left column with more space */}
+          <div className="space-y-4 flex-[2]">
             <h3 className="text-xl font-bold">
               Our Transparency Report has landed!
             </h3>
@@ -27,30 +28,30 @@ export default function SiteBanner() {
               Find out which actions we've taken to protect you and promote
               trust on our platform this year.
             </p>
-
-            <div className="flex justify-between mb-4 mt-6">
-              <div className="grid grid-cols-2 gap-2">
-                <div className="bg-emerald-400 w-16 h-16 rounded-lg flex items-center justify-center font-bold text-3xl">
-                  2
-                </div>
-                <div className="bg-orange-300 w-16 h-16 rounded-lg flex items-center justify-center font-bold text-3xl">
-                  0
-                </div>
-                <div className="bg-pink-400 w-16 h-16 rounded-lg flex items-center justify-center font-bold text-3xl">
-                  2
-                </div>
-                <div className="bg-yellow-300 w-16 h-16 rounded-lg flex items-center justify-center font-bold text-3xl">
-                  4
-                </div>
-              </div>
-            </div>
-
             <Button
               variant="outline"
-              className="rounded-full border-white text-white hover:bg-white/10"
+              className="rounded-full border-white text-black hover:bg-green-300"
             >
               Take a look
             </Button>
+          </div>
+
+          {/* Right column with less space */}
+          <div className="flex-[1] flex justify-end items-end">
+            <div className="grid grid-cols-2 gap-2">
+              <div className="bg-emerald-400 w-16 h-16 rounded-lg flex items-center justify-center font-bold text-3xl">
+                2
+              </div>
+              <div className="bg-orange-300 w-16 h-16 rounded-lg flex items-center justify-center font-bold text-3xl">
+                0
+              </div>
+              <div className="bg-pink-400 w-16 h-16 rounded-lg flex items-center justify-center font-bold text-3xl">
+                2
+              </div>
+              <div className="bg-yellow-300 w-16 h-16 rounded-lg flex items-center justify-center font-bold text-3xl">
+                4
+              </div>
+            </div>
           </div>
         </div>
       </div>
