@@ -9,12 +9,12 @@ import Link from "next/link";
 import { login_user_action } from "@/services/AuthService";
 import { IResponse } from "@/types/respones";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import { ILoginPayload } from "@/types/auth";
+import { useUser } from "@/context/UserContext";
 
 
 function Login() {
-    const router = useRouter();
+    const { setIsLoading } = useUser()
     const [showPassword, setShowPassword] = useState(false);
     const handleSubmit = async (e: any) => {
         const toastId = toast.loading("Information verifying ...")
@@ -23,10 +23,10 @@ function Login() {
         userData.email = e.target.username.value;
         userData.password = e.target.password.value;
         const res = await login_user_action(userData) as IResponse
-        console.log(res)
         if (res.success) {
             toast.success(res.message, { id: toastId })
-            router.push("/")
+            setIsLoading(true)
+            window.location.replace("/")
         } else {
             toast.error(res.message, { id: toastId })
         }

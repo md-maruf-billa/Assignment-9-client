@@ -1,7 +1,6 @@
 "use server";
 
 import { IResponse } from "@/types/respones";
-import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";
 
 export const register_user_action = async (userData: {
@@ -64,22 +63,25 @@ export const login_user_action = async (userData: {
   }
 };
 
-export const getCurrentUser = async () => {
+export const get_current_user_action = async () => {
   const accessToken = (await cookies()).get("accessToken")?.value;
-  let decodedData = null;
-
-  if (accessToken) {
-    decodedData = await jwtDecode(accessToken);
-    return decodedData;
-  } else {
-    return null;
+  if (!accessToken) {
+    throw new Error("Access token not found");
   }
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/me`, {
+    headers: {
+      "Authorization": accessToken,
+      "Content-Type": "application/json"
+    },
+    cache: "no-store",
+  });
+  return await res.json();
 };
 
-export const logoutUser = async () => {
+
+export const log_out_user_action = async () => {
   try {
     (await cookies()).delete("accessToken");
-    // redirect("/");
     return true;
   } catch (error: unknown) {
     if (error instanceof Error) {
