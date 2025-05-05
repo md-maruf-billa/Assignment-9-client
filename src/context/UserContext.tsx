@@ -1,4 +1,5 @@
-import { getCurrentUser } from "@/services/AuthService";
+import { get_current_user_action } from "@/services/AuthService";
+import { IResponse } from "@/types/respones";
 import { IUser } from "@/types/user";
 
 import {
@@ -24,16 +25,20 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const handleUser = async () => {
-    const user = await getCurrentUser();
-
-    setUser(user);
-    setIsLoading(false);
+    const user = await get_current_user_action() as IResponse;
+    if (user?.data) {
+      setUser(user?.data)
+    } else {
+      setUser(null)
+    }
   };
 
   useEffect(() => {
+    console.log("mai redner hoici")
     handleUser();
+    setIsLoading(false)
   }, [isLoading]);
-
+  console.log("Hello", isLoading)
   return (
     <UserContext.Provider value={{ user, setUser, isLoading, setIsLoading }}>
       {children}

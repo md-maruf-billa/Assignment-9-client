@@ -31,6 +31,7 @@ export default function RootLayout({
         <Providers>
           <Toaster
             position="bottom-right"
+            visibleToasts={2}
             richColors
             closeButton={false}
             toastOptions={{
