@@ -1,10 +1,12 @@
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { FcGoogle } from "react-icons/fc";
-import { FaApple, FaFacebookF } from "react-icons/fa";
-import banner1 from "@/assets/ReviewBanner/banner-1.jpg";
-import banner2 from "@/assets/ReviewBanner/banner-2.jpg";
-import banner3 from "@/assets/ReviewBanner/banner-3.jpg";
+
+import Image from 'next/image';
+import { Button } from '@/components/ui/button';
+import { FcGoogle } from 'react-icons/fc';
+import { FaApple, FaFacebookF } from 'react-icons/fa';
+import banner1 from '@/assets/ReviewBanner/banner-1.jpg';
+import banner2 from '@/assets/ReviewBanner/banner-2.jpg';
+import banner3 from '@/assets/ReviewBanner/banner-3.jpg';
+
 
 export default function ReviewBanner() {
   return (
@@ -15,7 +17,7 @@ export default function ReviewBanner() {
             Help millions make the right choice
           </h2>
           <p className="text-lg mb-6">
-            Share your experience on Trustpilot, where real reviews make a
+            Share your experience on ReviewHub, where real reviews make a
             difference.
           </p>
           <div className="flex flex-wrap gap-4">

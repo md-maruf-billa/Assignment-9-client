@@ -15,10 +15,18 @@ export default function SearchHero() {
   };
 
   return (
-    <section className="relative bg-[#fefef6] py-20 px-4 text-center overflow-hidden">
+    <section
+      className="relative py-32 px-4 text-center overflow-hidden mb-16"
+      style={{
+        backgroundImage: "url('/banner-bg.svg')",
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
+        backgroundSize: 'cover',
+      }}
+    >
       <div className="max-w-2xl mx-auto">
         <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-          Find a company you can trust
+          Find a review you can trust
         </h1>
         <p className="text-lg text-gray-700 mb-8">
           Real reviews by real people.
@@ -42,7 +50,7 @@ export default function SearchHero() {
         </div>
       </div>
 
-      {/* Optional corner shapes */}
+      {/* Optional corner blobs */}
       <div className="absolute -bottom-10 -left-10 w-72 h-72 bg-yellow-400 rounded-full -z-10" />
       <div className="absolute -bottom-10 -right-10 w-72 h-72 bg-emerald-400 rounded-full -z-10" />
     </section>

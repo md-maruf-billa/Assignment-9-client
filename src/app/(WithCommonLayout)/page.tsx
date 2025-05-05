@@ -13,7 +13,7 @@ const HomePage = () => {
   return (
     <main>
       <SearchHero />
-      <div className="container mx-auto">
+      <div className="container mx-auto space-y-7">
         <WriteReviewBanner />
         <CategorySlider />
         <BusinessPromo />
