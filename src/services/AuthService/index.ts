@@ -1,9 +1,9 @@
 "use server";
 
-import { jwtDecode } from "jwt-decode";
+import { IResponse } from "@/types/respones";
 import { cookies } from "next/headers";
 
-export const registerUser = async (userData: {
+export const register_user_action = async (userData: {
   role: string;
   email: string;
   password: string;
@@ -11,7 +11,7 @@ export const registerUser = async (userData: {
   console.log("registerUser", userData);
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_API}/auth/register`,
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/register`,
       {
         method: "POST",
         headers: {
@@ -26,7 +26,6 @@ export const registerUser = async (userData: {
       (await cookies()).set("accessToken", result.data.accessToken);
       (await cookies()).set("refreshToken", result.data.refreshToken);
     }
-
     return result;
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -36,12 +35,12 @@ export const registerUser = async (userData: {
   }
 };
 
-export const loginUser = async (userData: {
+export const login_user_action = async (userData: {
   email: string;
   password: string;
 }) => {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/auth/login`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -55,8 +54,7 @@ export const loginUser = async (userData: {
       (await cookies()).set("accessToken", result.data.accessToken);
       (await cookies()).set("refreshToken", result.data.refreshToken);
     }
-
-    return result;
+    return result as IResponse;
   } catch (error: unknown) {
     if (error instanceof Error) {
       return Error(error.message);
@@ -65,22 +63,25 @@ export const loginUser = async (userData: {
   }
 };
 
-export const getCurrentUser = async () => {
+export const get_current_user_action = async () => {
   const accessToken = (await cookies()).get("accessToken")?.value;
-  let decodedData = null;
-
-  if (accessToken) {
-    decodedData = await jwtDecode(accessToken);
-    return decodedData;
-  } else {
-    return null;
+  if (!accessToken) {
+    throw new Error("Access token not found");
   }
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/me`, {
+    headers: {
+      "Authorization": accessToken,
+      "Content-Type": "application/json"
+    },
+    cache: "no-store",
+  });
+  return await res.json();
 };
 
-export const logoutUser = async () => {
+
+export const log_out_user_action = async () => {
   try {
     (await cookies()).delete("accessToken");
-    // redirect("/");
     return true;
   } catch (error: unknown) {
     if (error instanceof Error) {
