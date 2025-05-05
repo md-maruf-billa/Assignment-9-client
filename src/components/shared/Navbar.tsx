@@ -6,12 +6,14 @@ import { GoCodeReview } from "react-icons/go";
 
 import UserMenu from "../customs/NavHelpers/UserMenu";
 import { usePathname } from "next/navigation";
+import {Button} from "@/components/ui/button";
+
 
 const Navbar = () => {
   const pathname = usePathname()
   const { user, setIsLoading } = useUser();
   const [showSearch, setShowSearch] = useState(false);
-
+  console.log(user)
   useEffect(() => {
     const handleScroll = () => {
       setShowSearch(window.scrollY > 50);
@@ -80,10 +82,10 @@ const Navbar = () => {
 
           {user?.email ? (
             <>
-              {user?.role === "ADMIN" ? null : user?.role === "USER" ? (
+              {user?.role === "ADMIN" ? <Link href="/admin-dashboard"><Button>Dashboard</Button></Link> : user?.role === "USER" ? (
                 <UserMenu setIsLoading={setIsLoading} user={user} />
               ) : (
-                user.role === "COMPANY" && null
+                user.role === "COMPANY" && <Link href="/company-dashboard"><Button>Dashboard</Button></Link>
               )}
             </>
           ) : (
