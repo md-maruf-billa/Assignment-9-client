@@ -1,5 +1,7 @@
 import BusinessPromo from '@/components/home/BusinessPromo';
 import CategorySlider from '@/components/home/CategorySlider';
+import ContactUs from '@/components/home/ContactUs';
+import FaqAccordion from '@/components/home/FaqAccordion';
 import PartnerCompany from '@/components/home/PartnerCompany';
 import RecentReview from '@/components/home/RecentReview';
 import ReviewBanner from '@/components/home/ReviewBanner';
@@ -22,7 +24,9 @@ const HomePage = () => {
         <SiteComparison />
         <SiteBanner />
         <RecentReview />
+        <FaqAccordion />
         <PartnerCompany />
+        <ContactUs />
       </div>
     </main>
   );
