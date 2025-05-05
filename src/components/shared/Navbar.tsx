@@ -9,6 +9,7 @@ import { usePathname } from "next/navigation";
 import {Button} from "@/components/ui/button";
 
 
+
 const Navbar = () => {
   const pathname = usePathname()
   const { user, setIsLoading } = useUser();
@@ -86,6 +87,7 @@ const Navbar = () => {
                 <UserMenu setIsLoading={setIsLoading} user={user} />
               ) : (
                 user.role === "COMPANY" && <Link href="/company-dashboard"><Button>Dashboard</Button></Link>
+
               )}
             </>
           ) : (
