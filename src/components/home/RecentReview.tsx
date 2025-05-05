@@ -240,7 +240,7 @@ export default function RecentReview() {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full mb-10">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">Recent reviews</h2>
         <div className="flex gap-2">
