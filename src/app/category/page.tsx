@@ -168,7 +168,7 @@ export default function CategoryPage() {
 
                 <p className="text-sm mb-4">
                   These headphones have incredible sound quality and battery
-                  life. The noise cancellation is top-notch and they&#96;re..
+                  life. The noise cancellation is top-notch and they&#96;re...
                 </p>
 
                 <div className="flex items-center justify-between text-sm text-gray-500">
