@@ -1,12 +1,23 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 export interface IUser {
   id: string;
-  name: string;
   email: string;
-  isActive?: ActiveStatus;
-  role: "USER" | "ADMIN" | "COMPANY";
   status: Status;
-  iat?: number;
-  exp?: number;
+  role: "USER" | "ADMIN" | "COMPANY";
+  user: {
+    id: string;
+    accountId: string;
+    name: string;
+    bio: string | null;
+    profileImage: string | null;
+    isDeleted: boolean;
+    createdAt: string;
+    updatedAt: string;
+  };
+  admin: any | null;
+  company: any | null;
+  createdAt: string;
 }
 
 enum Status {
@@ -15,10 +26,6 @@ enum Status {
   SUSPENDED,
 }
 
-enum ActiveStatus {
-  ACTIVE,
-  INACTIVE,
-}
 
 export const ACCOUNT_TYPE = {
   ADMIN: "ADMIN",

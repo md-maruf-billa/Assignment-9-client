@@ -1,14 +1,20 @@
 "use client";
+import { useUser } from "@/context/UserContext";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { GoCodeReview } from "react-icons/go";
 
+import UserMenu from "../customs/NavHelpers/UserMenu";
+import { usePathname } from "next/navigation";
+
 const Navbar = () => {
+  const pathname = usePathname()
+  const { user, setIsLoading } = useUser();
   const [showSearch, setShowSearch] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setShowSearch(window.scrollY > 50); // Show search after scrolling 50px
+      setShowSearch(window.scrollY > 50);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -54,16 +60,43 @@ const Navbar = () => {
           <a href="#" className="hover:underline">
             Write a review
           </a>
-          <a href="#" className="hover:underline">
-            Categories
-          </a>
 
-          <Link href="/company">Company</Link>
-          <Link href="/blogs">Blog&apos;s</Link>
-          <Link href="/services">Services</Link>
-          <Link href="/plans">Plans</Link>
-          <Link href="/login">Join us</Link>
+          {[
+            { href: "/category", label: "Category" },
+            { href: "/company", label: "Company" },
+            { href: "/blogs", label: "Blog's" },
+            { href: "/services", label: "Services" },
+            { href: "/plans", label: "Plans" },
+          ].map(({ href, label }) => (
+            <Link
+              key={href}
+              href={href}
+              className={`hover:underline ${pathname === href ? "text-blue-600 underline" : ""
+                }`}
+            >
+              {label}
+            </Link>
+          ))}
+
+          {user?.email ? (
+            <>
+              {user?.role === "ADMIN" ? null : user?.role === "USER" ? (
+                <UserMenu setIsLoading={setIsLoading} user={user} />
+              ) : (
+                user.role === "COMPANY" && null
+              )}
+            </>
+          ) : (
+            <Link
+              href="/login"
+              className={`hover:underline ${pathname === "/login" ? "text-blue-600 underline" : ""
+                }`}
+            >
+              Join us
+            </Link>
+          )}
         </div>
+
       </div>
     </nav>
   );
