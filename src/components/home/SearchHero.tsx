@@ -19,9 +19,9 @@ export default function SearchHero() {
       className="relative py-32 px-4 text-center overflow-hidden mb-16"
       style={{
         backgroundImage: "url('/banner-bg.svg')",
-        backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'center',
-        backgroundSize: 'cover',
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+        backgroundSize: "cover",
       }}
     >
       <div className="max-w-2xl mx-auto">

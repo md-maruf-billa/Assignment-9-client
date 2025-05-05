@@ -1,3 +1,4 @@
+import { GoCodeReview } from "react-icons/go";
 import CountrySelector from "./CountrySelector";
 
 function Footer() {
@@ -7,7 +8,10 @@ function Footer() {
         <div className="grid md:grid-cols-5 gap-10">
           {/* Logo and About */}
           <div>
-            <h2 className="text-white text-xl font-bold mb-4">★ ReviewHub</h2>
+            <h2 className="text-white text-xl font-bold mb-4 flex items-center space-x-2">
+              <GoCodeReview />
+              <span>ReviewHub</span>
+            </h2>
             <div className="space-y-2 text-sm text-gray-300">
               <p>About us</p>
               <p>Jobs</p>
