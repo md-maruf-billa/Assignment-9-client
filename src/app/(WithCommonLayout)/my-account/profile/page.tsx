@@ -3,9 +3,11 @@ import { useUser } from '@/context/UserContext';
 import Image from 'next/image';
 import React from 'react';
 import ProfileUpdateForm from "@/components/customs/UpdateProfile/ProfileUpdateForm";
+import UpdatePasswordForm from "@/components/customs/UpdateProfile/UpdatePasswordForm";
 
 
 const ProfilePage = () => {
+    const dateForater = (date:string) => new Date(date)?.toLocaleString();
     const { user,setIsLoading } = useUser()
     return (
         <div className="min-h-screen flex items-center justify-center p-6">
@@ -36,10 +38,15 @@ const ProfilePage = () => {
                         />
                         <h2 className="text-xl font-semibold text-blue-600">{user?.user?.name}</h2>
                         {/*<p className="text-sm">User Id - {user?.id}</p>*/}
-                        <p className="text-xs text-center mt-2 mb-8 text-gray-500">
+                        <p className="text-xs text-center mt-2 text-gray-500">
                             {user?.user?.bio}
                         </p>
-                        <ProfileUpdateForm user={user} setIsLoading={setIsLoading} />
+                        <p className="text-xs text-center mt-2 mb-8 text-gray-500">Last Update :{dateForater(user?.user?.updatedAt as string)}</p>
+                        <div className={"flex justify-between w-full gap-5"}>
+                            <ProfileUpdateForm user={user} setIsLoading={setIsLoading} />
+                            <UpdatePasswordForm/>
+                        </div>
+
 
                     </div>
 

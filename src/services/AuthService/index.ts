@@ -8,7 +8,6 @@ export const register_user_action = async (userData: {
   email: string;
   password: string;
 }) => {
-  console.log("registerUser", userData);
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/register`,
@@ -114,3 +113,17 @@ export const getNewToken = async () => {
     return Error("An unknown error occurred");
   }
 };
+
+
+export const change_password_action= async (payload:{ oldPassword: string; newPassword: string }) => {
+  const accessToken = (await cookies()).get("accessToken")?.value;
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/change-password`,{
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": accessToken!,
+    },
+    body: JSON.stringify(payload)
+  })
+  return await res.json();
+}
