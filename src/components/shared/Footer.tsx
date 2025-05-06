@@ -2,8 +2,8 @@ import CountrySelector from "./CountrySelector";
 
 function Footer() {
   return (
-    <>
-      <footer className="bg-black text-white px-6 md:px-16 py-10">
+    <div className="bg-black">
+      <footer className="container text-white     py-10 mx-auto">
         <div className="grid md:grid-cols-5 gap-10">
           {/* Logo and About */}
           <div>
@@ -80,7 +80,7 @@ function Footer() {
           <div>© 2025 ★ReviewHub, Inc. All rights reserved.</div>
         </div>
       </footer>
-    </>
+    </div>
   );
 }
 
