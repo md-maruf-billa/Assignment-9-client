@@ -1,12 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
     DialogContent,
     DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
@@ -14,11 +13,18 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-
-const ProfileUpdateForm = () => {
+import {toast} from "sonner";
+import {update_user_profile_action} from "@/services/user";
+import {IUser} from "@/types/user";
+import Image from "next/image"
+type UpdateProfileFormProps = {
+    name:string | undefined;
+    bio:string | undefined;
+}
+const ProfileUpdateForm = ({user,setIsLoading}:{user:IUser | null,setIsLoading:React.Dispatch<React.SetStateAction<boolean>>}) => {
     const [selectedFile, setSelectedFile] = useState(null);
-    const [previewUrl, setPreviewUrl] = useState(null);
-    console.log(previewUrl);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -32,10 +38,34 @@ const ProfileUpdateForm = () => {
         setSelectedFile(null);
         setPreviewUrl(null);
     };
+    const handleUpdateProfile = async (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+        const id = toast.loading("Updating Profile ...");
+        const profileData:UpdateProfileFormProps ={}
+        if(e.target.name.value.length > 0){
+            profileData.name=e.target.name.value;
+        }
+        if(e.target.bio.value.length > 0){
+            profileData.bio=e.target.bio.value;
+        }
+        formData.append("data", JSON.stringify(profileData));
+        if(selectedFile){
+            formData.append("image",selectedFile)
+        }
+        const res = await update_user_profile_action(formData);
+        if(res.success){
+            toast.success("Profile updated successfully.",{id});
+            setIsLoading(true)
+            setModalOpen(false);
+        }else {
+            toast.error(res.message,{id})
+        }
+    }
 
     return (
         <div>
-            <Dialog>
+            <Dialog open={modalOpen} onOpenChange={setModalOpen}>
                 <DialogTrigger asChild>
                     <Button variant="outline">Edit Profile</Button>
                 </DialogTrigger>
@@ -46,7 +76,7 @@ const ProfileUpdateForm = () => {
                             Make changes to your profile here. Click save when you are done.
                         </DialogDescription>
                     </DialogHeader>
-                    <div className="grid gap-4 py-4">
+                    <form onSubmit={(e)=>handleUpdateProfile(e)} className="grid gap-4 py-4">
                         {!previewUrl ? (
                             <label
                                 htmlFor="dropzone-file"
@@ -85,9 +115,11 @@ const ProfileUpdateForm = () => {
                             </label>
                         ) : (
                             <div className="flex flex-col items-center space-y-2">
-                                <img
+                                <Image
                                     src={previewUrl}
                                     alt="Preview"
+                                    width={32}
+                                    height={32}
                                     className="w-32 h-32 object-cover rounded-full"
                                 />
                                 <Button variant="destructive" size="sm" onClick={handleRemoveImage}>
@@ -100,18 +132,17 @@ const ProfileUpdateForm = () => {
                             <Label htmlFor="name" className="text-right">
                                 Name
                             </Label>
-                            <Input id="name" value="Pedro Duarte" />
+                            <Input name="name" id="name" placeholder={user?.user?.name} />
                         </div>
                         <div className="space-y-3">
                             <Label htmlFor="bio" className="text-right">
                                 Bio
                             </Label>
-                            <Textarea id="bio" placeholder="Type your message here." />
+                            <Textarea name="bio" id="bio" placeholder={user?.user?.bio as string} />
                         </div>
-                    </div>
-                    <DialogFooter>
+
                         <Button type="submit">Save changes</Button>
-                    </DialogFooter>
+                    </form>
                 </DialogContent>
             </Dialog>
         </div>

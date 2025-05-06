@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Create Next App",
-  description: " ",
+  title: "ReviewHub",
+  description: "This is product review portal.",
 };
 
 export default function RootLayout({

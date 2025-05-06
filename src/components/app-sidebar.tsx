@@ -28,6 +28,8 @@ import { Button } from "@/components/ui/button";
 import { useUser } from "@/context/UserContext";
 import {GoCodeReview} from "react-icons/go";
 import Link from "next/link";
+import {toast} from "sonner";
+import {log_out_user_action} from "@/services/AuthService";
 
 const data = {
   user: {
@@ -84,7 +86,18 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { user } = useUser()
+  const { user,setIsLoading } = useUser()
+  const handle_logout = async () => {
+    const id = toast.loading("Log outing ...")
+    const res = await log_out_user_action();
+    if (res) {
+      toast.success("Logout successful .", { id })
+      setIsLoading(true)
+      window.location.replace("/")
+    } else {
+      toast.error("Logout Failed !", { id })
+    }
+  }
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -107,7 +120,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
       <SidebarFooter>
         {/*<NavUser user={data.user} />*/}
-        <Button>Logout</Button>
+        <Button onClick={handle_logout}>Logout</Button>
       </SidebarFooter>
     </Sidebar>
   )
