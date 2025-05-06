@@ -127,3 +127,24 @@ export const change_password_action= async (payload:{ oldPassword: string; newPa
   })
   return await res.json();
 }
+export const forget_password_action = async (email:string) => {
+  const res =  await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/forgot-password`,{
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({email})
+  })
+  return await res.json();
+}
+
+export const reset_password_action = async (email:string,token:string,password:string) => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/reset-password`,{
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({email,token,newPassword:password})
+  })
+  return await res.json();
+}
