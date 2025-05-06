@@ -6,7 +6,6 @@ import {
   IconDashboard,
   IconFolder,
   IconHelp,
-  IconInnerShadowTop,
   IconListDetails,
   IconSearch,
   IconSettings,
@@ -25,8 +24,10 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import {Button} from "@/components/ui/button";
-import {useUser} from "@/context/UserContext";
+import { Button } from "@/components/ui/button";
+import { useUser } from "@/context/UserContext";
+import {GoCodeReview} from "react-icons/go";
+import Link from "next/link";
 
 const data = {
   user: {
@@ -46,15 +47,15 @@ const data = {
       icon: IconListDetails,
     }
   ],
-  company:[
+  company: [
     {
-      title: "Analytics",
-      url: "#",
+      title: "Create Product",
+      url: "/dashboard/company/createProduct",
       icon: IconChartBar,
     },
     {
       title: "Projects",
-      url: "#",
+      url: "/dashboard/company",
       icon: IconFolder,
     },
     {
@@ -83,7 +84,7 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const {user} = useUser()
+  const { user } = useUser()
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -91,18 +92,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
-              className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <a href="#">
-                <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">Acme Inc.</span>
-              </a>
+              <Link href={"/"} className="flex items-center space-x-2">
+                <GoCodeReview className={"!text-3xl"} />
+                <span className="font-bold text-xl ">ReviewHub</span>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={user?.role == "ADMIN" ? data.admin : user?.role == "COMPANY"? data.company:[]} />
+        <NavMain items={user?.role == "ADMIN" ? data.admin : user?.role == "COMPANY" ? data.company : []} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>

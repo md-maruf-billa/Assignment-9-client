@@ -561,7 +561,7 @@ export function DataTable({
               </Select>
             </div>
             <div className="flex w-fit items-center justify-center text-sm font-medium">
-              Page {table.getState().pagination.pageIndex + 1} of{" "}
+              Layout {table.getState().pagination.pageIndex + 1} of{" "}
               {table.getPageCount()}
             </div>
             <div className="ml-auto flex items-center gap-2 lg:ml-0">
@@ -750,7 +750,7 @@ function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
                       Focus Documents
                     </SelectItem>
                     <SelectItem value="Narrative">Narrative</SelectItem>
-                    <SelectItem value="Cover Page">Cover Page</SelectItem>
+                    <SelectItem value="Cover Layout">Cover Layout</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
