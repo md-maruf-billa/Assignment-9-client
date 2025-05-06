@@ -83,10 +83,10 @@ const Navbar = () => {
 
           {user?.email ? (
             <>
-              {user?.role === "ADMIN" ? <Link href="/admin-dashboard"><Button>Dashboard</Button></Link> : user?.role === "USER" ? (
+              {user?.role === "ADMIN" ? <Link href="/dashbaord/admin"><Button>Dashboard</Button></Link> : user?.role === "USER" ? (
                 <UserMenu setIsLoading={setIsLoading} user={user} />
               ) : (
-                user.role === "COMPANY" && <Link href="/company-dashboard"><Button>Dashboard</Button></Link>
+                user.role === "COMPANY" && <Link href="/dashboard/company"><Button>Dashboard</Button></Link>
 
               )}
             </>

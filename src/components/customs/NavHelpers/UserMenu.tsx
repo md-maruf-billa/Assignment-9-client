@@ -1,5 +1,6 @@
 "user client"
 import React, { Dispatch, SetStateAction } from 'react'
+import Link from "next/link";
 import { IUser } from '@/types/user';
 import {
   DropdownMenu,
@@ -72,7 +73,7 @@ export default function UserMenu({ setIsLoading, user }: { setIsLoading: Dispatc
       <DropdownMenuContent>
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Profile</DropdownMenuItem>
+        <DropdownMenuItem><Link href={"/my-account/profile"}>Profile</Link></DropdownMenuItem>
         <DropdownMenuItem>Billing</DropdownMenuItem>
         <DropdownMenuItem>Team</DropdownMenuItem>
         <DropdownMenuItem>Subscription</DropdownMenuItem>
