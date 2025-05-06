@@ -14,7 +14,6 @@ const Navbar = () => {
   const pathname = usePathname()
   const { user, setIsLoading } = useUser();
   const [showSearch, setShowSearch] = useState(false);
-  console.log(user)
   useEffect(() => {
     const handleScroll = () => {
       setShowSearch(window.scrollY > 50);
