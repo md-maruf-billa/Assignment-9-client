@@ -1,97 +1,93 @@
 import Image from 'next/image';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Star } from 'lucide-react';
+import bank1 from '@/assets/bank logo/bank-1.png';
+import bank2 from '@/assets/bank logo/bank-2.png';
+import bank3 from '@/assets/bank logo/bank-3.png';
+import bank4 from '@/assets/bank logo/bank-4.png';
 
-interface BankCardProps {
-  logo: string;
-  name: string;
-  website: string;
-  rating: number;
-  reviewCount: number;
-}
+const bankData = [
+  {
+    name: 'DuGood Credit Union',
+    url: 'www.dugood.org',
+    logo: bank1,
+    rating: 4.8,
+    reviews: 4345,
+  },
+  {
+    name: 'EECU Credit Union',
+    url: 'eecu.org',
+    logo: bank2,
+    rating: 4.8,
+    reviews: 1667,
+  },
+  {
+    name: 'Superior Funding',
+    url: 'superiorfunding.net',
+    logo: bank3,
+    rating: 4.8,
+    reviews: 450,
+  },
+  {
+    name: 'MAJORITY - Mobile Banking',
+    url: 'majority.com',
+    logo: bank4,
+    rating: 4.7,
+    reviews: 11207,
+  },
+];
 
-const BankCard = ({
-  logo,
-  name,
-  website,
-  rating,
-  reviewCount,
-}: BankCardProps) => {
-  return (
-    <Card className="p-4 flex flex-col gap-2">
-      <div className="w-16 h-16 mb-2">
-        <Image
-          src={logo || '/placeholder.svg'}
-          alt={`${name} logo`}
-          width={64}
-          height={64}
-          className="object-contain"
-        />
-      </div>
-      <h3 className="font-bold text-lg">{name}</h3>
-      <p className="text-sm text-muted-foreground">{website}</p>
-      <div className="flex items-center gap-1">
-        {[...Array(5)].map((_, i) => (
-          <Star
-            key={i}
-            className={`w-4 h-4 fill-current ${
-              i < Math.floor(rating) ? 'text-green-500' : 'text-gray-300'
-            }`}
-          />
-        ))}
-        <span className="ml-1 font-medium">{rating}</span>
-        <span className="text-muted-foreground text-sm">
-          ({reviewCount.toLocaleString()})
-        </span>
-      </div>
-    </Card>
-  );
-};
+const StarIcon = ({ filled }: { filled: boolean }) => (
+  <svg
+    className={`w-4 h-4 ${filled ? 'text-green-500' : 'text-gray-300'}`}
+    fill={filled ? 'currentColor' : 'none'}
+    viewBox="0 0 20 20"
+  >
+    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674h4.911c.969 0 1.371 1.24.588 1.81l-3.974 2.888 1.519 4.674c.3.921-.755 1.688-1.54 1.118L10 15.347l-3.974 2.888c-.784.57-1.838-.197-1.539-1.118l1.518-4.674-3.974-2.888c-.784-.57-.38-1.81.588-1.81h4.911l1.519-4.674z" />
+  </svg>
+);
 
 export default function SiteReview() {
-  const banks = [
-    {
-      logo: '/placeholder.svg?height=64&width=64',
-      name: 'DuGood Credit Union',
-      website: 'www.dugood.org',
-      rating: 4.8,
-      reviewCount: 4344,
-    },
-    {
-      logo: '/placeholder.svg?height=64&width=64',
-      name: 'MAJORITY - Mobile Banking',
-      website: 'majority.com',
-      rating: 4.7,
-      reviewCount: 11201,
-    },
-    {
-      logo: '/placeholder.svg?height=64&width=64',
-      name: 'BankFive',
-      website: 'www.bankfive.com',
-      rating: 4.7,
-      reviewCount: 4742,
-    },
-    {
-      logo: '/placeholder.svg?height=64&width=64',
-      name: 'Credit Union of New Jersey',
-      website: 'www.cunj.com',
-      rating: 4.7,
-      reviewCount: 3860,
-    },
-  ];
-
   return (
-    <div className="w-full py-6">
+    <div className="mx-auto p-4">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">Best in Bank</h2>
-        <Button variant="outline" className="rounded-full">
+        <button className="text-sm border border-blue-500 text-blue-600 px-3 py-1 rounded-full hover:bg-blue-50">
           See more
-        </Button>
+        </button>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {banks.map((bank, index) => (
-          <BankCard key={index} {...bank} />
+
+      <div className="flex gap-4 overflow-x-auto pb-4">
+        {bankData.map((bank, idx) => (
+          <div
+            key={idx}
+            className="flex-shrink-0 w-64 bg-white border rounded-xl p-4 shadow-sm hover:shadow-lg transition-shadow duration-300"
+          >
+            <div className="w-14 h-14 mb-2">
+              <Image
+                src={bank.logo}
+                alt="img"
+                width={56}
+                height={56}
+                className="rounded-md object-contain"
+              />
+            </div>
+            <h3
+              className="font-semibold text-[15px] leading-tight truncate"
+              title={bank.name}
+            >
+              {bank.name}
+            </h3>
+            <p className="text-gray-500 text-sm">{bank.url}</p>
+            <div className="flex items-center mt-2">
+              <div className="flex gap-[1px]">
+                {Array.from({ length: 5 }, (_, i) => (
+                  <StarIcon key={i} filled={i < Math.floor(bank.rating)} />
+                ))}
+              </div>
+              <p className="text-sm text-gray-700 ml-1">
+                {bank.rating} ({bank.reviews.toLocaleString()})
+              </p>
+            </div>
+          </div>
         ))}
       </div>
     </div>

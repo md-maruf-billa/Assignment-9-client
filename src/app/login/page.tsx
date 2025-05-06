@@ -1,41 +1,53 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-
 import React, { useState } from "react";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { GoCodeReview } from "react-icons/go";
-import { HiOutlineEye } from "react-icons/hi2";
+import { HiOutlineEye, HiOutlineEyeSlash } from "react-icons/hi2";
 import Image from "next/image";
 import Link from "next/link";
+import { login_user_action } from "@/services/AuthService";
+import { IResponse } from "@/types/respones";
+import { toast } from "sonner";
+import { ILoginPayload } from "@/types/auth";
+import { useUser } from "@/context/UserContext";
 
 
 function Login() {
-
+    const { setIsLoading } = useUser()
     const [showPassword, setShowPassword] = useState(false);
-
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: any) => {
+        const toastId = toast.loading("Information verifying ...")
         e.preventDefault();
-        console.log("clicked");
-        // Handle registration logic here
+        const userData: ILoginPayload = { email: "", password: "" }
+        userData.email = e.target.username.value;
+        userData.password = e.target.password.value;
+        const res = await login_user_action(userData) as IResponse
+        if (res.success) {
+            toast.success(res.message, { id: toastId })
+            setIsLoading(true)
+            window.location.replace("/")
+        } else {
+            toast.error(res.message, { id: toastId })
+        }
+
     };
 
     return (
         <>
             <div className="min-h-screen bg-[#FAF8F5] flex flex-col font-sans">
-
-                {/* Header Section */}
                 <header className="flex flex-col md:flex-row items-center justify-evenly gap-10 md:gap-36 mx-auto w-full py-6 md:py-16">
-                    {/* Logo and Brand Name */}
+
                     <Link href={"/"} className="flex items-center space-x-2">
                         <GoCodeReview size={40} />
                         <span className="font-bold text-3xl text-gray-800">ReviewHub</span>
                     </Link>
 
-                    {/* Trustpilot Review Snippet */}
                     <div className="text-right max-w-xs">
                         <p className="text-sm text-gray-700 italic mb-1">&quot;The product is superfast, reliable and robust
                             with great support team.&quot;</p>
                         <div className="flex items-center justify-end space-x-2">
-                            {/* Placeholder for reviewer images */}
+
                             <div className="flex -space-x-2">
                                 <Image
                                     className="inline-block h-6 w-6 rounded-full ring-2 ring-white object-cover"
@@ -69,7 +81,7 @@ function Login() {
                         <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome back!</h1>
                         <p className="text-gray-600 mb-8">Please login to your account</p>
 
-                        <form action="" onSubmit={handleSubmit}>
+                        <form onSubmit={handleSubmit}>
                             {/* Email Input */}
                             <div className="mb-5">
                                 <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">Email
@@ -78,7 +90,6 @@ function Login() {
                                     type="email"
                                     id="username"
                                     name="username"
-                                    defaultValue="jhon@gmail.com" // Default value as in image
                                     className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition duration-200"
                                     placeholder="you@example.com"
                                 />
@@ -93,7 +104,6 @@ function Login() {
                                         type={showPassword ? "text" : "password"}
                                         id="password"
                                         name="password"
-                                        defaultValue="********" // Default value placeholder
                                         className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition duration-200 pr-10" // Added pr-10 for icon spacing
                                         placeholder="Enter your password"
                                     />
@@ -104,7 +114,11 @@ function Login() {
                                         className="absolute inset-y-0 right-0 px-3 flex items-center text-sm leading-5"
                                         aria-label={showPassword ? "Hide password" : "Show password"}
                                     >
-                                        <HiOutlineEye className="ml-4 text-gray-500" size={20} />
+                                        {
+                                            showPassword ?
+                                                <HiOutlineEye className="ml-4 text-gray-500" size={20} /> :
+                                                <HiOutlineEyeSlash className="ml-4 text-gray-500" size={20} />
+                                        }
                                     </button>
                                 </div>
                             </div>

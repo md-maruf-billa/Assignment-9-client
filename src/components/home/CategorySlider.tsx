@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 const categories = [
   { name: "Pet Store", icon: "🐾" },
@@ -41,6 +41,15 @@ export default function CategorySlider() {
     });
   };
 
+  //for auto slide
+  useEffect(() => {
+    const interval = setInterval(() => {
+      scroll("right");
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <section className="py-10 px-4">
       <div className="flex items-center justify-between mb-4">
@@ -68,15 +77,16 @@ export default function CategorySlider() {
 
       <div
         ref={scrollRef}
-        className="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth"
+        className="flex overflow-x-auto scroll-smooth scrollbar-hide gap-5"
+        style={{ scrollSnapType: "x mandatory" }}
       >
         {categories.map((cat, idx) => (
           <div
             key={idx}
-            className="flex flex-col items-center min-w-[100px] text-center"
+            className="flex flex-col items-centre flex-shrink-0 w-[25%]  max-w-[225px] text-center scroll-snap-align-start"
           >
             <div className="text-3xl mb-2">{cat.icon}</div>
-            <span className="text-sm text-gray-700 whitespace-nowrap">
+            <span className="text-sm text-gray-700 px-2 break-words leading-snug">
               {cat.name}
             </span>
           </div>

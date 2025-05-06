@@ -1,14 +1,23 @@
 "use client";
+import { useUser } from "@/context/UserContext";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { GoCodeReview } from "react-icons/go";
 
-const Navbar = () => {
-  const [showSearch, setShowSearch] = useState(false);
+import UserMenu from "../customs/NavHelpers/UserMenu";
+import { usePathname } from "next/navigation";
+import {Button} from "@/components/ui/button";
 
+
+
+const Navbar = () => {
+  const pathname = usePathname()
+  const { user, setIsLoading } = useUser();
+  const [showSearch, setShowSearch] = useState(false);
+  console.log(user)
   useEffect(() => {
     const handleScroll = () => {
-      setShowSearch(window.scrollY > 50); // Show search after scrolling 50px
+      setShowSearch(window.scrollY > 50);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -32,7 +41,7 @@ const Navbar = () => {
                 <input
                   type="text"
                   placeholder="Search hare..."
-                  className="w-full rounded-md pl-10 pr-4 py-2 border border-gray-300 text-gray-700 placeholder-gray-500 focus:outline-none"
+                  className="w-full rounded-md pl-10 pr-4 py-2 border border-gray-500 text-gray-700 placeholder-gray-500 focus:outline-none"
                 />
                 <svg
                   className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"
@@ -54,16 +63,44 @@ const Navbar = () => {
           <a href="#" className="hover:underline">
             Write a review
           </a>
-          <a href="#" className="hover:underline">
-            Categories
-          </a>
 
-          <Link href="/company">Company</Link>
-          <Link href="/blogs">Blog&apos;s</Link>
-          <Link href="/services">Services</Link>
-          <Link href="/plans">Plans</Link>
-          <Link href="/login">Join us</Link>
+          {[
+            { href: "/category", label: "Category" },
+            { href: "/company", label: "Company" },
+            { href: "/blogs", label: "Blog's" },
+            { href: "/services", label: "Services" },
+            { href: "/plans", label: "Plans" },
+          ].map(({ href, label }) => (
+            <Link
+              key={href}
+              href={href}
+              className={`hover:underline ${pathname === href ? "text-blue-600 underline" : ""
+                }`}
+            >
+              {label}
+            </Link>
+          ))}
+
+          {user?.email ? (
+            <>
+              {user?.role === "ADMIN" ? <Link href="/dashbaord"><Button>Dashboard</Button></Link> : user?.role === "USER" ? (
+                <UserMenu setIsLoading={setIsLoading} user={user} />
+              ) : (
+                user.role === "COMPANY" && <Link href="/dashboard"><Button>Dashboard</Button></Link>
+
+              )}
+            </>
+          ) : (
+            <Link
+              href="/login"
+              className={`hover:underline ${pathname === "/login" ? "text-blue-600 underline" : ""
+                }`}
+            >
+              Join us
+            </Link>
+          )}
         </div>
+
       </div>
     </nav>
   );
