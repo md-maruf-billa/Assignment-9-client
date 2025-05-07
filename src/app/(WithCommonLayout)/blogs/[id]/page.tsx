@@ -214,7 +214,7 @@ const BlogDetailsPage = () => {
         return (
             <div className="flex flex-col justify-center items-center min-h-screen bg-[#FAF8F5] px-4">
                 <h1 className="text-3xl font-bold text-gray-900 mb-4">Blog Post Not Found</h1>
-                <p className="text-gray-600 mb-8">The blog post you're looking for doesn't exist or has been removed.</p>
+                <p className="text-gray-600 mb-8">The blog post you&apos;re looking for doesn&apos;t exist or has been removed.</p>
                 <Link
                     href="/blogs"
                     className="inline-flex items-center px-6 py-3 bg-amber-500 text-white rounded-md hover:bg-amber-600 transition-colors duration-200"
@@ -474,6 +474,7 @@ const BlogDetailsPage = () => {
                         initial="hidden"
                         animate="visible"
                     >
+                        {/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
                         {relatedPosts.map((post, index) => (
                             <motion.div
                                 key={post.id}

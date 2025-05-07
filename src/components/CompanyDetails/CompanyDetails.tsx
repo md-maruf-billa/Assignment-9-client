@@ -38,14 +38,14 @@ const CompanyDetails: React.FC<CompanyDetailsProps> = ({ companyData, isLoading 
     };
 
     // Animation variants
-    const fadeIn = {
-        hidden: { opacity: 0, y: 20 },
-        visible: {
-            opacity: 1,
-            y: 0,
-            transition: { duration: 0.6 }
-        }
-    };
+    // const fadeIn = {
+    //     hidden: { opacity: 0, y: 20 },
+    //     visible: {
+    //         opacity: 1,
+    //         y: 0,
+    //         transition: { duration: 0.6 }
+    //     }
+    // };
 
     const staggerContainer = {
         hidden: { opacity: 0 },
