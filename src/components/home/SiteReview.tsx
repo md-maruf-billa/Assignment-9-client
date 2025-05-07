@@ -58,7 +58,7 @@ export default function SiteReview() {
     <div ref={sectionRef} className="mx-auto px-4 py-6 md:py-10 ">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-2">
         <h2 className="text-2xl md:text-3xl font-bold">Best in Bank</h2>
-        <button className="text-sm border border-blue-500 text-blue-600 px-4 py-1.5 rounded-full hover:bg-blue-50 transition">
+        <button className="text-sm sm:text-base border border-blue-600 text-blue-600 font-medium px-4 py-1.5 rounded-full transition hover:bg-blue-600 hover:text-white active:scale-95">
           See more
         </button>
       </div>

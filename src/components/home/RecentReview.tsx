@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useInView } from 'framer-motion';
 
 interface Review {
   id: string;
@@ -27,7 +27,10 @@ export default function RecentReview() {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [direction, setDirection] = useState(0); // -1 for left, 1 for right
+
+  const sectionRef = useRef(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(sectionRef, { once: true });
 
   const reviews: Review[] = [
     {
@@ -150,7 +153,6 @@ export default function RecentReview() {
         logo: '/placeholder.svg?height=40&width=40',
       },
     },
-    // Add more reviews if needed to demonstrate pagination
     {
       id: '9',
       reviewer: {
@@ -183,7 +185,6 @@ export default function RecentReview() {
     },
   ];
 
-  // Calculate total pages based on reviews length (8 cards per page)
   useEffect(() => {
     setTotalPages(Math.ceil(reviews.length / 8));
   }, [reviews.length]);
@@ -202,10 +203,8 @@ export default function RecentReview() {
     }
   };
 
-  // Get current page reviews
   const currentReviews = reviews.slice(currentPage * 8, (currentPage + 1) * 8);
 
-  // Animation variants
   const containerVariants = {
     hidden: (direction: number) => ({
       x: direction > 0 ? 100 : -100,
@@ -229,18 +228,19 @@ export default function RecentReview() {
   };
 
   const cardVariants = {
-    hidden: { y: 20, opacity: 0 },
+    hidden: { y: 30, opacity: 0 },
     visible: {
       y: 0,
       opacity: 1,
       transition: {
-        duration: 0.4,
+        duration: 0.5,
+        ease: 'easeOut',
       },
     },
   };
 
   return (
-    <div className="w-full mb-10">
+    <div className="w-full mb-10" ref={sectionRef}>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">Recent reviews</h2>
         <div className="flex gap-2">
@@ -282,9 +282,11 @@ export default function RecentReview() {
               <motion.div
                 key={review.id}
                 variants={cardVariants}
-                custom={index}
+                initial="hidden"
+                animate={isInView ? 'visible' : 'hidden'}
+                transition={{ delay: index * 0.05 }}
               >
-                <Card className="p-4 flex flex-col h-full">
+                <Card className="p-4 flex flex-col h-full hover:shadow-lg transition-all duration-300 rounded-2xl">
                   <div className="flex items-center gap-2 mb-2">
                     <div
                       className={`${review.reviewer.avatarColor} w-10 h-10 rounded-full flex items-center justify-center text-white font-bold`}
