@@ -1,52 +1,37 @@
-"use client";
+'use client';
 
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import Image from 'next/image';
+import { JSX, useEffect, useRef } from 'react';
 
-const categories = [
-  { name: "Pet Store", icon: "🐾" },
-  { name: "Energy Supplier", icon: "⚡" },
-  { name: "Real Estate Agents", icon: "🏠" },
-  { name: "Insurance Agency", icon: "☂️" },
-  { name: "Bedroom Furniture Store", icon: "🛏️" },
-  { name: "Activewear Store", icon: "🛍️" },
-  { name: "Women's Clothing Store", icon: "👗" },
-  { name: "Men's Clothing Store", icon: "👔" },
-  { name: "Electronics", icon: "💻" },
-  { name: "Grocery", icon: "🛒" },
-  { name: "Pet Store", icon: "🐾" },
-  { name: "Energy Supplier", icon: "⚡" },
-  { name: "Real Estate Agents", icon: "🏠" },
-  { name: "Insurance Agency", icon: "☂️" },
-  { name: "Bedroom Furniture Store", icon: "🛏️" },
-  { name: "Activewear Store", icon: "🛍️" },
-  { name: "Women's Clothing Store", icon: "👗" },
-  { name: "Men's Clothing Store", icon: "👔" },
-  { name: "Electronics", icon: "💻" },
-  { name: "Grocery", icon: "🛒" },
-];
+export interface ICategory {
+  name: string;
+  categoryImage: string;
+  id: string;
+}
 
-export default function CategorySlider() {
+export default function CategorySlider(categories: ICategory[]): JSX.Element {
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const scroll = (direction: "left" | "right") => {
+  const scroll = (direction: 'left' | 'right') => {
     if (!scrollRef.current) return;
-    const { scrollLeft, clientWidth } = scrollRef.current;
-    scrollRef.current.scrollTo({
-      left:
-        direction === "left"
-          ? scrollLeft - clientWidth
-          : scrollLeft + clientWidth,
-      behavior: "smooth",
+    const card = scrollRef.current.querySelector(
+      '.category-card'
+    ) as HTMLElement;
+    if (!card) return;
+
+    const scrollAmount = card.offsetWidth + 20; // 20px = gap
+    scrollRef.current.scrollBy({
+      left: direction === 'left' ? -scrollAmount : scrollAmount,
+      behavior: 'smooth',
     });
   };
 
-  //for auto slide
+  // Auto-slide every 5 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      scroll("right");
-    }, 5000);
-
+      scroll('right');
+    }, 3000);
     return () => clearInterval(interval);
   }, []);
 
@@ -56,20 +41,20 @@ export default function CategorySlider() {
         <h2 className="text-xl font-semibold">What are you looking for?</h2>
         <div className="flex items-center gap-2">
           <button
-            onClick={() => scroll("left")}
+            onClick={() => scroll('left')}
             className="p-2 rounded-full border border-gray-300 hover:bg-gray-100"
             aria-label="Scroll left"
           >
             <ChevronLeft size={18} />
           </button>
           <button
-            onClick={() => scroll("right")}
+            onClick={() => scroll('right')}
             className="p-2 rounded-full border border-gray-300 hover:bg-gray-100"
             aria-label="Scroll right"
           >
             <ChevronRight size={18} />
           </button>
-          <button className="ml-2 text-sm px-3 py-1 border border-blue-500 text-blue-600 rounded-full hover:bg-blue-50">
+          <button className="text-sm sm:text-base border border-blue-600 text-blue-600 font-medium px-4 py-1.5 rounded-full transition hover:bg-blue-600 hover:text-white active:scale-95">
             See more
           </button>
         </div>
@@ -77,15 +62,23 @@ export default function CategorySlider() {
 
       <div
         ref={scrollRef}
-        className="flex overflow-x-auto scroll-smooth scrollbar-hide gap-5"
-        style={{ scrollSnapType: "x mandatory" }}
+        className="flex overflow-x-auto scroll-smooth gap-5 scrollbar-hide"
+        style={{ scrollSnapType: 'x mandatory' }}
       >
-        {categories.map((cat, idx) => (
+        {Object.values(categories).map((cat: ICategory) => (
           <div
-            key={idx}
-            className="flex flex-col items-centre flex-shrink-0 w-[25%]  max-w-[225px] text-center scroll-snap-align-start"
+            key={cat.id}
+            className="category-card flex-shrink-0 w-[70vw] sm:w-[40vw] md:w-[25vw] lg:w-[20vw] max-w-[225px] text-center scroll-snap-align-start flex flex-col items-center"
           >
-            <div className="text-3xl mb-2">{cat.icon}</div>
+            <div className="w-24 h-24 mb-2 relative">
+              <Image
+                src={cat.categoryImage}
+                alt={cat.name}
+                layout="fill"
+                className="rounded-full object-cover hover:scale-105 transition-transform duration-300 grayscale-100 hover:grayscale-0"
+                style={{ scrollSnapAlign: 'start' }}
+              />
+            </div>
             <span className="text-sm text-gray-700 px-2 break-words leading-snug">
               {cat.name}
             </span>
