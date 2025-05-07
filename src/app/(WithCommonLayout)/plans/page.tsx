@@ -573,7 +573,7 @@ const Page = () => {
                                         ))}
                                     </div>
                                     <p className="text-gray-700 mb-6 text-lg italic">
-                                        &apos;ReviewHub&apos;s pricing plans offered exactly what we needed at each stage of our business growth. We started with the Free plan to test the waters, upgraded to Basic as we expanded, and now the Premium plan provides all the advanced features we need to manage our reputation at scale."
+                                        &apos;ReviewHub&apos;s pricing plans offered exactly what we needed at each stage of our business growth. We started with the Free plan to test the waters, upgraded to Basic as we expanded, and now the Premium plan provides all the advanced features we need to manage our reputation at scale.&quot;
                                     </p>
                                     <div>
                                         <p className="font-semibold text-gray-900">John Doe</p>
@@ -586,7 +586,7 @@ const Page = () => {
                 </div>
             </motion.div>
 
-            {/* Money Back Guarantee */}
+            {/* Money-Back Guarantee */}
             <motion.div
                 className="bg-[#FAF8F5] py-12"
                 initial={{ opacity: 0 }}

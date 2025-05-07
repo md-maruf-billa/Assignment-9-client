@@ -1,5 +1,6 @@
 "use client"
 
+
 import React from 'react';
 import { useParams } from "next/navigation";
 import { get_company_by_id } from "@/services/company";
