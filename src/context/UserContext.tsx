@@ -34,7 +34,6 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   useEffect(() => {
-    console.log("mai redner hoici")
     handleUser();
     setIsLoading(false)
   }, [isLoading]);

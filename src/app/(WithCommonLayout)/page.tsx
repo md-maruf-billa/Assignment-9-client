@@ -1,17 +1,16 @@
-import BusinessPromo from "@/components/home/BusinessPromo";
-import CategorySlider, { ICategory } from "@/components/home/CategorySlider";
-import ContactUs from "@/components/home/ContactUs";
-import FaqAccordion from "@/components/home/FaqAccordion";
-import PartnerCompany from "@/components/home/PartnerCompany";
-import RecentReview from "@/components/home/RecentReview";
-import ReviewBanner from "@/components/home/ReviewBanner";
-import SearchHero from "@/components/home/SearchHero";
-import SiteBanner from "@/components/home/SiteBanner";
-import SiteComparison from "@/components/home/SiteComparison";
-import SiteReview from "@/components/home/SiteReview";
-import WriteReviewBanner from "@/components/home/WriteReviewBanner";
-import { allCategory } from "@/services/category";
-import React from "react";
+import BusinessPromo from '@/components/home/BusinessPromo';
+import CategorySlider, { ICategory } from '@/components/home/CategorySlider';
+import ContactUs from '@/components/home/ContactUs';
+import FaqAccordion from '@/components/home/FaqAccordion';
+import PartnerCompany from '@/components/home/PartnerCompany';
+import RecentReview from '@/components/home/RecentReview';
+import ReviewBanner from '@/components/home/ReviewBanner';
+import SearchHero from '@/components/home/SearchHero';
+import SiteBanner from '@/components/home/SiteBanner';
+import SiteComparison from '@/components/home/SiteComparison';
+import SiteReview from '@/components/home/SiteReview';
+import WriteReviewBanner from '@/components/home/WriteReviewBanner';
+import { allCategory } from '@/services/category';
 
 const HomePage = async () => {
   const { data: categories } = await allCategory();

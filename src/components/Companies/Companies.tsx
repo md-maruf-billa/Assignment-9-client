@@ -63,9 +63,9 @@ const Companies: React.FC<CompaniesProps> = ({companiesData}) => {
 
     // Filter companies based on search query
     const filteredCompanies = companiesData.success
-        ? companiesData.data.filter(company =>
-            company.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            (company.description && company.description.toLowerCase().includes(searchQuery.toLowerCase()))
+        ? companiesData?.data?.filter(company =>
+            company?.name?.toLowerCase().includes(searchQuery?.toLowerCase()) ||
+            (company?.description && company?.description?.toLowerCase()?.includes(searchQuery?.toLowerCase()))
         )
         : [];
 
