@@ -14,7 +14,6 @@ const Navbar = () => {
   const [showSearch, setShowSearch] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Handle scroll for search display
   useEffect(() => {
     const handleScroll = () => {
       setShowSearch(window.scrollY > 50);
