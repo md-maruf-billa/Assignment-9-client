@@ -2,14 +2,13 @@
 
 import * as React from "react"
 import {
-  IconChartBar,
   IconDashboard,
-  IconFolder,
   IconHelp,
   IconListDetails,
   IconSearch,
   IconSettings,
   IconUsers,
+  IconLibraryPlus, IconDeviceDesktopCog
 } from "@tabler/icons-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -53,12 +52,12 @@ const data = {
     {
       title: "Create Product",
       url: "/dashboard/company/createProduct",
-      icon: IconChartBar,
+      icon: IconLibraryPlus ,
     },
     {
-      title: "Projects",
-      url: "/dashboard/company",
-      icon: IconFolder,
+      title: "Manage Products",
+      url: "/dashboard/company/manageProducts",
+      icon: IconDeviceDesktopCog ,
     },
     {
       title: "Team",
@@ -69,7 +68,7 @@ const data = {
   navSecondary: [
     {
       title: "Settings",
-      url: "#",
+      url: "/dashboard/company/settings",
       icon: IconSettings,
     },
     {
