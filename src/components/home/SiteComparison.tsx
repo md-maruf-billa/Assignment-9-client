@@ -1,4 +1,7 @@
+'use client';
+
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 import travel1 from '@/assets/Travel company-logo/travel-1.png';
 import travel2 from '@/assets/Travel company-logo/travel-2.png';
 import travel3 from '@/assets/Travel company-logo/travel-3.png';
@@ -20,7 +23,7 @@ const travelCompanyData = [
     reviews: 1667,
   },
   {
-    name: 'MexiPass International Insurance Services ',
+    name: 'MexiPass International Insurance Services',
     url: 'mexipass.com',
     logo: travel3,
     rating: 4.8,
@@ -47,47 +50,52 @@ const StarIcon = ({ filled }: { filled: boolean }) => (
 
 export default function SiteComparison() {
   return (
-    <div className=" mx-auto p-4">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold">Best in Travel Insurance Company</h2>
-        <button className="text-sm border border-blue-500 text-blue-600 px-3 py-1 rounded-full hover:bg-blue-50">
+    <div className="w-full  mx-auto px-4 py-8">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-800">
+          Best in Travel Insurance Company
+        </h2>
+        <button className="text-sm sm:text-base border border-blue-600 text-blue-600 font-medium px-4 py-1.5 rounded-full transition hover:bg-blue-600 hover:text-white active:scale-95">
           See more
         </button>
       </div>
 
-      <div className="flex gap-4 overflow-x-auto pb-4">
-        {travelCompanyData.map((bank, idx) => (
-          <div
+      <div className="flex gap-4 overflow-x-auto pb-4 scroll-smooth">
+        {travelCompanyData.map((company, idx) => (
+          <motion.div
             key={idx}
-            className="flex-shrink-0 w-64 bg-white border rounded-xl p-4 shadow-sm hover:shadow-lg transition-shadow duration-300"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: idx * 0.2 }}
+            className="flex-shrink-0 w-64 bg-white border rounded-xl p-4 shadow-md hover:shadow-lg transition-shadow duration-300"
           >
-            <div className="w-14 h-14 mb-2">
+            <div className="w-14 h-14 mb-3">
               <Image
-                src={bank.logo}
-                alt="img"
+                src={company.logo}
+                alt={`${company.name} logo`}
                 width={56}
                 height={56}
                 className="rounded-md object-contain"
               />
             </div>
             <h3
-              className="font-semibold text-[15px] leading-tight truncate"
-              title={bank.name}
+              className="font-semibold text-base leading-tight truncate"
+              title={company.name}
             >
-              {bank.name}
+              {company.name}
             </h3>
-            <p className="text-gray-500 text-sm">{bank.url}</p>
+            <p className="text-gray-500 text-sm truncate">{company.url}</p>
             <div className="flex items-center mt-2">
               <div className="flex gap-[1px]">
                 {Array.from({ length: 5 }, (_, i) => (
-                  <StarIcon key={i} filled={i < Math.floor(bank.rating)} />
+                  <StarIcon key={i} filled={i < Math.floor(company.rating)} />
                 ))}
               </div>
               <p className="text-sm text-gray-700 ml-1">
-                {bank.rating} ({bank.reviews.toLocaleString()})
+                {company.rating} ({company.reviews.toLocaleString()})
               </p>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
     </div>

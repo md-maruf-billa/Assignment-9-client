@@ -1,8 +1,13 @@
+'use client';
+
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 import bank1 from '@/assets/bank logo/bank-1.png';
 import bank2 from '@/assets/bank logo/bank-2.png';
 import bank3 from '@/assets/bank logo/bank-3.png';
 import bank4 from '@/assets/bank logo/bank-4.png';
+import { useInView } from 'framer-motion';
+import { useRef } from 'react';
 
 const bankData = [
   {
@@ -46,25 +51,31 @@ const StarIcon = ({ filled }: { filled: boolean }) => (
 );
 
 export default function SiteReview() {
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
+
   return (
-    <div className="mx-auto p-4">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold">Best in Bank</h2>
-        <button className="text-sm border border-blue-500 text-blue-600 px-3 py-1 rounded-full hover:bg-blue-50">
+    <div ref={sectionRef} className="mx-auto px-4 py-6 md:py-10 ">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-2">
+        <h2 className="text-2xl md:text-3xl font-bold">Best in Bank</h2>
+        <button className="text-sm sm:text-base border border-blue-600 text-blue-600 font-medium px-4 py-1.5 rounded-full transition hover:bg-blue-600 hover:text-white active:scale-95">
           See more
         </button>
       </div>
 
-      <div className="flex gap-4 overflow-x-auto pb-4">
+      <div className="flex gap-4 overflow-x-auto md:grid md:grid-cols-2 lg:grid-cols-4 pb-4">
         {bankData.map((bank, idx) => (
-          <div
+          <motion.div
             key={idx}
-            className="flex-shrink-0 w-64 bg-white border rounded-xl p-4 shadow-sm hover:shadow-lg transition-shadow duration-300"
+            initial={{ opacity: 0, y: 40 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: idx * 0.15, duration: 0.5 }}
+            className="flex-shrink-0 w-64 md:w-full bg-white border rounded-xl p-4 shadow-sm hover:shadow-lg transition-shadow duration-300"
           >
             <div className="w-14 h-14 mb-2">
               <Image
                 src={bank.logo}
-                alt="img"
+                alt={`${bank.name} logo`}
                 width={56}
                 height={56}
                 className="rounded-md object-contain"
@@ -87,7 +98,7 @@ export default function SiteReview() {
                 {bank.rating} ({bank.reviews.toLocaleString()})
               </p>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
     </div>
