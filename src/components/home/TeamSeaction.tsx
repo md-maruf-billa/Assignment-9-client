@@ -61,6 +61,7 @@ const TeamMemberCard = ({ member }: { member: TeamMember }) => {
               "{member.description}"
             </blockquote>
           </div>
+
           <div className="flex space-x-4 mt-auto">
             {member.gitHub && <SocialIcon platform="github" url={member.gitHub} />}
             {member.linkedin && <SocialIcon platform="linkedin" url={member.linkedIn} />}
