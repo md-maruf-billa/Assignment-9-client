@@ -16,6 +16,8 @@ import {
     FaInfoCircle,
     FaSave,
 } from 'react-icons/fa';
+import {get_company_by_id} from "@/services/company";
+import {useUser} from "@/context/UserContext";
 
 // Define the types for the API response
 interface Company {
@@ -58,6 +60,7 @@ type FormValues = {
 
 const SettingsPage = () => {
     // State for user profile data
+    const {user} = useUser()
     const [profileData, setProfileData] = useState<Account | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
@@ -86,62 +89,14 @@ const SettingsPage = () => {
 
     // Fetch user profile data
     useEffect(() => {
-        const fetchProfileData = async () => {
-            setIsLoading(true);
-            try {
-                // In a real app, you would fetch data from the API
-                // const response = await fetch('/api/auth/me');
-                // const data = await response.json();
-
-                // Simulate API response with the provided data
-                const mockResponse: ApiResponse = {
-                    "success": true,
-                    "message": "User profile fetched successfully!",
-                    "data": {
-                        "id": "04b63e24-4a91-410e-b01c-88abbde3210c",
-                        "status": "ACTIVE",
-                        "email": "waltonCompany@gmail.com",
-                        "role": "COMPANY",
-                        "isCompleteProfile": false,
-                        "user": null,
-                        "admin": null,
-                        "company": {
-                            "id": "44c9b1cc-61d7-41b0-ba9f-fd2562e6e1ff",
-                            "name": "Walton",
-                            "accountId": "04b63e24-4a91-410e-b01c-88abbde3210c",
-                            "website": "https://waltonbd.com",
-                            "companyImage": "https://images.unsplash.com/photo-1560179707-f14e90ef3623?q=80&w=2073&auto=format&fit=crop",
-                            "description": "Walton is a leading electronics manufacturer in Bangladesh, producing a wide range of consumer electronics and home appliances.",
-                            "createdAt": "2025-05-07T06:13:13.949Z",
-                            "updatedAt": "2025-05-07T06:13:13.949Z",
-                            "isDeleted": false
-                        },
-                        "createdAt": "2025-05-07T06:13:13.710Z"
-                    },
-                    "meta": null
-                };
-
-                if (mockResponse.success) {
-                    setProfileData(mockResponse.data);
-
-                    // Set image preview if company has an image
-                    if (mockResponse.data.company?.companyImage) {
-                        setImagePreview(mockResponse.data.company.companyImage);
-                    }
-                } else {
-                    toast.error('Failed to fetch profile data');
-                }
-            } catch (error) {
-                console.error('Error fetching profile data:', error);
-                toast.error('An error occurred while fetching profile data');
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
+        const fetchProfileData = async ()=>{
+            const res  = await get_company_by_id(user?.company?.id as string);
+            setProfileData(res.data);
+            setIsLoading(false);
+        }
         fetchProfileData();
-    }, []);
-
+    }, [user?.company?.id]);
+    console.log(profileData);
     // Set form values when opening the update modal
     useEffect(() => {
         if (isUpdateModalOpen && profileData?.company) {
@@ -344,10 +299,10 @@ const SettingsPage = () => {
                                     className="flex flex-col items-center"
                                 >
                                     <div className="w-48 h-48 rounded-lg overflow-hidden bg-gray-100 border border-gray-200 shadow-sm">
-                                        {profileData.company?.companyImage ? (
+                                        {profileData?.companyImage ? (
                                             <Image
-                                                src={profileData.company.companyImage}
-                                                alt={profileData.company.name}
+                                                src={profileData?.companyImage}
+                                                alt={profileData?.name}
                                                 width={192}
                                                 height={192}
                                                 className="w-full h-full object-cover"
@@ -374,21 +329,21 @@ const SettingsPage = () => {
                                     className="flex-1 space-y-4"
                                 >
                                     <div>
-                                        <h2 className="text-2xl font-bold text-gray-900">{profileData.company?.name || 'Company Name Not Set'}</h2>
+                                        <h2 className="text-2xl font-bold text-gray-900">{profileData?.name || 'Company Name Not Set'}</h2>
                                         <p className="text-gray-500 flex items-center mt-1">
                                             <FaEnvelope className="mr-2" />
-                                            {profileData.email}
+                                            {profileData?.account?.email}
                                         </p>
-                                        {profileData.company?.website && (
+                                        {profileData?.website && (
                                             <p className="text-gray-500 flex items-center mt-1">
                                                 <FaGlobe className="mr-2" />
                                                 <a
-                                                    href={profileData.company.website.startsWith('http') ? profileData.company.website : `https://${profileData.company.website}`}
+                                                    href={profileData?.website.startsWith('http') ? profileData?.website : `https://${profileData?.website}`}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="text-amber-600 hover:text-amber-800 transition-colors duration-200"
                                                 >
-                                                    {profileData.company.website}
+                                                    {profileData?.website}
                                                 </a>
                                             </p>
                                         )}
@@ -397,7 +352,7 @@ const SettingsPage = () => {
                                     <div>
                                         <h3 className="text-lg font-semibold text-gray-900">Description</h3>
                                         <p className="text-gray-700 mt-2">
-                                            {profileData.company?.description || 'No description provided.'}
+                                            {profileData?.description || 'No description provided.'}
                                         </p>
                                     </div>
 
@@ -405,15 +360,15 @@ const SettingsPage = () => {
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                             <div>
                                                 <p className="text-sm text-gray-500">Company ID</p>
-                                                <p className="font-medium text-gray-900">{profileData.company?.id}</p>
+                                                <p className="font-medium text-gray-900">{profileData?.id}</p>
                                             </div>
                                             <div>
                                                 <p className="text-sm text-gray-500">Account ID</p>
-                                                <p className="font-medium text-gray-900">{profileData.id}</p>
+                                                <p className="font-medium text-gray-900">{profileData?.account?.id}</p>
                                             </div>
                                             <div>
                                                 <p className="text-sm text-gray-500">Role</p>
-                                                <p className="font-medium text-gray-900">{profileData.role}</p>
+                                                <p className="font-medium text-gray-900">{profileData?.account?.role}</p>
                                             </div>
                                             <div>
                                                 <p className="text-sm text-gray-500">Joined</p>
@@ -426,7 +381,7 @@ const SettingsPage = () => {
                                             <div>
                                                 <p className="text-sm text-gray-500">Profile Status</p>
                                                 <p className="font-medium text-gray-900 flex items-center">
-                                                    {profileData.isCompleteProfile ? (
+                                                    {profileData?.account?.isCompleteProfile ? (
                                                         <>
                                                             <FaCheck className="text-green-500 mr-1" />
                                                             Complete
@@ -458,7 +413,7 @@ const SettingsPage = () => {
                                 <div className="flex flex-col md:flex-row md:items-center justify-between p-4 bg-gray-50 rounded-lg">
                                     <div>
                                         <h3 className="font-medium text-gray-900">Email Address</h3>
-                                        <p className="text-gray-600">{profileData.email}</p>
+                                        <p className="text-gray-600">{profileData?.account?.email}</p>
                                     </div>
                                     <button className="mt-2 md:mt-0 inline-flex items-center px-3 py-1.5 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors duration-200">
                                         Change Email
@@ -467,7 +422,7 @@ const SettingsPage = () => {
                                 <div className="flex flex-col md:flex-row md:items-center justify-between p-4 bg-gray-50 rounded-lg">
                                     <div>
                                         <h3 className="font-medium text-gray-900">Password</h3>
-                                        <p className="text-gray-600">Last changed: Not available</p>
+                                        <p className="text-gray-600">Last changed: {formatDate(profileData.account?.updatedAt)}</p>
                                     </div>
                                     <button className="mt-2 md:mt-0 inline-flex items-center px-3 py-1.5 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors duration-200">
                                         Change Password

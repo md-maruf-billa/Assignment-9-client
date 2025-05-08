@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef } from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
@@ -14,34 +14,35 @@ import {
 } from 'react-icons/fa';
 import Image from "next/image";
 import { useWatch } from 'react-hook-form';
+import {create_new_product_action} from "@/services/product";
+import {allCategory} from "@/services/category";
 
 type FormValues = {
     name: string;
     price: number;
     description: string;
-    category?: string;
+    categoryId?: string;
     tags?: string;
 };
 
-const categories = [
-    "Electronics",
-    "Clothing",
-    "Home & Kitchen",
-    "Beauty & Personal Care",
-    "Books",
-    "Toys & Games",
-    "Sports & Outdoors",
-    "Automotive",
-    "Health & Wellness",
-    "Other"
-];
 
 const CreateProductPage = () => {
+    const [categories, setCategories] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [dragActive, setDragActive] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+    // fetch category
+    useEffect(() => {
+        const fetchCategory = async ()=>{
+            const res = await allCategory();
+            setCategories(res?.data);
+        }
+        fetchCategory();
+    },[])
+
 
     const {
         register,
@@ -54,7 +55,7 @@ const CreateProductPage = () => {
             name: '',
             price: 0,
             description: '',
-            category: '',
+            categoryId: '',
             tags: ''
         }
     });
@@ -131,6 +132,7 @@ const CreateProductPage = () => {
     };
 
     const onSubmit = async (data: FormValues) => {
+        const id = toast.loading('Verifying product data ...');
         if (!selectedImage) {
             toast.error('Please select a product image');
             return;
@@ -140,27 +142,22 @@ const CreateProductPage = () => {
 
         try {
             const formData = new FormData();
+            data.price = Number(data.price);
             formData.append('data', JSON.stringify(data));
             formData.append('image', selectedImage);
+           const res = await create_new_product_action(formData);
+           if(res.success) {
+               toast.success(res?.message,{id});
+               reset();
+               setSelectedImage(null);
+               setImagePreview(null);
+           }else{
+               toast.error(res.message,{id})
+           }
 
-            // Update the API Call ----------
-            const response = await fetch('/api/product/create-product', {
-              method: 'POST',
-              body: formData,
-            });
 
-            console.log(response);
-
-            // Simulating API call
-            //await new Promise(resolve => setTimeout(resolve, 1500));
-
-            toast.success('Product created successfully!');
-            reset();
-            setSelectedImage(null);
-            setImagePreview(null);
         } catch (error) {
-            console.error('Error creating product:', error);
-            toast.error('Failed to create product');
+            toast.error('Failed to create product',{id});
         } finally {
             setIsLoading(false);
         }
@@ -248,12 +245,12 @@ const CreateProductPage = () => {
                                 <div className="relative rounded-md shadow-sm">
                                     <select
                                         id="category"
-                                        {...register('category')}
+                                        {...register('categoryId')}
                                         className="block w-full pl-3 pr-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-amber-500 focus:border-amber-500"
                                     >
                                         <option value="">Select a category</option>
                                         {categories.map((category) => (
-                                            <option key={category} value={category}>{category}</option>
+                                            <option key={category?.id} value={category?.id}>{category?.name}</option>
                                         ))}
                                     </select>
                                 </div>
@@ -400,9 +397,9 @@ const CreateProductPage = () => {
           <span className="text-amber-600 font-medium">
             ${watchedValues.price ? Number(watchedValues.price).toFixed(2) : '0.00'}
           </span>
-                                                {watchedValues.category && (
+                                                {watchedValues.categoryId && (
                                                     <span className="ml-2 text-xs bg-gray-200 text-gray-700 px-2 py-1 rounded-full">
-              {watchedValues.category}
+              {watchedValues.categoryId}
             </span>
                                                 )}
                                             </div>

@@ -21,90 +21,24 @@ import {
 import Link from 'next/link';
 import { FiTrash2} from "react-icons/fi";
 import {RiEditLine} from "react-icons/ri";
+import {delete_product_action, get_all_products_action, update_product_action} from "@/services/product";
+import {allCategory} from "@/services/category";
+import {Product} from "@/types/company";
+import {ICategory} from "@/types/product";
 
-// Define the Product type
-interface Product {
-    id: string;
-    name: string;
-    price: number;
-    description: string;
-    imageUrl: string;
-    category?: string;
-    tags?: string;
-    isDeleted: boolean;
-    createdAt: string;
-    updatedAt: string;
-    companyId: string;
-}
 
 // Form values type for the update modal
 type FormValues = {
     name: string;
     price: number;
     description: string;
-    category?: string;
+    categoryId?: string;
     tags?: string;
 };
 
-// Categories for dropdown
-const categories = [
-    "Electronics",
-    "Clothing",
-    "Home & Kitchen",
-    "Beauty & Personal Care",
-    "Books",
-    "Toys & Games",
-    "Sports & Outdoors",
-    "Automotive",
-    "Health & Wellness",
-    "Other"
-];
+
 
 const ManageProductsPage = () => {
-    // Sample products data - in a real app, this would come from an API
-    const [products, setProducts] = useState<Product[]>([
-        {
-            id: "5411afea-4ff8-4bff-af4f-b5247ec98d90",
-            name: "Wireless Mouse",
-            price: 1299.99,
-            description: "A high-precision wireless mouse with ergonomic design.",
-            imageUrl: "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?q=80&w=1767&auto=format&fit=crop",
-            category: "Electronics",
-            tags: "computer,wireless,accessories",
-            isDeleted: false,
-            createdAt: "2025-05-02T20:41:50.241Z",
-            updatedAt: "2025-05-02T20:41:50.241Z",
-            companyId: "67af48aa-b898-4966-8ece-ee3de510a7eb"
-        },
-        {
-            id: "6522bfeb-5ff9-5cgg-bf5g-c6358fd99e91",
-            name: "Mechanical Keyboard",
-            price: 2499.99,
-            description: "Premium mechanical keyboard with RGB lighting and customizable keys.",
-            imageUrl: "https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?q=80&w=1780&auto=format&fit=crop",
-            category: "Electronics",
-            tags: "computer,gaming,accessories",
-            isDeleted: false,
-            createdAt: "2025-05-03T10:30:20.241Z",
-            updatedAt: "2025-05-03T10:30:20.241Z",
-            companyId: "67af48aa-b898-4966-8ece-ee3de510a7eb"
-        },
-        {
-            id: "7633cgfc-6gg0-6dhh-cg6h-d7469ge00f02",
-            name: "Bluetooth Headphones",
-            price: 1899.99,
-            description: "Noise-cancelling Bluetooth headphones with 30-hour battery life.",
-            imageUrl: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1770&auto=format&fit=crop",
-            category: "Electronics",
-            tags: "audio,wireless,music",
-            isDeleted: false,
-            createdAt: "2025-05-04T15:22:10.241Z",
-            updatedAt: "2025-05-04T15:22:10.241Z",
-            companyId: "67af48aa-b898-4966-8ece-ee3de510a7eb"
-        }
-    ]);
-
-    // State for search, filter, and sorting
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
     const [sortConfig, setSortConfig] = useState<{key: string, direction: 'ascending' | 'descending'} | null>(null);
@@ -120,6 +54,23 @@ const ManageProductsPage = () => {
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [dragActive, setDragActive] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const [products, setProducts] = useState<Product[]>([]);
+    const [categories, setCategories] = useState([]);
+    useEffect(() => {
+        const fetchProduct = async ()=>{
+            const res = await get_all_products_action()
+            setProducts(res.data)
+        }
+
+        const fetchCategory = async ()=>{
+            const res = await allCategory();
+            setCategories(res?.data);
+        }
+        fetchCategory();
+        fetchProduct()
+    }, [isLoading]);
+    // State for search, filter, and sorting
+
 
     // Form setup for the update modal
     const {
@@ -133,7 +84,7 @@ const ManageProductsPage = () => {
             name: '',
             price: 0,
             description: '',
-            category: '',
+            categoryId: '',
             tags: ''
         }
     });
@@ -144,7 +95,7 @@ const ManageProductsPage = () => {
             setValue('name', selectedProduct.name);
             setValue('price', selectedProduct.price);
             setValue('description', selectedProduct.description);
-            setValue('category', selectedProduct.category || '');
+            setValue('categoryId', selectedProduct.categoryId || '');
             setValue('tags', selectedProduct.tags || '');
 
             if (selectedProduct.imageUrl) {
@@ -232,42 +183,24 @@ const ManageProductsPage = () => {
     // Function to handle product update submission
     const handleUpdateProduct = async (data: FormValues) => {
         if (!selectedProduct) return;
-
         setIsLoading(true);
-
         try {
-            // In a real app, you would send the data to an API
-            // const formData = new FormData();
-            // formData.append('data', JSON.stringify(data));
-            // if (selectedImage) {
-            //   formData.append('image', selectedImage);
-            // }
-            // const response = await fetch(`/api/products/${selectedProduct.id}`, {
-            //   method: 'PUT',
-            //   body: formData,
-            // });
 
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 1000));
-
-            // Update the product in the local state
-            const updatedProducts = products.map(product => {
-                if (product.id === selectedProduct.id) {
-                    return {
-                        ...product,
-                        ...data,
-                        imageUrl: imagePreview || product.imageUrl,
-                        updatedAt: new Date().toISOString()
-                    };
-                }
-                return product;
-            });
-
-            setProducts(updatedProducts);
-            toast.success('Product updated successfully!');
+            const formData = new FormData();
+            formData.append('data', JSON.stringify(data));
+            if (selectedImage) {
+              formData.append('image', selectedImage);
+            }
+            const res = await update_product_action(selectedProduct?.id,formData);
+            if(res.success) {
+                toast.success(res.message);
+                setIsLoading(true);
+            }
+            else{
+                toast.error(res.message);
+            }
             handleCloseModals();
         } catch (error) {
-            console.error('Error updating product:', error);
             toast.error('Failed to update product');
         } finally {
             setIsLoading(false);
@@ -277,27 +210,20 @@ const ManageProductsPage = () => {
     // Function to handle product deletion
     const handleDeleteProduct = async () => {
         if (!selectedProduct) return;
-
         setIsLoading(true);
 
         try {
-            // In a real app, you would send a request to an API
-            // const response = await fetch(`/api/products/${selectedProduct.id}`, {
-            //   method: 'DELETE',
-            // });
-
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 1000));
-
-            // Remove the product from the local state
-            const updatedProducts = products.filter(product => product.id !== selectedProduct.id);
-            setProducts(updatedProducts);
-
-            toast.success('Product deleted successfully!');
+            const res = await delete_product_action(selectedProduct.id);
+            if(res.success) {
+                toast.success(res.message);
+                setIsLoading(true);
+            }
+            else{
+                toast.error(res.message);
+            }
             handleCloseModals();
         } catch (error) {
-            console.error('Error deleting product:', error);
-            toast.error('Failed to delete product');
+            toast.error(JSON.stringify(error));
         } finally {
             setIsLoading(false);
         }
@@ -329,7 +255,7 @@ const ManageProductsPage = () => {
         // Apply category filter
         if (selectedCategory) {
             filteredProducts = filteredProducts.filter(product =>
-                product.category === selectedCategory
+                product.categoryId === selectedCategory
             );
         }
 
@@ -439,8 +365,8 @@ const ManageProductsPage = () => {
                                     onChange={(e) => setSelectedCategory(e.target.value)}
                                 >
                                     <option value="">All Categories</option>
-                                    {categories.map((category) => (
-                                        <option key={category} value={category}>{category}</option>
+                                    {categories.map((category:ICategory) => (
+                                        <option key={category?.id} value={category?.id}>{category?.name}</option>
                                     ))}
                                 </select>
                             </div>
@@ -453,7 +379,7 @@ const ManageProductsPage = () => {
                             Showing <span className="font-medium">{filteredAndSortedProducts.length}</span> of <span className="font-medium">{products.length}</span> products
                             {selectedCategory && (
                                 <span className="ml-2">
-                  in <span className="font-medium">{selectedCategory}</span>
+                  in <span className="font-medium">{categories?.find((ct:ICategory)=>ct.id == selectedCategory)?.name}</span>
                   <button
                       className="ml-1 text-amber-600 hover:text-amber-800"
                       onClick={() => setSelectedCategory('')}
@@ -566,9 +492,9 @@ const ManageProductsPage = () => {
                                             <div className="text-sm font-medium text-amber-600">${product.price.toFixed(2)}</div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            {product.category ? (
+                                            {product.categoryId ? (
                                                 <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
-                            {product.category}
+                            {product.categoryId}
                           </span>
                                             ) : (
                                                 <span className="text-sm text-gray-500">-</span>
@@ -705,12 +631,12 @@ const ManageProductsPage = () => {
                                             <div className="relative rounded-md shadow-sm">
                                                 <select
                                                     id="category"
-                                                    {...register('category')}
+                                                    {...register('categoryId')}
                                                     className="block w-full pl-3 pr-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-amber-500 focus:border-amber-500"
                                                 >
                                                     <option value="">Select a category</option>
-                                                    {categories.map((category) => (
-                                                        <option key={category} value={category}>{category}</option>
+                                                    {categories?.map((category:ICategory) => (
+                                                        <option key={category?.id} value={category?.id}>{category?.name}</option>
                                                     ))}
                                                 </select>
                                             </div>
