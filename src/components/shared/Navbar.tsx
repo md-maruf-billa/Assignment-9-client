@@ -103,7 +103,7 @@ const Navbar = () => {
           {user?.email ? (
             <>
               {user?.role === 'ADMIN' ? (
-                <Link href="/dashbaord">
+                <Link href="/dashboard/admin">
                   <Button size="sm" className="whitespace-nowrap">
                     Dashboard
                   </Button>
@@ -112,7 +112,7 @@ const Navbar = () => {
                 <UserMenu setIsLoading={setIsLoading} user={user} />
               ) : (
                 user.role === 'COMPANY' && (
-                  <Link href="/dashboard">
+                  <Link href="/dashboard/company">
                     <Button size="sm" className="whitespace-nowrap">
                       Dashboard
                     </Button>

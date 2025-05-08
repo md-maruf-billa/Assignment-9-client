@@ -4,10 +4,7 @@ import * as React from "react"
 import {
   IconDashboard,
   IconHelp,
-  IconListDetails,
-  IconSearch,
   IconSettings,
-  IconUsers,
   IconLibraryPlus, IconDeviceDesktopCog
 } from "@tabler/icons-react"
 
@@ -29,6 +26,7 @@ import {GoCodeReview} from "react-icons/go";
 import Link from "next/link";
 import {toast} from "sonner";
 import {log_out_user_action} from "@/services/AuthService";
+import {Building2, MessageSquareCode, Users} from "lucide-react";
 
 const data = {
   user: {
@@ -38,14 +36,24 @@ const data = {
   },
   admin: [
     {
-      title: "Dashboard",
+      title: "Overview",
       url: "#",
       icon: IconDashboard,
     },
     {
-      title: "Lifecycle",
-      url: "#",
-      icon: IconListDetails,
+      title: "Manage Users",
+      url: "/dashboard/admin/manage-users",
+      icon: Users,
+    },
+    {
+      title: "Manage Companies",
+      url: "/dashboard/admin/manage-companies",
+      icon: Building2,
+    },
+    {
+      title: "Manage Reviews",
+      url: "/dashboard/admin/manage-reviews",
+      icon: MessageSquareCode ,
     }
   ],
   company: [
@@ -60,12 +68,24 @@ const data = {
       icon: IconDeviceDesktopCog ,
     },
     {
-      title: "Team",
-      url: "#",
-      icon: IconUsers,
+      title: "Manage Reviews",
+      url: "/dashboard/company/manageReviews",
+      icon: MessageSquareCode,
     },
   ],
-  navSecondary: [
+  navSecondaryAdmin: [
+    {
+      title: "Settings",
+      url: "/dashboard/admin/settings",
+      icon: IconSettings,
+    },
+    {
+      title: "Get Help",
+      url: "#",
+      icon: IconHelp,
+    }
+  ],
+  navSecondaryCompany:[
     {
       title: "Settings",
       url: "/dashboard/company/settings",
@@ -75,12 +95,7 @@ const data = {
       title: "Get Help",
       url: "#",
       icon: IconHelp,
-    },
-    {
-      title: "Search",
-      url: "#",
-      icon: IconSearch,
-    },
+    }
   ]
 }
 
@@ -115,7 +130,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={user?.role == "ADMIN" ? data.admin : user?.role == "COMPANY" ? data.company : []} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        <NavSecondary items={user?.role == "ADMIN" ? data.navSecondaryAdmin : user?.role == "COMPANY" ? data.navSecondaryCompany : []} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
         {/*<NavUser user={data.user} />*/}
