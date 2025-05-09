@@ -73,25 +73,8 @@ const data = {
     {
       title: 'Manage Reviews',
       url: '/dashboard/company/manageReviews',
-      title: "Overview",
-      url: "#",
       icon: IconDashboard,
     },
-    {
-      title: "Manage Users",
-      url: "/dashboard/admin/manageUsers",
-      icon: Users,
-    },
-    {
-      title: "Manage Companies",
-      url: "/dashboard/admin/manageCompanies",
-      icon: Building2,
-    },
-    {
-      title: "Manage Reviews",
-      url: "/dashboard/admin/manage-reviews",
-      icon: MessageSquareCode,
-    }, 
   ],
   navSecondaryAdmin: [
     {
@@ -104,13 +87,6 @@ const data = {
       url: '/dashboard/admin/get-help',
       icon: IconHelp,
     }
-  ],
-  navSecondaryCompany:[
-    {
-      title: "Settings",
-      url: "/dashboard/company/settings",
-      icon: IconSettings,
-    },
   ],
   navSecondaryCompany: [
     {
