@@ -495,6 +495,7 @@ const ManageProductsPage = () => {
                                             {product.categoryId ? (
                                                 <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
                             {categories?.find((category:any) => category?.id == product?.categoryId)?.name}
+
                           </span>
                                             ) : (
                                                 <span className="text-sm text-gray-500">-</span>

@@ -75,6 +75,7 @@ const data = {
       url: '/dashboard/company/manageReviews',
       icon: IconDashboard,
     },
+
   ],
   navSecondaryAdmin: [
     {
@@ -87,6 +88,13 @@ const data = {
       url: '/dashboard/admin/get-help',
       icon: IconHelp,
     }
+  ],
+  navSecondaryCompany:[
+    {
+      title: 'Settings',
+      url: '/dashboard/company/settings',
+      icon: IconSettings,
+    },
   ],
   navSecondaryCompany: [
     {
