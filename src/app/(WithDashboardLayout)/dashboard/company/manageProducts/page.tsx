@@ -185,7 +185,7 @@ const ManageProductsPage = () => {
         if (!selectedProduct) return;
         setIsLoading(true);
         try {
-
+            data.price = Number(data?.price);
             const formData = new FormData();
             formData.append('data', JSON.stringify(data));
             if (selectedImage) {
@@ -484,7 +484,7 @@ const ManageProductsPage = () => {
                                                 </div>
                                                 <div className="ml-4">
                                                     <div className="text-sm font-medium text-gray-900">{product.name}</div>
-                                                    <div className="text-sm text-gray-500 line-clamp-1">{product.description}</div>
+                                                    <div className="text-sm text-gray-500 line-clamp-1">{product.description?.slice(0,30)} ..</div>
                                                 </div>
                                             </div>
                                         </td>
@@ -494,7 +494,7 @@ const ManageProductsPage = () => {
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             {product.categoryId ? (
                                                 <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
-                            {product.categoryId}
+                            {categories?.find((category:any) => category?.id == product?.categoryId)?.name}
                           </span>
                                             ) : (
                                                 <span className="text-sm text-gray-500">-</span>
