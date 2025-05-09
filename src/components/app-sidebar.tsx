@@ -5,9 +5,9 @@ import {
   IconDashboard,
   IconHelp,
   IconSettings,
-  IconLibraryPlus,
-  IconDeviceDesktopCog,
-} from '@tabler/icons-react';
+  IconLibraryPlus, IconDeviceDesktopCog
+} from "@tabler/icons-react"
+
 
 import { NavMain } from '@/components/nav-main';
 import { NavSecondary } from '@/components/nav-secondary';
@@ -76,14 +76,21 @@ const data = {
   ],
   navSecondaryAdmin: [
     {
-      title: 'Settings',
-      url: '/dashboard/admin/settings',
+      title: "Settings",
+      url: "/dashboard/admin/settings",
       icon: IconSettings,
     },
     {
       title: 'Get Help',
       url: '/dashboard/admin/get-help',
       icon: IconHelp,
+    }
+  ],
+  navSecondaryCompany:[
+    {
+      title: "Settings",
+      url: "/dashboard/company/settings",
+      icon: IconSettings,
     },
   ],
   navSecondaryCompany: [
@@ -97,8 +104,8 @@ const data = {
       url: '#',
       icon: IconHelp,
     },
-  ],
-};
+  ]
+}
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user, setIsLoading } = useUser();
@@ -128,25 +135,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain
-          items={
-            user?.role == 'ADMIN'
-              ? data.admin
-              : user?.role == 'COMPANY'
-              ? data.company
-              : []
-          }
-        />
-        <NavSecondary
-          items={
-            user?.role == 'ADMIN'
-              ? data.navSecondaryAdmin
-              : user?.role == 'COMPANY'
-              ? data.navSecondaryCompany
-              : []
-          }
-          className="mt-auto"
-        />
+        <NavMain items={user?.role == "ADMIN" ? data.admin : user?.role == "COMPANY" ? data.company : []} />
+        <NavSecondary items={user?.role == "ADMIN" ? data.navSecondaryAdmin : user?.role == "COMPANY" ? data.navSecondaryCompany : []} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
         {/*<NavUser user={data.user} />*/}
