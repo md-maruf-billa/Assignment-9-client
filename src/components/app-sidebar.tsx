@@ -1,16 +1,18 @@
 'use client';
 
 import * as React from 'react';
+
 import {
   IconDashboard,
   IconHelp,
   IconSettings,
-  IconLibraryPlus, IconDeviceDesktopCog
-} from "@tabler/icons-react"
+  IconLibraryPlus,
+  IconDeviceDesktopCog,
+} from "@tabler/icons-react";
 
+import { NavMain } from "@/components/nav-main";
+import { NavSecondary } from "@/components/nav-secondary";
 
-import { NavMain } from '@/components/nav-main';
-import { NavSecondary } from '@/components/nav-secondary';
 
 import {
   Sidebar,
@@ -71,8 +73,25 @@ const data = {
     {
       title: 'Manage Reviews',
       url: '/dashboard/company/manageReviews',
-      icon: MessageSquareCode,
+      title: "Overview",
+      url: "#",
+      icon: IconDashboard,
     },
+    {
+      title: "Manage Users",
+      url: "/dashboard/admin/manageUsers",
+      icon: Users,
+    },
+    {
+      title: "Manage Companies",
+      url: "/dashboard/admin/manageCompanies",
+      icon: Building2,
+    },
+    {
+      title: "Manage Reviews",
+      url: "/dashboard/admin/manage-reviews",
+      icon: MessageSquareCode,
+    }, 
   ],
   navSecondaryAdmin: [
     {
@@ -100,12 +119,12 @@ const data = {
       icon: IconSettings,
     },
     {
-      title: 'Get Help',
-      url: '#',
+      title: "Get Help",
+      url: "#",
       icon: IconHelp,
     },
-  ]
-}
+  ],
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user, setIsLoading } = useUser();
@@ -117,7 +136,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       setIsLoading(true);
       window.location.replace('/');
     } else {
-      toast.error('Logout Failed !', { id });
+      toast.error('Logout Failed !', { id })
     }
   };
   return (
@@ -126,6 +145,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
+
               <Link href={'/'} className="flex items-center space-x-2">
                 <GoCodeReview className={'!text-3xl'} />
                 <span className="font-bold text-xl ">ReviewHub</span>
