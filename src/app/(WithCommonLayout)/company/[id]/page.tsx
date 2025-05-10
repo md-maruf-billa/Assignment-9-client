@@ -41,6 +41,8 @@ const CompanyDetailsPage = () => {
         loadData();
     }, [id]);
 
+    console.log(company);
+
     if (isLoading) return <Loading />
 
     if (error || !company) {

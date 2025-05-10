@@ -46,3 +46,9 @@ export const delete_product_action = async (id:string)=>{
     })
     return await result.json();
 }
+
+// get product by id
+export const get_product_by_id_action = async (id:string)=> {
+    const result = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/product/${id}`)
+    return await result.json();
+}
