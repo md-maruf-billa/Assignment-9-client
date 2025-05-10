@@ -45,17 +45,17 @@ const data = {
     },
     {
       title: 'Manage Users',
-      url: '/dashboard/admin/manage-users',
+      url: '/dashboard/admin/manageUsers',
       icon: Users,
     },
     {
       title: 'Manage Companies',
-      url: '/dashboard/admin/manage-companies',
+      url: '/dashboard/admin/manageCompanies',
       icon: Building2,
     },
     {
       title: 'Manage Reviews',
-      url: '/dashboard/admin/manage-reviews',
+      url: '/dashboard/admin/manageReviews',
       icon: MessageSquareCode,
     },
   ],
@@ -96,18 +96,7 @@ const data = {
       icon: IconSettings,
     },
   ],
-  navSecondaryCompany: [
-    {
-      title: 'Settings',
-      url: '/dashboard/company/settings',
-      icon: IconSettings,
-    },
-    {
-      title: "Get Help",
-      url: "#",
-      icon: IconHelp,
-    },
-  ],
+ 
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
