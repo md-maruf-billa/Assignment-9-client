@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useForm } from 'react-hook-form';
@@ -16,8 +16,12 @@ import {
     FaCalendarAlt,
     FaCheck,
     FaPaperPlane,
-    FaRegComment
+    FaRegComment, FaThumbsDown
 } from 'react-icons/fa';
+import {useUser} from "@/context/UserContext";
+import {create_review_action, create_voter_action} from "@/services/review";
+import {create_comment_action} from "@/services/comment";
+import {get_product_by_category_id_action} from "@/services/product";
 
 // Types for the API response
 interface ReviewComment {
@@ -95,7 +99,7 @@ interface Product {
     reviews: Review[];
 }
 
-interface ProductResponse {
+export interface ProductResponse {
     success: boolean;
     message: string;
     data: Product;
@@ -116,20 +120,31 @@ type CommentFormValues = {
 interface ProductDetailsProps {
     productData: ProductResponse;
     isLoading?: boolean;
+    setRefatch: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading = false }) => {
+const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,setRefatch }) => {
+    const {user} = useUser()
     // State for modals
     const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
-    const [activeReviewId, setActiveReviewId] = useState<string | null>(null);
+    const [relatedProducts, setRelatedProducts] = useState([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [selectedRating, setSelectedRating] = useState(0);
     const [hoverRating, setHoverRating] = useState(0);
-
     // State for comments
     const commentInputRefs = useRef<{ [key: string]: HTMLTextAreaElement | null }>({});
     const [commentExpanded, setCommentExpanded] = useState<{ [key: string]: boolean }>({});
     const [isPostingComment, setIsPostingComment] = useState<{ [key: string]: boolean }>({});
+// load related product
+    useEffect(() => {
+        const fetchData = async ()=>{
+            const res = await get_product_by_category_id_action(productData?.data?.categoryId as string);
+            setRelatedProducts(res?.data)
+        }
+        fetchData()
+    }, [productData?.data?.categoryId]);
+
+
 
     // Forms setup
     const {
@@ -197,32 +212,31 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading 
 
     // Form submission handlers
     const onSubmitReview = async (data: ReviewFormValues) => {
-        if (selectedRating === 0) {
+        if (!user?.email) {
+            toast.error('Please Login first!!');
+            return;
+        }  if (selectedRating === 0) {
             toast.error('Please select a rating');
             return;
         }
-
         setIsSubmitting(true);
-
         try {
-            // In a real app, you would send the data to the API
-            // const response = await fetch('/api/reviews', {
-            //   method: 'POST',
-            //   headers: {
-            //     'Content-Type': 'application/json',
-            //   },
-            //   body: JSON.stringify({
-            //     ...data,
-            //     rating: selectedRating,
-            //     productId: product.id,
-            //   }),
-            // });
+            const reviewPayload={
+                title: data.title,
+                description: data.description,
+                rating: selectedRating,
+                productId:productData?.data?.id,
+                categoryId:productData?.data?.categoryId,
+                reviewerName:user?.user?.name || user?.admin?.name,
+                isPremium: user?.role == "ADMIN",
+            }
 
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 1500));
-
-            toast.success('Review submitted successfully!');
-            closeReviewModal();
+            const res = await create_review_action(reviewPayload)
+            if(res.success){
+                toast.success('Review submitted successfully!');
+                setRefatch(true)
+                closeReviewModal();
+            }
         } catch (error) {
             console.error('Error submitting review:', error);
             toast.error('Failed to submit review');
@@ -240,25 +254,15 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading 
         setIsPostingComment(prev => ({ ...prev, [reviewId]: true }));
 
         try {
-            // In a real app, you would send the data to the API
-            // const response = await fetch(`/api/reviews/${reviewId}/comments`, {
-            //   method: 'POST',
-            //   headers: {
-            //     'Content-Type': 'application/json',
-            //   },
-            //   body: JSON.stringify({
-            //     content: data.content,
-            //   }),
-            // });
+            const res = await create_comment_action({reviewId,content:data?.content});
+            if(res.success){
+                toast.success('Comment added successfully!');
+                setRefatch(true)
+                resetCommentForm();
+                // Close the comment input
+                setCommentExpanded(prev => ({ ...prev, [reviewId]: false }));
+            }
 
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 1000));
-
-            toast.success('Comment added successfully!');
-            resetCommentForm();
-
-            // Close the comment input
-            setCommentExpanded(prev => ({ ...prev, [reviewId]: false }));
         } catch (error) {
             console.error('Error posting comment:', error);
             toast.error('Failed to post comment');
@@ -267,23 +271,14 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading 
         }
     };
 
-    const handleVote = async (reviewId: string) => {
+    const handleVote = async (reviewId: string,type:string) => {
         try {
-            // In a real app, you would send the data to the API
-            // const response = await fetch(`/api/reviews/${reviewId}/vote`, {
-            //   method: 'POST',
-            //   headers: {
-            //     'Content-Type': 'application/json',
-            //   },
-            //   body: JSON.stringify({
-            //     type: 'UP',
-            //   }),
-            // });
-
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 500));
-
-            toast.success('Vote recorded!');
+            console.log(reviewId,type);
+           const res = await create_voter_action({reviewId, type})
+            if(res.success){
+                toast.success('Vote recorded!');
+                setRefatch(true)
+            }
         } catch (error) {
             console.error('Error voting:', error);
             toast.error('Failed to record vote');
@@ -346,7 +341,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading 
         return (
             <div className="text-center py-16">
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">Product Not Found</h3>
-                <p className="text-gray-600">The product you're looking for doesn't exist or has been removed.</p>
+                <p className="text-gray-600">The product you are looking for does not exist or has been removed.</p>
             </div>
         );
     }
@@ -500,14 +495,14 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading 
                         )}
 
                         {/* Reviews List */}
-                        {product.reviews.length > 0 ? (
+                        {product?.reviews?.length > 0 ? (
                             <motion.div
                                 variants={staggerContainer}
                                 initial="hidden"
                                 animate="visible"
                                 className="space-y-6"
                             >
-                                {product.reviews.map(review => (
+                                {product?.reviews?.map(review => (
                                     <motion.div
                                         key={review.id}
                                         variants={reviewItem}
@@ -518,11 +513,11 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading 
                                                 <div className="mr-4">
                                                     {review.reviewerProfilePhoto ? (
                                                         <Image
-                                                            src={review.reviewerProfilePhoto}
-                                                            alt={review.reviewerName}
-                                                            width={48}
-                                                            height={48}
-                                                            className="rounded-full object-cover"
+                                                            src={review?.reviewerProfilePhoto}
+                                                            alt={review?.reviewerName}
+                                                            width={600}
+                                                            height={600}
+                                                            className="rounded-full size-10 object-cover"
                                                         />
                                                     ) : (
                                                         <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
@@ -531,9 +526,9 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading 
                                                     )}
                                                 </div>
                                                 <div>
-                                                    <h3 className="font-semibold text-gray-900">{review.reviewerName}</h3>
+                                                    <h3 className="font-semibold text-gray-900">{review?.reviewerName}</h3>
                                                     <div className="flex items-center mt-1">
-                                                        {renderStarRating(review.rating, 'text-sm')}
+                                                        {renderStarRating(review?.rating, 'text-sm')}
                                                         <span className="ml-2 text-sm text-gray-500">
                               {formatDate(review.createdAt)}
                             </span>
@@ -553,18 +548,24 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading 
 
                                         <div className="flex items-center space-x-4 mb-4">
                                             <button
-                                                onClick={() => handleVote(review.id)}
+                                                onClick={() => handleVote(review.id,"up")}
                                                 className="flex items-center text-gray-500 hover:text-amber-500 transition-colors duration-200"
                                             >
                                                 <FaThumbsUp className="mr-1" />
-                                                <span>{review.votes.length}</span>
+                                                <span>{review?.upVotes}</span>
+                                            </button>  <button
+                                                onClick={() => handleVote(review.id,"down")}
+                                                className="flex items-center text-gray-500 hover:text-amber-500 transition-colors duration-200"
+                                            >
+                                                <FaThumbsDown className="mr-1" />
+                                                <span>{review?.downVotes}</span>
                                             </button>
                                             <button
                                                 onClick={() => toggleCommentInput(review.id)}
                                                 className="flex items-center text-gray-500 hover:text-amber-500 transition-colors duration-200"
                                             >
                                                 <FaComment className="mr-1" />
-                                                <span>{review.ReviewComment.length}</span>
+                                                <span>{review?.ReviewComment.length}</span>
                                             </button>
                                         </div>
 
@@ -574,15 +575,15 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading 
                                                 <h5 className="font-medium text-gray-900 mb-3">Comments</h5>
                                                 <div className="space-y-4">
                                                     {review.ReviewComment.map(comment => (
-                                                        <div key={comment.id} className="flex space-x-3">
+                                                        <div key={comment.id} className="flex space-x-3 items-center">
                                                             <div className="flex-shrink-0">
                                                                 {comment.account.user?.profileImage ? (
                                                                     <Image
                                                                         src={comment.account.user.profileImage}
                                                                         alt={comment.account.user.name}
-                                                                        width={32}
-                                                                        height={32}
-                                                                        className="rounded-full h-10 w-10 object-cover"
+                                                                        width={600}
+                                                                        height={600}
+                                                                        className="rounded-full size-8 object-cover"
                                                                     />
                                                                 ) : (
                                                                     <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
@@ -621,7 +622,9 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading 
                                                 >
                                                     <form onSubmit={(e) => {
                                                         e.preventDefault();
-                                                        handleSubmitComment((data) => handleCommentSubmit(review.id, data))();
+                                                        handleSubmitComment(() => handleCommentSubmit(review.id, {
+                                                            content:e.target.content.value
+                                                        }))();
                                                     }}>
                                                         <div className="flex space-x-3">
                                                             <div className="flex-shrink-0">
@@ -631,11 +634,12 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading 
                                                             </div>
                                                             <div className="flex-1">
                                 <textarea
-                                    {...registerComment('content', { required: 'Comment is required' })}
+                                    {...registerComment('content')}
                                     ref={(el) => { commentInputRefs.current[review.id] = el; }}
                                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
                                     placeholder="Add a comment..."
                                     rows={3}
+                                    name={"content"}
                                 ></textarea>
                                                                 {commentErrors.content && (
                                                                     <p className="mt-1 text-sm text-red-600">{commentErrors.content.message}</p>
@@ -715,11 +719,18 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading 
                 <div className="mt-16">
                     <h2 className="text-2xl font-bold text-gray-900 mb-8">You Might Also Like</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {[1, 2, 3, 4].map((item) => (
-                            <div key={item} className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-300">
-                                <div className="h-48 bg-gray-200"></div>
+                        {relatedProducts?.map((item) => (
+                            <div key={item.id} className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-300">
+                                <div className="h-48 p-2">
+                                    <Image
+                                    src={item?.imageUrl}
+                                    width={400}
+                                    height={400}
+                                    alt={item?.name}
+                                    className={"h-48"}                                    />
+                                </div>
                                 <div className="p-4">
-                                    <h3 className="font-semibold text-gray-900">Related Product {item}</h3>
+                                    <h3 className="font-semibold text-gray-900">{item?.name}</h3>
                                     <div className="flex items-center mt-1">
                                         <div className="flex text-amber-400">
                                             <FaStar />
@@ -730,7 +741,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading 
                                         </div>
                                         <span className="text-sm text-gray-500 ml-1">(24)</span>
                                     </div>
-                                    <div className="mt-2 font-bold text-amber-600">$99.99</div>
+                                    <div className="mt-2 font-bold text-amber-600">${item?.price}</div>
                                 </div>
                             </div>
                         ))}

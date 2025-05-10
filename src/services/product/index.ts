@@ -52,3 +52,8 @@ export const get_product_by_id_action = async (id:string)=> {
     const result = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/product/${id}`)
     return await result.json();
 }
+
+export const get_product_by_category_id_action = async (id:string)=> {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/product/category/${id}`)
+    return await res.json();
+}
