@@ -23,7 +23,6 @@ const CompanyDetailsPage = () => {
     const [error, setError] = React.useState(null);
 
     const { id } = useParams();
-    console.log(id);
 
     React.useEffect(() => {
         const loadData = async () => {
@@ -40,6 +39,7 @@ const CompanyDetailsPage = () => {
         };
         loadData();
     }, [id]);
+
 
     if (isLoading) return <Loading />
 

@@ -14,6 +14,7 @@ import {
 } from 'react-icons/fa';
 import { FaArrowRightLong,FaArrowLeftLong} from 'react-icons/fa6';
 import {CompanyDetailsProps, Product} from "@/types/company";
+import {useRouter} from "next/navigation";
 
 
 const CompanyDetails: React.FC<CompanyDetailsProps> = ({ companyData, isLoading = false }) => {
@@ -22,6 +23,8 @@ const CompanyDetails: React.FC<CompanyDetailsProps> = ({ companyData, isLoading 
 
     const [activeTab, setActiveTab] = useState<'products' | 'about'>('products');
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+    const router = useRouter();
+
 
     // Default placeholder images
     const defaultCompanyImage = "https://images.unsplash.com/photo-1560179707-f14e90ef3623?q=80&w=2073&auto=format&fit=crop";
@@ -319,7 +322,8 @@ const CompanyDetails: React.FC<CompanyDetailsProps> = ({ companyData, isLoading 
                                                     className="inline-flex items-center px-4 py-2 bg-amber-500 text-white rounded-md hover:bg-amber-600 transition-colors duration-200"
                                                     onClick={(e) => {
                                                         e.stopPropagation();
-                                                        // Redirect to the product page
+                                                        // redirect to the product page
+                                                        router.push(`/product/${product.id}`);
                                                     }}
                                                 >
                                                     <FaShoppingCart className="mr-2" />
