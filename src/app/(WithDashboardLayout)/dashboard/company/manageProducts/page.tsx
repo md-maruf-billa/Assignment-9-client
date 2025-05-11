@@ -33,7 +33,6 @@ type FormValues = {
     price: number;
     description: string;
     categoryId?: string;
-    tags?: string;
 };
 
 
@@ -85,7 +84,6 @@ const ManageProductsPage = () => {
             price: 0,
             description: '',
             categoryId: '',
-            tags: ''
         }
     });
 
@@ -96,7 +94,6 @@ const ManageProductsPage = () => {
             setValue('price', selectedProduct.price);
             setValue('description', selectedProduct.description);
             setValue('categoryId', selectedProduct.categoryId || '');
-            setValue('tags', selectedProduct.tags || '');
 
             if (selectedProduct.imageUrl) {
                 setImagePreview(selectedProduct.imageUrl);
@@ -265,7 +262,6 @@ const ManageProductsPage = () => {
             filteredProducts = filteredProducts.filter(product =>
                 product.name.toLowerCase().includes(searchLower) ||
                 product.description.toLowerCase().includes(searchLower) ||
-                (product.tags && product.tags.toLowerCase().includes(searchLower))
             );
         }
 
@@ -643,21 +639,7 @@ const ManageProductsPage = () => {
                                             </div>
                                         </div>
 
-                                        {/* Product Tags */}
-                                        <div className="space-y-2">
-                                            <label htmlFor="tags" className="block text-sm font-medium text-gray-700">
-                                                Tags (comma separated)
-                                            </label>
-                                            <div className="relative rounded-md shadow-sm">
-                                                <input
-                                                    id="tags"
-                                                    type="text"
-                                                    {...register('tags')}
-                                                    className="block w-full pl-3 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-amber-500 focus:border-amber-500"
-                                                    placeholder="premium, bestseller, new"
-                                                />
-                                            </div>
-                                        </div>
+
 
                                         {/* Product Description */}
                                         <div className="space-y-2">
@@ -884,12 +866,7 @@ const ManageProductsPage = () => {
                                 High-quality images can significantly increase customer interest. Use clear, well-lit photos that showcase your products.
                             </p>
                         </div>
-                        <div className="bg-green-50 p-4 rounded-lg border border-green-100">
-                            <h3 className="font-medium text-green-800 mb-2">Organizing Products</h3>
-                            <p className="text-sm text-green-700">
-                                Use categories and tags to help customers find your products more easily when browsing or searching.
-                            </p>
-                        </div>
+
                     </div>
                 </div>
             </motion.div>
