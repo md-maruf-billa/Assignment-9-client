@@ -16,6 +16,8 @@ import {
     FaSave,
 } from 'react-icons/fa';
 import {useUser} from "@/context/UserContext";
+import {update_user_profile_action} from "@/services/user";
+import {IUser} from "@/types/user";
 
 // Define the types for the API response
 interface Company {
@@ -57,8 +59,7 @@ type FormValues = {
 
 const SettingsPage = () => {
     // State for user profile data
-    const {user} = useUser();
-    console.log(user);
+    const { user } = useUser();
     const [isLoading, setIsLoading] = useState(false);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
@@ -82,6 +83,7 @@ const SettingsPage = () => {
             bio: '',
         }
     });
+
 
 
     // Set form values when opening the update modal
@@ -172,39 +174,20 @@ const SettingsPage = () => {
         setIsUpdating(true);
 
         try {
-            // In a real app, you would send the data to the API
-            // const formData = new FormData();
-            // formData.append('data', JSON.stringify(data));
-            // if (selectedImage) {
-            //   formData.append('image', selectedImage);
-            // }
-            // const response = await fetch('/api/auth/me/profile', {
-            //   method: 'PATCH',
-            //   body: formData,
-            // });
-
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 1500));
-
-            // Update the profile data in the local state
-            if (profileData) {
-                const updatedProfileData = {
-                    ...profileData,
-                    company: {
-                        ...profileData.company,
-                        name: data.name,
-                        website: data.website,
-                        description: data.description,
-                        companyImage: imagePreview,
-                        updatedAt: new Date().toISOString()
-                    }
-                };
-
-                setProfileData(updatedProfileData);
+            const formData = new FormData();
+            formData.append('data', JSON.stringify(data));
+            if (selectedImage) {
+              formData.append('image', selectedImage);
             }
-
-            toast.success('Profile updated successfully!');
-            handleCloseUpdateModal();
+            const response = await update_user_profile_action(formData);
+            if(response.success) {
+                toast.success('Profile updated successfully!');
+                window.location.reload();
+                handleCloseUpdateModal();
+            }
+            else {
+                toast.error(response.message);
+            }
         } catch (error) {
             console.error('Error updating profile:', error);
             toast.error('Failed to update profile');
