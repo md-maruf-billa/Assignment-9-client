@@ -79,8 +79,6 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
               ? data.navSecondaryCompany
               : [];
 
-
-
   return (
       <Sidebar collapsible="offcanvas" {...props}>
         <SidebarHeader>
