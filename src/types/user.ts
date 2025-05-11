@@ -14,7 +14,9 @@ export interface IUser {
     isDeleted: boolean;
     createdAt: string;
     updatedAt: string;
+
   };
+  isCompleteProfile:boolean;
   admin: any | null;
   company: any | null;
   createdAt: string;

@@ -29,7 +29,7 @@ import { GoCodeReview } from 'react-icons/go';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { log_out_user_action } from '@/services/AuthService';
-import { Building2, MessageSquareCode, Users } from 'lucide-react';
+import {Building2, LayoutGrid, MessageSquareCode, Users} from 'lucide-react';
 
 const data = {
   user: {
@@ -40,7 +40,7 @@ const data = {
   admin: [
     {
       title: 'Overview',
-      url: '#',
+      url: '/dashboard/admin',
       icon: IconDashboard,
     },
     {
@@ -61,6 +61,10 @@ const data = {
   ],
   company: [
     {
+      title: 'Overview',
+      url: '/dashboard/company',
+      icon: LayoutGrid,
+    },   {
       title: 'Create Product',
       url: '/dashboard/company/createProduct',
       icon: IconLibraryPlus,
@@ -73,9 +77,8 @@ const data = {
     {
       title: 'Manage Reviews',
       url: '/dashboard/company/manageReviews',
-      icon: IconDashboard,
-    },
-
+      icon: MessageSquareCode,
+    }
   ],
   navSecondaryAdmin: [
     {
@@ -89,14 +92,18 @@ const data = {
       icon: IconHelp,
     }
   ],
-  navSecondaryCompany:[
+  navSecondaryCompany: [
     {
       title: 'Settings',
       url: '/dashboard/company/settings',
       icon: IconSettings,
     },
+    {
+      title: "Get Help",
+      url: "#",
+      icon: IconHelp,
+    },
   ],
- 
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {

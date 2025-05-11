@@ -16,40 +16,49 @@ import {
     FaInfoCircle,
     FaSave,
 } from 'react-icons/fa';
-import {get_company_by_id} from "@/services/company";
+import {get_company_by_id, update_company_action} from "@/services/company";
 import {useUser} from "@/context/UserContext";
 
 // Define the types for the API response
-interface Company {
+export interface Account {
     id: string;
-    name: string;
-    accountId: string;
-    website: string | null;
-    companyImage: string | null;
-    description: string | null;
+    email: string;
+    password: string;
+    role: 'COMPANY' | 'USER' | 'ADMIN'; // Adjust roles as per your app
     createdAt: string;
     updatedAt: string;
     isDeleted: boolean;
+    status?: string;
+    isCompleteProfile?: boolean;
+    isPremium?: boolean;
 }
 
-interface Account {
+export interface Product {
+    // Define this based on the structure of your product
+    [key: string]: any;
+}
+
+export interface Review {
+    // Define this based on the structure of your review
+    [key: string]: any;
+}
+
+export interface Company {
     id: string;
-    status: string;
-    email: string;
-    role: string;
-    isCompleteProfile: boolean;
-    user: null;
-    admin: null;
-    company: Company;
+    name: string;
+    accountId: string;
+    website: string;
+    companyImage: string;
+    description: string;
     createdAt: string;
+    updatedAt: string;
+    isDeleted: boolean;
+    account: Account;
+    products: Product[];
+    reviews: Review[];
 }
 
-interface ApiResponse {
-    success: boolean;
-    message: string;
-    data: Account;
-    meta: null;
-}
+
 
 // Form values type for the update modal
 type FormValues = {
@@ -61,10 +70,12 @@ type FormValues = {
 const SettingsPage = () => {
     // State for user profile data
     const {user} = useUser()
-    const [profileData, setProfileData] = useState<Account | null>(null);
+    const [profileData, setProfileData] = useState<Company | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
+    const [reFetch,setReFetch] = useState(true);
+
 
     // State for image upload
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -92,23 +103,31 @@ const SettingsPage = () => {
         const fetchProfileData = async ()=>{
             const res  = await get_company_by_id(user?.company?.id as string);
             setProfileData(res.data);
+            setReFetch(false);
             setIsLoading(false);
         }
         fetchProfileData();
-    }, [user?.company?.id]);
-    console.log(profileData);
+    }, [user?.company?.id,reFetch]);
+
     // Set form values when opening the update modal
     useEffect(() => {
-        if (isUpdateModalOpen && profileData?.company) {
-            setValue('name', profileData.company.name || '');
-            setValue('website', profileData.company.website || '');
-            setValue('description', profileData.company.description || '');
+        if (isUpdateModalOpen && profileData) {
+            setValue('name', profileData?.name || '');
+            setValue('website', profileData?.website || '');
+            setValue('description', profileData?.description || '');
         }
-    }, [isUpdateModalOpen, profileData, setValue]);
+        if (profileData?.companyImage) {
+            setImagePreview(profileData?.companyImage);
+        }
+    }, [isUpdateModalOpen, profileData?.id]); // ← more precise
 
     // Function to open the update modal
     const handleOpenUpdateModal = () => {
-        setIsUpdateModalOpen(true);
+        if (profileData?.accountId) {
+            setIsUpdateModalOpen(true);
+        } else {
+            toast.error("Company data not loaded yet.");
+        }
     };
 
     // Function to close the update modal
@@ -116,8 +135,8 @@ const SettingsPage = () => {
         setIsUpdateModalOpen(false);
         setSelectedImage(null);
         // Keep the current image preview
-        if (profileData?.company?.companyImage) {
-            setImagePreview(profileData.company.companyImage);
+        if (profileData?.companyImage) {
+            setImagePreview(profileData?.companyImage);
         } else {
             setImagePreview(null);
         }
@@ -184,38 +203,21 @@ const SettingsPage = () => {
 
         try {
             // In a real app, you would send the data to the API
-            // const formData = new FormData();
-            // formData.append('data', JSON.stringify(data));
-            // if (selectedImage) {
-            //   formData.append('image', selectedImage);
-            // }
-            // const response = await fetch('/api/auth/me/profile', {
-            //   method: 'PATCH',
-            //   body: formData,
-            // });
-
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 1500));
-
-            // Update the profile data in the local state
-            if (profileData) {
-                const updatedProfileData = {
-                    ...profileData,
-                    company: {
-                        ...profileData.company,
-                        name: data.name,
-                        website: data.website,
-                        description: data.description,
-                        companyImage: imagePreview,
-                        updatedAt: new Date().toISOString()
-                    }
-                };
-
-                setProfileData(updatedProfileData);
+            const formData = new FormData();
+            formData.append('data', JSON.stringify(data));
+            if (selectedImage) {
+              formData.append('image', selectedImage);
+            }
+            const response = await update_company_action(formData)
+            if(response.success){
+                toast.success('Profile updated successfully!');
+                setReFetch(true);
+                handleCloseUpdateModal();
+            }
+            else {
+                toast.error(response.message);
             }
 
-            toast.success('Profile updated successfully!');
-            handleCloseUpdateModal();
         } catch (error) {
             console.error('Error updating profile:', error);
             toast.error('Failed to update profile');
@@ -584,7 +586,7 @@ const SettingsPage = () => {
                                                 <input
                                                     id="name"
                                                     type="text"
-                                                    {...register('name', { required: 'Company name is required' })}
+                                                    {...register('name')}
                                                     className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-amber-500 focus:border-amber-500"
                                                     placeholder="Enter company name"
                                                 />
@@ -631,9 +633,9 @@ const SettingsPage = () => {
                                         <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
                                             <h3 className="text-sm font-medium text-gray-700 mb-2">Account Information</h3>
                                             <div className="text-sm text-gray-600">
-                                                <p><span className="font-medium">Email:</span> {profileData.email}</p>
-                                                <p><span className="font-medium">Role:</span> {profileData.role}</p>
-                                                <p><span className="font-medium">Status:</span> {profileData.status}</p>
+                                                <p><span className="font-medium">Email:</span> {profileData?.account?.email}</p>
+                                                <p><span className="font-medium">Role:</span> {profileData?.account?.role}</p>
+                                                <p><span className="font-medium">Status:</span> {profileData?.account?.status}</p>
                                                 <p><span className="font-medium">Joined:</span> {formatDate(profileData.createdAt)}</p>
                                             </div>
                                         </div>
