@@ -83,6 +83,9 @@ interface Review {
     isDeleted: boolean;
     ReviewComment: ReviewComment[];
     votes: Vote[];
+    upVotes?: number;
+    downVotes?: number;
+
 }
 
 interface Product {
@@ -127,7 +130,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
     const {user} = useUser()
     // State for modals
     const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
-    const [relatedProducts, setRelatedProducts] = useState([]);
+    const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [selectedRating, setSelectedRating] = useState(0);
     const [hoverRating, setHoverRating] = useState(0);
@@ -407,17 +410,6 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
                             </div>
 
                             <div className="flex flex-col sm:flex-row gap-4 mb-6">
-                                {/*<button className="flex-1 bg-amber-500 hover:bg-amber-600 text-white py-3 px-6 rounded-md font-medium flex items-center justify-center transition-colors duration-200">*/}
-                                {/*    <FaShoppingCart className="mr-2" />*/}
-                                {/*    Add to Cart*/}
-                                {/*</button>*/}
-                                {/*<button*/}
-                                {/*    onClick={openReviewModal}*/}
-                                {/*    className="flex-1 bg-gray-900 hover:bg-gray-800 text-white py-3 px-6 rounded-md font-medium flex items-center justify-center transition-colors duration-200"*/}
-                                {/*>*/}
-                                {/*    <FaStar className="mr-2" />*/}
-                                {/*    Write a Review*/}
-                                {/*</button>*/}
                                 <button
                                     onClick={openReviewModal}
                                     className="flex-1 bg-amber-500 hover:bg-amber-600 text-white py-3 px-6 rounded-md font-medium flex items-center justify-center transition-colors duration-200"
@@ -450,15 +442,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
                                         : 'Be the first to review this product'}
                                 </p>
                             </div>
-                            {/*<motion.button*/}
-                            {/*    whileHover={{ scale: 1.05 }}*/}
-                            {/*    whileTap={{ scale: 0.95 }}*/}
-                            {/*    onClick={openReviewModal}*/}
-                            {/*    className="mt-4 md:mt-0 inline-flex items-center px-4 py-2 bg-amber-500 text-white rounded-md hover:bg-amber-600 transition-colors duration-200"*/}
-                            {/*>*/}
-                            {/*    <FaPlus className="mr-2" />*/}
-                            {/*    Add Review*/}
-                            {/*</motion.button>*/}
+
                         </div>
 
                         {/* Rating Summary */}
@@ -624,10 +608,14 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
                                                 >
                                                     <form onSubmit={(e) => {
                                                         e.preventDefault();
+                                                        const form = e.target as HTMLFormElement;
+                                                        const content = (form.elements.namedItem("content") as HTMLInputElement).value;
+
                                                         handleSubmitComment(() => handleCommentSubmit(review.id, {
-                                                            content:e.target.content.value
+                                                            content,
                                                         }))();
-                                                    }}>
+                                                    }}
+                                                    >
                                                         <div className="flex space-x-3">
                                                             <div className="flex-shrink-0">
                                                                 <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">

@@ -15,7 +15,7 @@ import {toast} from "sonner";
 
 const UpdatePasswordForm = () => {
     const [modalOpen, setModalOpen] = useState(false);
-    const handleUpdatePassword =async (e)=>{
+    const handleUpdatePassword =async (e:any)=>{
         const id = toast.loading("Updating password ..");
         e.preventDefault();
         const passwordData  = {

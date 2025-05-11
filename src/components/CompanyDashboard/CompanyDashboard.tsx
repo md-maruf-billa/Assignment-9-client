@@ -29,252 +29,6 @@ import {
 import {CompanyDetailsProps} from "@/types/company";
 
 const CompanyDashboard: React.FC<CompanyDetailsProps>  = ({ companyData, isLoading = false }) => {
-    // API response data
-    // const companyData = {
-    //     "success": true,
-    //     "message": "Company data fetched successful.",
-    //     "data": {
-    //         "id": "c166b086-2f75-4849-8905-29fbc0d955f9",
-    //         "name": "PH Hero",
-    //         "accountId": "2cd0838d-648d-4154-942f-8a633650d30b",
-    //         "website": null,
-    //         "companyImage": null,
-    //         "description": null,
-    //         "createdAt": "2025-05-10T22:49:36.919Z",
-    //         "updatedAt": "2025-05-10T22:49:36.919Z",
-    //         "isDeleted": false,
-    //         "account": {
-    //             "id": "2cd0838d-648d-4154-942f-8a633650d30b",
-    //             "email": "phro@gmail.com",
-    //             "password": "$2b$10$ZdC8aDNyMLrLDD2tlYWXFekUZ7uzy11yKmaaqQehSZj0mgc4Nyxzm",
-    //             "role": "COMPANY",
-    //             "createdAt": "2025-05-10T22:49:36.858Z",
-    //             "updatedAt": "2025-05-10T22:49:36.858Z",
-    //             "status": "ACTIVE",
-    //             "isDeleted": false,
-    //             "isCompleteProfile": false,
-    //             "isPremium": false
-    //         },
-    //         "products": [
-    //             {
-    //                 "id": "a2e0524f-49da-4fd3-a10a-c9269e08d444",
-    //                 "name": "Lenovo X1 Yeoga 360",
-    //                 "price": 1000,
-    //                 "description": "jlfkjdlkfdslkfdkfjd",
-    //                 "imageUrl": "https://res.cloudinary.com/dza9jdqt6/image/upload/v1746917514/hfvceinzekl0vmgrz9nl.png",
-    //                 "isDeleted": false,
-    //                 "createdAt": "2025-05-10T22:51:54.011Z",
-    //                 "updatedAt": "2025-05-10T22:51:54.011Z",
-    //                 "companyId": "c166b086-2f75-4849-8905-29fbc0d955f9",
-    //                 "categoryId": "ac1466b4-d48a-46f7-bdd8-37cdbf60950c"
-    //             }
-    //         ],
-    //         "reviews": [
-    //             {
-    //                 "id": "f5f8b360-f1bb-46ea-ab18-e3ad1bffd0f4",
-    //                 "title": "Basic Shipping",
-    //                 "description": "klfjdkfjdkjfdkf",
-    //                 "rating": 5,
-    //                 "categoryId": "ac1466b4-d48a-46f7-bdd8-37cdbf60950c",
-    //                 "productId": "a2e0524f-49da-4fd3-a10a-c9269e08d444",
-    //                 "isPremium": false,
-    //                 "reviewerName": "user",
-    //                 "reviewerEmail": "user@gmail.com",
-    //                 "reviewerProfilePhoto": null,
-    //                 "createdAt": "2025-05-11T05:49:17.353Z",
-    //                 "updatedAt": "2025-05-11T05:49:44.643Z",
-    //                 "isDeleted": false,
-    //                 "upVotes": 3,
-    //                 "downVotes": 2,
-    //                 "ReviewComment": [
-    //                     {
-    //                         "id": "0ba025b9-8fe8-4191-8446-8d4f6c955098",
-    //                         "reviewId": "f5f8b360-f1bb-46ea-ab18-e3ad1bffd0f4",
-    //                         "accountId": "3e105bf7-1c08-4327-8d43-1ba80895c615",
-    //                         "content": "Good",
-    //                         "createdAt": "2025-05-11T05:50:11.228Z",
-    //                         "updatedAt": "2025-05-11T05:50:11.228Z",
-    //                         "isDeleted": false,
-    //                         "account": {
-    //                             "id": "3e105bf7-1c08-4327-8d43-1ba80895c615",
-    //                             "email": "user@gmail.com",
-    //                             "password": "$2b$10$hLJbYST4qcv0J8uXVzMRC.gHcit/LWeJ/zAm2HSTxuiL7Q5aIKtGe",
-    //                             "role": "USER",
-    //                             "createdAt": "2025-05-10T22:49:17.166Z",
-    //                             "updatedAt": "2025-05-10T22:54:04.690Z",
-    //                             "status": "ACTIVE",
-    //                             "isDeleted": false,
-    //                             "isCompleteProfile": true,
-    //                             "isPremium": false,
-    //                             "user": {
-    //                                 "id": "7fd18968-ea69-4436-8408-2be528afadcb",
-    //                                 "name": "user",
-    //                                 "accountId": "3e105bf7-1c08-4327-8d43-1ba80895c615",
-    //                                 "profileImage": null,
-    //                                 "bio": "Home appliance expert",
-    //                                 "createdAt": "2025-05-10T22:49:17.289Z",
-    //                                 "updatedAt": "2025-05-10T22:54:04.322Z",
-    //                                 "isDeleted": false
-    //                             },
-    //                             "admin": null
-    //                         }
-    //                     }
-    //                 ],
-    //                 "productName": "Lenovo X1 Yeoga 360",
-    //                 "categoryName": "Laptop"
-    //             },
-    //             {
-    //                 "id": "ddb12525-5bad-4fb0-b01e-116e1f46d2ce",
-    //                 "title": "I'm Admin i know this product is very nice",
-    //                 "description": "dfdfadfdfd",
-    //                 "rating": 5,
-    //                 "categoryId": "ac1466b4-d48a-46f7-bdd8-37cdbf60950c",
-    //                 "productId": "a2e0524f-49da-4fd3-a10a-c9269e08d444",
-    //                 "isPremium": true,
-    //                 "reviewerName": "Admin",
-    //                 "reviewerEmail": "admin@gmail.com",
-    //                 "reviewerProfilePhoto": "https://res.cloudinary.com/dza9jdqt6/image/upload/v1746946313/i4mzubfv86a7gpytdaoc.png",
-    //                 "createdAt": "2025-05-11T06:52:23.799Z",
-    //                 "updatedAt": "2025-05-11T06:52:23.799Z",
-    //                 "isDeleted": false,
-    //                 "upVotes": 0,
-    //                 "downVotes": 0,
-    //                 "ReviewComment": [],
-    //                 "productName": "Lenovo X1 Yeoga 360",
-    //                 "categoryName": "Laptop"
-    //             },
-    //             {
-    //                 "id": "3a308ad4-3f31-4469-919a-3c4d6edfe8e6",
-    //                 "title": "ava taylor example",
-    //                 "description": "It exceeded my expectations.Prisma expects id or email, but neither is provided properly.",
-    //                 "rating": 5,
-    //                 "categoryId": "ac1466b4-d48a-46f7-bdd8-37cdbf60950c",
-    //                 "productId": "a2e0524f-49da-4fd3-a10a-c9269e08d444",
-    //                 "isPremium": false,
-    //                 "reviewerName": "user",
-    //                 "reviewerEmail": "user@gmail.com",
-    //                 "reviewerProfilePhoto": null,
-    //                 "createdAt": "2025-05-10T22:54:09.928Z",
-    //                 "updatedAt": "2025-05-10T23:20:07.345Z",
-    //                 "isDeleted": false,
-    //                 "upVotes": 10,
-    //                 "downVotes": 7,
-    //                 "ReviewComment": [
-    //                     {
-    //                         "id": "374f9a9a-c28e-4126-9f04-5c11afd98f2b",
-    //                         "reviewId": "3a308ad4-3f31-4469-919a-3c4d6edfe8e6",
-    //                         "accountId": "3e105bf7-1c08-4327-8d43-1ba80895c615",
-    //                         "content": "Thank you so much",
-    //                         "createdAt": "2025-05-10T23:14:34.052Z",
-    //                         "updatedAt": "2025-05-10T23:14:34.052Z",
-    //                         "isDeleted": false,
-    //                         "account": {
-    //                             "id": "3e105bf7-1c08-4327-8d43-1ba80895c615",
-    //                             "email": "user@gmail.com",
-    //                             "password": "$2b$10$hLJbYST4qcv0J8uXVzMRC.gHcit/LWeJ/zAm2HSTxuiL7Q5aIKtGe",
-    //                             "role": "USER",
-    //                             "createdAt": "2025-05-10T22:49:17.166Z",
-    //                             "updatedAt": "2025-05-10T22:54:04.690Z",
-    //                             "status": "ACTIVE",
-    //                             "isDeleted": false,
-    //                             "isCompleteProfile": true,
-    //                             "isPremium": false,
-    //                             "user": {
-    //                                 "id": "7fd18968-ea69-4436-8408-2be528afadcb",
-    //                                 "name": "user",
-    //                                 "accountId": "3e105bf7-1c08-4327-8d43-1ba80895c615",
-    //                                 "profileImage": null,
-    //                                 "bio": "Home appliance expert",
-    //                                 "createdAt": "2025-05-10T22:49:17.289Z",
-    //                                 "updatedAt": "2025-05-10T22:54:04.322Z",
-    //                                 "isDeleted": false
-    //                             },
-    //                             "admin": null
-    //                         }
-    //                     }
-    //                 ],
-    //                 "productName": "Lenovo X1 Yeoga 360",
-    //                 "categoryName": "Laptop"
-    //             },
-    //             {
-    //                 "id": "ea247c0d-b957-4cb6-8e26-747259eaed57",
-    //                 "title": "very good",
-    //                 "description": "jhhjkughjughg",
-    //                 "rating": 5,
-    //                 "categoryId": "ac1466b4-d48a-46f7-bdd8-37cdbf60950c",
-    //                 "productId": "a2e0524f-49da-4fd3-a10a-c9269e08d444",
-    //                 "isPremium": false,
-    //                 "reviewerName": "user",
-    //                 "reviewerEmail": "user@gmail.com",
-    //                 "reviewerProfilePhoto": null,
-    //                 "createdAt": "2025-05-10T23:15:55.403Z",
-    //                 "updatedAt": "2025-05-10T23:45:28.662Z",
-    //                 "isDeleted": false,
-    //                 "upVotes": 15,
-    //                 "downVotes": 4,
-    //                 "ReviewComment": [],
-    //                 "productName": "Lenovo X1 Yeoga 360",
-    //                 "categoryName": "Laptop"
-    //             },
-    //             {
-    //                 "id": "8771530d-7ff3-4b98-a113-b720aa355bfe",
-    //                 "title": "Very Bad Product",
-    //                 "description": "This product is very bad",
-    //                 "rating": 1,
-    //                 "categoryId": "ac1466b4-d48a-46f7-bdd8-37cdbf60950c",
-    //                 "productId": "a2e0524f-49da-4fd3-a10a-c9269e08d444",
-    //                 "isPremium": false,
-    //                 "reviewerName": "user",
-    //                 "reviewerEmail": "user@gmail.com",
-    //                 "reviewerProfilePhoto": null,
-    //                 "createdAt": "2025-05-10T23:21:01.763Z",
-    //                 "updatedAt": "2025-05-10T23:45:30.592Z",
-    //                 "isDeleted": false,
-    //                 "upVotes": 4,
-    //                 "downVotes": 1,
-    //                 "ReviewComment": [
-    //                     {
-    //                         "id": "c5c535ca-b4e8-4e22-b094-9dd078a760cc",
-    //                         "reviewId": "8771530d-7ff3-4b98-a113-b720aa355bfe",
-    //                         "accountId": "3e105bf7-1c08-4327-8d43-1ba80895c615",
-    //                         "content": "Why brother?",
-    //                         "createdAt": "2025-05-10T23:21:33.274Z",
-    //                         "updatedAt": "2025-05-10T23:21:33.274Z",
-    //                         "isDeleted": false,
-    //                         "account": {
-    //                             "id": "3e105bf7-1c08-4327-8d43-1ba80895c615",
-    //                             "email": "user@gmail.com",                                "password": "$2b$10$hLJbYST4qcv0J8uXVzMRC.gHcit/LWeJ/zAm2HSTxuiL7Q5aIKtGe",
-    //                             "role": "USER",
-    //                             "createdAt": "2025-05-10T22:49:17.166Z",
-    //                             "updatedAt": "2025-05-10T22:54:04.690Z",
-    //                             "status": "ACTIVE",
-    //                             "isDeleted": false,
-    //                             "isCompleteProfile": true,
-    //                             "isPremium": false,
-    //                             "user": {
-    //                                 "id": "7fd18968-ea69-4436-8408-2be528afadcb",
-    //                                 "name": "user",
-    //                                 "accountId": "3e105bf7-1c08-4327-8d43-1ba80895c615",
-    //                                 "profileImage": null,
-    //                                 "bio": "Home appliance expert",
-    //                                 "createdAt": "2025-05-10T22:49:17.289Z",
-    //                                 "updatedAt": "2025-05-10T22:54:04.322Z",
-    //                                 "isDeleted": false
-    //                             },
-    //                             "admin": null
-    //                         }
-    //                     }
-    //                 ],
-    //                 "productName": "Lenovo X1 Yeoga 360",
-    //                 "categoryName": "Laptop"
-    //             }
-    //         ]
-    //     },
-    //     "meta": null
-    // };
-
-    console.log(companyData);
-
 
     // State for active tab
     const [activeTab, setActiveTab] = useState('overview');
@@ -320,22 +74,23 @@ const CompanyDashboard: React.FC<CompanyDetailsProps>  = ({ companyData, isLoadi
     const company = companyData.data;
     const products = company.products;
     const reviews = company.reviews;
+    console.log(company);
 
     // Calculate statistics
     const totalProducts = products.length;
     const totalReviews = reviews.length;
-    const totalUpvotes = reviews.reduce((sum, review) => sum + review.upVotes, 0);
-    const totalDownvotes = reviews.reduce((sum, review) => sum + review.downVotes, 0);
-    const totalComments = reviews.reduce((sum, review) => sum + review.ReviewComment.length, 0);
+    const totalUpvotes = reviews.reduce((sum:number, review:{upVotes:number}) => sum + review.upVotes, 0);
+    const totalDownvotes = reviews.reduce((sum:number, review:{downVotes:number}) => sum + review.downVotes, 0);
+    const totalComments = reviews.reduce((sum:number, review:{ReviewComment:[]}) => sum + review.ReviewComment.length, 0);
 
     // Calculate average rating
     const averageRating = reviews.length > 0
-        ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
+        ? reviews.reduce((sum:number, review:{rating:number}) => sum + review.rating, 0) / reviews.length
         : 0;
 
     // Calculate rating distribution
     const ratingDistribution = [0, 0, 0, 0, 0]; // 1-5 stars
-    reviews.forEach(review => {
+    reviews.forEach((review:{rating:number}) => {
         const ratingIndex = Math.floor(review.rating) - 1;
         if (ratingIndex >= 0 && ratingIndex < 5) {
             ratingDistribution[ratingIndex]++;
@@ -367,13 +122,13 @@ const CompanyDashboard: React.FC<CompanyDetailsProps>  = ({ companyData, isLoadi
 
     // Filter and sort reviews
     const filteredReviews = reviews
-        .filter(review =>
+        .filter((review:any) =>
             (ratingFilter === 0 || review.rating === ratingFilter) &&
             (review.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 review.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 review.reviewerName.toLowerCase().includes(searchTerm.toLowerCase()))
         )
-        .sort((a, b) => {
+        .sort((a:any, b:any) => {
             if (reviewSortField === 'rating') {
                 return reviewSortDirection === 'asc'
                     ? a.rating - b.rating
@@ -391,7 +146,7 @@ const CompanyDashboard: React.FC<CompanyDetailsProps>  = ({ companyData, isLoadi
         });
 
     // Helper functions
-    const formatDate = (dateString) => {
+    const formatDate = (dateString:any) => {
         const date = new Date(dateString);
         return date.toLocaleDateString('en-US', {
             year: 'numeric',
@@ -400,7 +155,7 @@ const CompanyDashboard: React.FC<CompanyDetailsProps>  = ({ companyData, isLoadi
         });
     };
 
-    const renderStarRating = (rating) => {
+    const renderStarRating = (rating:any) => {
         const stars = [];
         const fullStars = Math.floor(rating);
         const hasHalfStar = rating % 1 >= 0.5;
@@ -419,7 +174,7 @@ const CompanyDashboard: React.FC<CompanyDetailsProps>  = ({ companyData, isLoadi
     };
 
     // Toggle sort direction
-    const toggleProductSort = (field) => {
+    const toggleProductSort = (field:any) => {
         if (productSortField === field) {
             setProductSortDirection(productSortDirection === 'asc' ? 'desc' : 'asc');
         } else {
@@ -428,7 +183,7 @@ const CompanyDashboard: React.FC<CompanyDetailsProps>  = ({ companyData, isLoadi
         }
     };
 
-    const toggleReviewSort = (field) => {
+    const toggleReviewSort = (field:any) => {
         if (reviewSortField === field) {
             setReviewSortDirection(reviewSortDirection === 'asc' ? 'desc' : 'asc');
         } else {
@@ -740,7 +495,7 @@ const CompanyDashboard: React.FC<CompanyDetailsProps>  = ({ companyData, isLoadi
 
                                 {reviews.length > 0 ? (
                                     <div className="space-y-4">
-                                        {reviews.slice(0, 3).map((review) => (
+                                        {reviews.slice(0, 3).map((review:any) => (
                                             <div key={review.id} className="border-b border-gray-100 pb-4 last:border-0 last:pb-0">
                                                 <div className="flex justify-between items-start">
                                                     <div className="flex items-start">
@@ -948,9 +703,9 @@ const CompanyDashboard: React.FC<CompanyDetailsProps>  = ({ companyData, isLoadi
                                             </thead>
                                             <tbody className="bg-white divide-y divide-gray-200">
                                             {filteredProducts.map((product) => {
-                                                const productReviews = reviews.filter(review => review.productId === product.id);
+                                                const productReviews = reviews.filter((review:any) => review.productId === product.id);
                                                 const productAvgRating = productReviews.length > 0
-                                                    ? productReviews.reduce((sum, review) => sum + review.rating, 0) / productReviews.length
+                                                    ? productReviews.reduce((sum:number, review:{rating:number}) => sum + review.rating, 0) / productReviews.length
                                                     : 0;
 
                                                 return (
@@ -1143,7 +898,7 @@ const CompanyDashboard: React.FC<CompanyDetailsProps>  = ({ companyData, isLoadi
                                             </tr>
                                             </thead>
                                             <tbody className="bg-white divide-y divide-gray-200">
-                                            {filteredReviews.map((review) => (
+                                            {filteredReviews.map((review:any) => (
                                                 <tr key={review.id} className="hover:bg-gray-50">
                                                     <td className="px-6 py-4">
                                                         <div className="flex items-start">

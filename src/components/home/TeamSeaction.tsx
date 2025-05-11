@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Facebook, Github, Linkedin, Globe } from 'lucide-react'; // Globe used for portfolio
 import { get_all_team_members_action } from "@/services/team";
+import {JSX} from "react";
 
 // Define types based on your Zod schema
 interface TeamMember {
@@ -64,7 +65,7 @@ const TeamMemberCard = ({ member }: { member: TeamMember }) => {
 
           <div className="flex space-x-4 mt-auto">
             {member.gitHub && <SocialIcon platform="github" url={member.gitHub} />}
-            {member.linkedin && <SocialIcon platform="linkedin" url={member.linkedIn} />}
+            {member.linkedIn && <SocialIcon platform="linkedin" url={member.linkedIn} />}
             {member.facebook && <SocialIcon platform="facebook" url={member.facebook} />}
             {member.portfolio && <SocialIcon platform="portfolio" url={member.portfolio} />}
           </div>

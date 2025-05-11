@@ -25,7 +25,7 @@ const ProfileUpdateForm = ({user,setIsLoading}:{user:IUser | null,setIsLoading:R
     const [selectedFile, setSelectedFile] = useState(null);
     const [modalOpen, setModalOpen] = useState(false);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-    const handleFileChange = (e) => {
+    const handleFileChange = (e:any) => {
         const file = e.target.files[0];
         if (file) {
             setSelectedFile(file);
@@ -38,11 +38,14 @@ const ProfileUpdateForm = ({user,setIsLoading}:{user:IUser | null,setIsLoading:R
         setSelectedFile(null);
         setPreviewUrl(null);
     };
-    const handleUpdateProfile = async (e) => {
+    const handleUpdateProfile = async (e:any) => {
         e.preventDefault();
         const formData = new FormData();
         const id = toast.loading("Updating Profile ...");
-        const profileData:UpdateProfileFormProps ={}
+        const profileData:UpdateProfileFormProps ={
+            name:user?.user?.name,
+            bio:user?.user?.bio as string,
+        }
         if(e.target.name.value.length > 0){
             profileData.name=e.target.name.value;
         }

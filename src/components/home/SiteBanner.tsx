@@ -125,7 +125,7 @@ export default function SiteBanner() {
 
   const numberBoxVariants = {
     hidden: { scale: 0, rotate: -10 },
-    visible: (i) => ({
+    visible: (i:number) => ({
       scale: 1,
       rotate: 0,
       transition: {

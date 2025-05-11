@@ -54,7 +54,7 @@ const ManageProductsPage = () => {
     const [dragActive, setDragActive] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [products, setProducts] = useState<Product[]>([]);
-    const [categories, setCategories] = useState([]);
+    const [categories, setCategories] = useState<ICategory[]>([]);
     useEffect(() => {
         const fetchProduct = async ()=>{
             const res = await get_all_products_action()
@@ -93,7 +93,7 @@ const ManageProductsPage = () => {
             setValue('name', selectedProduct.name);
             setValue('price', selectedProduct.price);
             setValue('description', selectedProduct.description);
-            setValue('categoryId', selectedProduct.categoryId || '');
+            setValue('categoryId', selectedProduct.categoryId || '')
 
             if (selectedProduct.imageUrl) {
                 setImagePreview(selectedProduct.imageUrl);
@@ -261,20 +261,18 @@ const ManageProductsPage = () => {
             const searchLower = searchTerm.toLowerCase();
             filteredProducts = filteredProducts.filter(product =>
                 product.name.toLowerCase().includes(searchLower) ||
-                product.description.toLowerCase().includes(searchLower) ||
+                product.description.toLowerCase().includes(searchLower)
             );
         }
 
         // Apply sorting
         if (sortConfig) {
             filteredProducts.sort((a, b) => {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-expect-error
+
                 if (a[sortConfig.key as keyof Product] < b[sortConfig.key as keyof Product]) {
                     return sortConfig.direction === 'ascending' ? -1 : 1;
                 }
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-expect-error
+
                 if (a[sortConfig.key as keyof Product] > b[sortConfig.key as keyof Product]) {
                     return sortConfig.direction === 'ascending' ? 1 : -1;
                 }
@@ -866,7 +864,6 @@ const ManageProductsPage = () => {
                                 High-quality images can significantly increase customer interest. Use clear, well-lit photos that showcase your products.
                             </p>
                         </div>
-
                     </div>
                 </div>
             </motion.div>

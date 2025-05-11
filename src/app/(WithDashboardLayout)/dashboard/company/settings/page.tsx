@@ -317,9 +317,9 @@ const SettingsPage = () => {
                                     </div>
                                     <div className="mt-4 text-center">
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        profileData.status === 'ACTIVE' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                        profileData?.account?.status == 'ACTIVE' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                     }`}>
-                      {profileData.status}
+                      {profileData.account?.status}
                     </span>
                                     </div>
                                 </motion.div>
@@ -378,7 +378,7 @@ const SettingsPage = () => {
                                             </div>
                                             <div>
                                                 <p className="text-sm text-gray-500">Last Updated</p>
-                                                <p className="font-medium text-gray-900">{formatDate(profileData.company?.updatedAt || profileData.createdAt)}</p>
+                                                <p className="font-medium text-gray-900">{formatDate(profileData?.account?.updatedAt || profileData.createdAt)}</p>
                                             </div>
                                             <div>
                                                 <p className="text-sm text-gray-500">Profile Status</p>
