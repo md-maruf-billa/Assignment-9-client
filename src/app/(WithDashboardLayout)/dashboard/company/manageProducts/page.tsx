@@ -95,6 +95,7 @@ const ManageProductsPage = () => {
             setValue('description', selectedProduct.description);
             setValue('categoryId', selectedProduct.categoryId || '')
 
+
             if (selectedProduct.imageUrl) {
                 setImagePreview(selectedProduct.imageUrl);
             }
