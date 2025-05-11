@@ -394,7 +394,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
                               type="submit"
                               className="bg-yellow-400 text-white py-2 rounded-md hover:bg-yellow-500 ease-linear duration-300 transition"
                             >
-                              Submit
+                              {isLoading ? "Creating..." : "Create Category"}
                             </button>
                           </form>
                         </div>
