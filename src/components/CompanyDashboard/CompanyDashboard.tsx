@@ -74,7 +74,6 @@ const CompanyDashboard: React.FC<CompanyDetailsProps>  = ({ companyData, isLoadi
     const company = companyData.data;
     const products = company.products;
     const reviews = company.reviews;
-    console.log(company);
 
     // Calculate statistics
     const totalProducts = products.length;

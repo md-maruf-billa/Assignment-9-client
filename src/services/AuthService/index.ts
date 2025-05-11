@@ -148,3 +148,16 @@ export const reset_password_action = async (email:string,token:string,password:s
   })
   return await res.json();
 }
+
+export const change_profile_status_action = async (payload:{email?:string,status:string}) => {
+  const token = (await cookies()).get("accessToken")?.value;
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/change-account-status`,{
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": token || "",
+    },
+    body: JSON.stringify(payload)
+  })
+  return await res.json();
+}
