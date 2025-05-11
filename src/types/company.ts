@@ -36,6 +36,7 @@ export interface Company {
     isDeleted: boolean;
     account: Account;
     products: Product[];
+    reviews: any;
 }
 
 

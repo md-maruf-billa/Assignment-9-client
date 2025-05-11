@@ -3,10 +3,10 @@ import CountrySelector from './CountrySelector';
 import { useState } from 'react';
 
 function Footer() {
-  const [expandedSection, setExpandedSection] = useState(null);
+  const [expandedSection, setExpandedSection] = useState<string|number|null>(null);
 
   // Toggle mobile accordion sections
-  const toggleSection = (section) => {
+  const toggleSection = (section:string) => {
     if (expandedSection === section) {
       setExpandedSection(null);
     } else {
