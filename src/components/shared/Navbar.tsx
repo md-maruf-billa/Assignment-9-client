@@ -30,7 +30,7 @@ const Navbar = () => {
 
   // Navigation links array
   const navLinks = [
-    { href: '/category', label: 'Category' },
+    { href: '/products', label: 'Products' },
     { href: '/company', label: 'Company' },
     { href: '/blogs', label: "Blog's" },
     { href: '/services', label: 'Services' },
@@ -84,9 +84,6 @@ const Navbar = () => {
 
         {/* Desktop Navigation - Hidden on mobile */}
         <div className="hidden md:flex items-center gap-4 lg:gap-6 text-sm font-medium">
-          <a href="#" className="hover:underline whitespace-nowrap">
-            Write a review
-          </a>
 
           {navLinks.map(({ href, label }) => (
             <Link
@@ -159,13 +156,6 @@ const Navbar = () => {
             </svg>
           </div>
 
-          {/* Write a review link */}
-          <a
-            href="#"
-            className="py-2 hover:text-blue-600 block font-medium border-b border-gray-200"
-          >
-            Write a review
-          </a>
 
           {/* Navigation Links */}
           {navLinks.map(({ href, label }) => (

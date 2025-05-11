@@ -29,7 +29,7 @@ import { GoCodeReview } from 'react-icons/go';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { log_out_user_action } from '@/services/AuthService';
-import { Building2, MessageSquareCode, Users } from 'lucide-react';
+import {Building2, LayoutGrid, MessageSquareCode, Users} from 'lucide-react';
 
 const data = {
   user: {
@@ -61,6 +61,10 @@ const data = {
   ],
   company: [
     {
+      title: 'Overview',
+      url: '/dashboard/company',
+      icon: LayoutGrid,
+    },   {
       title: 'Create Product',
       url: '/dashboard/company/createProduct',
       icon: IconLibraryPlus,
@@ -73,23 +77,8 @@ const data = {
     {
       title: 'Manage Reviews',
       url: '/dashboard/company/manageReviews',
-      icon: IconDashboard,
-    },
-    {
-      title: "Manage Users",
-      url: "/dashboard/admin/manageUsers",
-      icon: Users,
-    },
-    {
-      title: "Manage Companies",
-      url: "/dashboard/admin/manageCompanies",
-      icon: Building2,
-    },
-    {
-      title: "Manage Reviews",
-      url: "/dashboard/admin/manage-reviews",
       icon: MessageSquareCode,
-    }, 
+    }
   ],
   navSecondaryAdmin: [
     {
