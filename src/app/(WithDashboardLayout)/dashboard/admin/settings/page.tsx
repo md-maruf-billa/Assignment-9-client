@@ -19,6 +19,7 @@ import {useUser} from "@/context/UserContext";
 import {update_user_profile_action} from "@/services/user";
 import {IUser} from "@/types/user";
 
+
 // Define the types for the API response
 interface Company {
     id: string;
@@ -60,6 +61,7 @@ type FormValues = {
 const SettingsPage = () => {
     // State for user profile data
     const { user } = useUser();
+
     const [isLoading, setIsLoading] = useState(false);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
@@ -83,7 +85,6 @@ const SettingsPage = () => {
             bio: '',
         }
     });
-
 
 
     // Set form values when opening the update modal
