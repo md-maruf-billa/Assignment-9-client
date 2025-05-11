@@ -3,7 +3,6 @@
 import React from 'react';
 import CompanyDashboard from "@/components/CompanyDashboard/CompanyDashboard";
 import {CompanyResponse} from "@/types/company";
-import {useParams} from "next/navigation";
 import {get_company_by_id} from "@/services/company";
 import Loading from "@/components/shared/loading";
 import {FaBuilding} from "react-icons/fa";
@@ -24,7 +23,6 @@ function CompanyHomePage() {
     const [error, setError] = React.useState(null);
     const {user} = useUser();
 
-    console.log(user?.company?.id);
 
     const  id = user?.company?.id;
 

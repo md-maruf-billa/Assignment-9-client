@@ -7,6 +7,9 @@ import { HiMenu, HiX } from 'react-icons/hi'; // Import icons for menu toggle
 import UserMenu from '../customs/NavHelpers/UserMenu';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import { LogOut } from 'lucide-react';
+import {toast} from "sonner";
+import {log_out_user_action} from "@/services/AuthService";
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -36,13 +39,25 @@ const Navbar = () => {
     { href: '/services', label: 'Services' },
     { href: '/plans', label: 'Plans' },
   ];
+  // logout user
+  const handle_logout = async () => {
+    const id = toast.loading('Logging out...');
+    const res = await log_out_user_action();
+    if (res) {
+      toast.success('Logout successful.', { id });
+      setIsLoading(true);
+      window.location.replace('/');
+    } else {
+      toast.error('Logout failed!', { id });
+    }
+  };
 
   return (
     <nav className="sticky top-0 z-50 drop-shadow-xl bg-[#FAF8F5]">
       <div className="container mx-auto px-4 w-full py-4 flex items-center justify-between">
         {/* Left: Logo */}
-        <div className="flex items-center">
-          <Link href={'/'} className="flex items-center space-x-2">
+        <div >
+          <Link href={'/'} className="flex justify-center items-center gap-2 text-amber-500">
             <GoCodeReview size={32} className="md:text-4xl text-3xl" />
             <span className="font-bold text-xl md:text-3xl">ReviewHub</span>
           </Link>
@@ -89,8 +104,8 @@ const Navbar = () => {
             <Link
               key={href}
               href={href}
-              className={`hover:underline whitespace-nowrap ${
-                pathname === href ? 'text-blue-600 underline' : ''
+              className={` whitespace-nowrap ${
+                pathname === href ? 'border-amber-500 text-amber-500 text-md' : ''
               }`}
             >
               {label}
@@ -98,10 +113,10 @@ const Navbar = () => {
           ))}
 
           {user?.email ? (
-            <>
+            <div className={"flex items-center gap-2"}>
               {user?.role === 'ADMIN' ? (
                 <Link href="/dashboard/admin">
-                  <Button size="sm" className="whitespace-nowrap">
+                  <Button  className="whitespace-nowrap bg-amber-500 hover:bg-amber-600 cursor-pointer">
                     Dashboard
                   </Button>
                 </Link>
@@ -110,21 +125,19 @@ const Navbar = () => {
               ) : (
                 user.role === 'COMPANY' && (
                   <Link href="/dashboard/company">
-                    <Button size="sm" className="whitespace-nowrap">
+                    <Button  className="whitespace-nowrap bg-amber-500 hover:bg-amber-600 cursor-pointer">
                       Dashboard
                     </Button>
                   </Link>
                 )
               )}
-            </>
+              <Button onClick={handle_logout} variant={"outline"}  className={"cursor-pointer border-black hover:bg-black hover:text-white border bg-none"}>Log Out <LogOut /></Button>
+            </div>
           ) : (
             <Link
               href="/login"
-              className={`hover:underline whitespace-nowrap ${
-                pathname === '/login' ? 'text-blue-600 underline' : ''
-              }`}
             >
-              Join us
+              <Button  className={`bg-amber-500 hover:bg-amber-600 cursor-pointer`}>Join us</Button>
             </Link>
           )}
         </div>
@@ -163,7 +176,7 @@ const Navbar = () => {
               key={href}
               href={href}
               className={`py-2 block border-b border-gray-200 ${
-                pathname === href ? 'text-blue-600' : ''
+                pathname === href ? 'border-amber-500 text-amber-500 text-md' : ''
               }`}
             >
               {label}
@@ -173,10 +186,10 @@ const Navbar = () => {
           {/* Authentication */}
           <div className="pt-2">
             {user?.email ? (
-              <>
+              <div className="flex items-center gap-2">
                 {user?.role === 'ADMIN' ? (
-                  <Link href="/dashbaord">
-                    <Button className="w-full">Dashboard</Button>
+                  <Link href="/dashboard/admin">
+                    <Button className=" bg-amber-500 hover:bg-amber-600 cursor-pointer">Dashboard</Button>
                   </Link>
                 ) : user?.role === 'USER' ? (
                   <div className="flex items-center justify-center">
@@ -184,19 +197,19 @@ const Navbar = () => {
                   </div>
                 ) : (
                   user.role === 'COMPANY' && (
-                    <Link href="/dashboard">
-                      <Button className="w-full">Dashboard</Button>
+                    <Link href="/dashboard/company">
+                      <Button className="bg-amber-500 hover:bg-amber-600 cursor-pointer">Dashboard</Button>
                     </Link>
                   )
                 )}
-              </>
+                <Button onClick={handle_logout} className={"cursor-pointer bg-red-600 hover:bg-red-700"}><LogOut /></Button>
+              </div>
             ) : (
-              <Link
-                href="/login"
-                className="block py-2 text-center bg-blue-600 text-white rounded"
-              >
-                Join us
-              </Link>
+                <Link
+                    href="/login"
+                >
+                  <Button  className={`bg-amber-500 hover:bg-amber-600 cursor-pointer`}>Join us</Button>
+                </Link>
             )}
           </div>
         </div>

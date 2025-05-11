@@ -11,6 +11,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import {LucideIcon} from "lucide-react";
+import {usePathname} from "next/navigation";
 
 export function NavSecondary({
   items,
@@ -22,13 +23,14 @@ export function NavSecondary({
     icon: Icon | LucideIcon
   }[]
 } & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
+  const path = usePathname()
   return (
     <SidebarGroup {...props}>
       <SidebarGroupContent>
         <SidebarMenu>
           {items.map((item) => (
-            <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton asChild>
+            <SidebarMenuItem key={item.title} >
+              <SidebarMenuButton asChild className={`${path == item.url && "bg-amber-500 text-white"}`}>
                 <a href={item.url}>
                   <item.icon />
                   <span>{item.title}</span>

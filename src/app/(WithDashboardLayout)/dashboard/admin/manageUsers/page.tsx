@@ -6,6 +6,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import { FaImage, FaSearch, FaSort } from "react-icons/fa";
 import { toast } from "sonner";
 import { get_all_user_action } from "@/services/user";
+import Loading from "@/app/loading";
+import {change_profile_status_action} from "@/services/AuthService";
 
 export interface IUser {
   id: string;
@@ -29,6 +31,7 @@ export interface IUser {
 const ManageUsersPage = () => {
   const [users, setUsers] = useState<IUser[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [reFetch, setReFetch] = useState<boolean>(true);
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
@@ -40,11 +43,12 @@ const ManageUsersPage = () => {
         toast.error("Failed to load users.");
       } finally {
         setIsLoading(false);
+        setReFetch(false);
       }
     };
 
     fetchData();
-  }, []);
+  }, [reFetch]);
 
   const filteredUsers = useMemo(() => {
     const lowerSearch = searchTerm.toLowerCase();
@@ -84,13 +88,20 @@ const ManageUsersPage = () => {
     }),
     exit: { opacity: 0, y: -20, transition: { duration: 0.2 } },
   };
+  // handle user status change
+  const change_profile_status = async (email: string,status:string) => {
+    const res = await change_profile_status_action({ email, status });
+    if(res.success) {
+      toast.success(res.message);
+      setReFetch(true)
+    }else{
+      toast.error(res.message);
+    }
+  }
+
 
   if (isLoading) {
-    return (
-        <div className="w-full flex justify-center items-center p-10">
-          <p className="text-gray-500">Loading users...</p>
-        </div>
-    );
+    return <Loading/>
   }
 
   return (
@@ -128,7 +139,7 @@ const ManageUsersPage = () => {
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                   <tr>
-                    {["User", "Name", "Email", "Bio", "Created", "Actions"].map((head) => (
+                    {["User", "Name", "Email", "Bio", "Created","Account Status", "Actions"].map((head) => (
                         <th
                             key={head}
                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -180,13 +191,31 @@ const ManageUsersPage = () => {
                           <td className="text-sm text-gray-500">
                             {formatDate(user.createdAt)}
                           </td>
-                          <td className="text-sm text-right">
-                            <select className="border rounded p-1">
+                          <td
+                              className={`text-sm text-gray-100 text-center px-2 py-1 rounded ${
+                                  user?.account?.status === "SUSPENDED"
+                                      ? "text-red-700"
+                                      : user?.account?.status === "INACTIVE"
+                                          ? "text-yellow-500"
+                                          : user?.account?.status === "ACTIVE"
+                                              ? "text-green-600"
+                                              : ""
+                              }`}
+                          >
+                            {user?.account?.status}
+                          </td>
+
+                          <td className="text-sm text-center">
+                            <select
+                                onChange={(e) => change_profile_status(user?.account?.email, e.target.value)}
+                                className="border rounded p-1"
+                            >
                               <option value="">Select Status</option>
                               <option value="ACTIVE">Active</option>
                               <option value="INACTIVE">Inactive</option>
                               <option value="SUSPENDED">Suspended</option>
                             </select>
+
                           </td>
                         </motion.tr>
                     ))}
