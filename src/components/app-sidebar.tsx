@@ -31,6 +31,7 @@ import {NavMain} from "@/components/nav-main";
 import {NavSecondary} from "@/components/nav-secondary";
 
 
+
 // Sidebar data
 const data = {
   admin: [
@@ -77,6 +78,8 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
           : user?.role === 'COMPANY'
               ? data.navSecondaryCompany
               : [];
+
+
 
   return (
       <Sidebar collapsible="offcanvas" {...props}>

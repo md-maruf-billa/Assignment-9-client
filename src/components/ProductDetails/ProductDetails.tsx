@@ -243,7 +243,6 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
                 toast.error(res.message);
             }
         } catch (error) {
-            console.error('Error submitting review:', error);
             toast.error('Failed to submit review');
         } finally {
             setIsSubmitting(false);
@@ -251,13 +250,15 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
     };
 
     const handleCommentSubmit = async (reviewId: string, data: CommentFormValues) => {
+        if(!user?.email){
+            toast.error('Please Login first!!');
+            return;
+        }
         if (!data.content.trim()) {
             toast.error('Comment cannot be empty');
             return;
         }
-
         setIsPostingComment(prev => ({ ...prev, [reviewId]: true }));
-
         try {
             const res = await create_comment_action({reviewId,content:data?.content});
             if(res.success){
@@ -266,6 +267,8 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
                 resetCommentForm();
                 // Close the comment input
                 setCommentExpanded(prev => ({ ...prev, [reviewId]: false }));
+            }else{
+                toast.error(res.message);
             }
 
         } catch (error) {
@@ -277,12 +280,17 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
     };
 
     const handleVote = async (reviewId: string,type:string) => {
+        if(!user?.email){
+            toast.error('Please Login first!!');
+            return;
+        }
         try {
-            console.log(reviewId,type);
            const res = await create_voter_action({reviewId, type})
             if(res.success){
                 toast.success('Vote recorded!');
                 setRefatch(true)
+            }else{
+                toast.error(res.message);
             }
         } catch (error) {
             console.error('Error voting:', error);
