@@ -24,7 +24,7 @@ const ProductDetailsPage =  () => {
 
     return (
         <>
-            <ProductDetails productData={product} isLoading={isLoading} setRefatch={setRefatch} />
+            <ProductDetails productData={product!} isLoading={isLoading} setRefatch={setRefatch} />
         </>
     );
 };

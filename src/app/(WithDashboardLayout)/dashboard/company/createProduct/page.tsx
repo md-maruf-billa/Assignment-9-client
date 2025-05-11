@@ -249,7 +249,7 @@ const CreateProductPage = () => {
                                         className="block w-full pl-3 pr-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-amber-500 focus:border-amber-500"
                                     >
                                         <option value="">Select a category</option>
-                                        {categories.map((category) => (
+                                        {categories?.map((category:any) => (
                                             <option key={category?.id} value={category?.id}>{category?.name}</option>
                                         ))}
                                     </select>

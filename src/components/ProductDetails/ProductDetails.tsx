@@ -236,6 +236,8 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
                 toast.success('Review submitted successfully!');
                 setRefatch(true)
                 closeReviewModal();
+            }else{
+                toast.error(res.message);
             }
         } catch (error) {
             console.error('Error submitting review:', error);

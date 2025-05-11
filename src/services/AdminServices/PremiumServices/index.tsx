@@ -18,7 +18,7 @@ export const getAllPremiumReview = async (): Promise<{
         },
         method: "GET",
         headers: {
-          Authorization: accessToken ? `Bearer ${accessToken}` : "",
+          Authorization: accessToken!,
           "Content-Type": "application/json",
         },
       }
