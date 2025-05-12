@@ -573,11 +573,11 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
 
 
                                         {/* Comments Section */}
-                                        {review.ReviewComment.length > 0 && (
+                                        {review?.ReviewComment?.length > 0 && (
                                             <div className="bg-gray-50 p-4 rounded-md mb-4">
                                                 <h5 className="font-medium text-gray-900 mb-3">Comments</h5>
                                                 <div className="space-y-4">
-                                                    {review.ReviewComment.map(comment => (
+                                                    {review?.ReviewComment?.map(comment => (
                                                         <div key={comment.id} className="flex space-x-3 items-center">
                                                             <div className="flex-shrink-0">
                                                                 {comment.account.user?.profileImage ? (

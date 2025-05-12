@@ -17,6 +17,8 @@ const Companies: React.FC<CompaniesProps> = ({companiesData}) => {
     const [searchQuery, setSearchQuery] = useState<string>("");
     const [hoveredCompany, setHoveredCompany] = useState<string | null>(null);
 
+    console.log(companiesData);
+
     // Function to format date
     const formatDate = (dateString: string) => {
         const date = new Date(dateString);
@@ -62,12 +64,25 @@ const Companies: React.FC<CompaniesProps> = ({companiesData}) => {
     };
 
     // Filter companies based on search query
+    // const filteredCompanies = companiesData.success
+    //     ? companiesData?.data?.filter(company =>
+    //         company?.name?.toLowerCase().includes(searchQuery?.toLowerCase()) ||
+    //         (company?.description && company?.description?.toLowerCase()?.includes(searchQuery?.toLowerCase()))
+    //     )
+    //     : [];
+
     const filteredCompanies = companiesData.success
-        ? companiesData?.data?.filter(company =>
-            company?.name?.toLowerCase().includes(searchQuery?.toLowerCase()) ||
-            (company?.description && company?.description?.toLowerCase()?.includes(searchQuery?.toLowerCase()))
-        )
+        ? companiesData?.data?.filter(company => {
+            // Always include company if there's no search query
+            if (!searchQuery) return true;
+
+            const nameMatch = company?.name?.toLowerCase().includes(searchQuery.toLowerCase());
+            const descMatch = company?.description?.toLowerCase().includes(searchQuery.toLowerCase());
+
+            return nameMatch || descMatch;
+        })
         : [];
+
 
     return (
         <div className="bg-[#FAF8F5] py-12 overflow-hidden">
