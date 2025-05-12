@@ -318,11 +318,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
             </div>
             <div className="flex space-x-2">
               <Link
-<<<<<<< HEAD
                 href="/dashboard/admin/settings"
-=======
-                href="/dashboard/company/settings"
->>>>>>> 93b41c531e94d7c3569659ef20c2fa28e7705e29
                 className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-md flex items-center transition-colors duration-200"
               >
                 <FaEdit className="mr-2" />

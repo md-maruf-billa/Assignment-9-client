@@ -38,11 +38,7 @@ const reviews: Review[] = [
     },
     company: {
       name: "TechCorp",
-<<<<<<< HEAD
       logo: "/logos/techcorp.svg",
-=======
-      logo: "https://images.unsplash.com/photo-1590102426319-c7526718cd70?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
->>>>>>> 93b41c531e94d7c3569659ef20c2fa28e7705e29
       website: "techcorp.com",
     },
   },
@@ -57,11 +53,7 @@ const reviews: Review[] = [
     },
     company: {
       name: "DevSolutions",
-<<<<<<< HEAD
       logo: "/logos/devsolutions.svg",
-=======
-      logo: "https://images.unsplash.com/photo-1670341447004-606a07fcfaa7?q=80&w=1934&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
->>>>>>> 93b41c531e94d7c3569659ef20c2fa28e7705e29
       website: "devsolutions.com",
     },
   },
@@ -76,11 +68,7 @@ const reviews: Review[] = [
     },
     company: {
       name: "UIExperts",
-<<<<<<< HEAD
       logo: "/logos/uiexperts.svg",
-=======
-      logo: "https://images.unsplash.com/photo-1669975864803-6d8e6e431563?q=80&w=1934&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
->>>>>>> 93b41c531e94d7c3569659ef20c2fa28e7705e29
       website: "uiexperts.com",
     },
   },
@@ -95,11 +83,7 @@ const reviews: Review[] = [
     },
     company: {
       name: "EconoTech",
-<<<<<<< HEAD
       logo: "/logos/econotech.svg",
-=======
-      logo: "https://images.unsplash.com/photo-1669975862041-997275f96aeb?q=80&w=1934&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
->>>>>>> 93b41c531e94d7c3569659ef20c2fa28e7705e29
       website: "econotech.com",
     },
   },
@@ -129,11 +113,7 @@ const reviews: Review[] = [
     },
     company: {
       name: "CodeWorx",
-<<<<<<< HEAD
       logo: "/logos/codeworx.svg",
-=======
-      logo: "https://images.unsplash.com/photo-1670341445726-8a9f4169da8c?q=80&w=1934&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
->>>>>>> 93b41c531e94d7c3569659ef20c2fa28e7705e29
       website: "codeworx.com",
     },
   },
@@ -148,11 +128,7 @@ const reviews: Review[] = [
     },
     company: {
       name: "NovaApps",
-<<<<<<< HEAD
       logo: "/logos/novaapps.svg",
-=======
-      logo: "https://images.unsplash.com/photo-1668419911970-899f8518a7bf?q=80&w=1934&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
->>>>>>> 93b41c531e94d7c3569659ef20c2fa28e7705e29
       website: "novaapps.com",
     },
   },
