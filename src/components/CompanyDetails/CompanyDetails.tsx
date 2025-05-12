@@ -19,8 +19,7 @@ import {useRouter} from "next/navigation";
 
 const CompanyDetails: React.FC<CompanyDetailsProps> = ({ companyData, isLoading = false }) => {
 
-    console.log(companyData);
-
+ 
     const [activeTab, setActiveTab] = useState<'products' | 'about'>('products');
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
     const router = useRouter();
