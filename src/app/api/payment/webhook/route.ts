@@ -6,7 +6,7 @@ export async function POST(req: Request) {
     const transId = params.get('tran_id');
 
     // ✅ Construct absolute URL
-    const baseUrl = req.nextUrl.origin;
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
     const redirectUrl = `${baseUrl}/payment/success/${transId}`;
 
     return NextResponse.redirect(redirectUrl, 303);
