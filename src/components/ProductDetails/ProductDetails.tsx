@@ -567,7 +567,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
                                                 className="flex items-center text-gray-500 hover:text-amber-500 transition-colors duration-200"
                                             >
                                                 <FaComment className="mr-1" />
-                                                <span>{review?.ReviewComment.length}</span>
+                                                <span>{review?.ReviewComment?.length}</span>
                                             </button>
                                         </div>
 

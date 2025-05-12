@@ -31,9 +31,9 @@ const HomePage = async () => {
         <BusinessPromo />
         <SiteReview products={productData} />
         <ReviewBanner />
-        <SiteComparison />
+        <SiteComparison companies={companies} />
         <SiteBanner />
-        <RecentReview />
+        <RecentReview reviews={reviews} />
         <FaqAccordion />
         <PartnerCompany />
         <TeamSection />
