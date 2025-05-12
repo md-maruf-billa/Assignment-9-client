@@ -17,6 +17,8 @@ export interface IReview {
   reviewerProfilePhoto: string | null;
   createdAt: string;
   updatedAt: string;
+  upVotes: number;
+  downVotes: number;
   isDeleted: boolean;
   accountId: string | null;
   category: {
@@ -60,10 +62,11 @@ const ManageReviews = () => {
     fetchReviews();
   }, []);
 
-  const filteredReviews = premiumReviews.filter((review) =>
-    review.product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    review.category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    review.title.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredReviews = premiumReviews.filter(
+    (review) =>
+      review.product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      review.category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      review.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const totalPages = Math.ceil(filteredReviews.length / itemsPerPage);
@@ -263,19 +266,27 @@ const ManageReviews = () => {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
-              <h3 className="font-medium text-blue-800 mb-2">Review Moderation</h3>
+              <h3 className="font-medium text-blue-800 mb-2">
+                Review Moderation
+              </h3>
               <p className="text-sm text-blue-700">
-                Approve or flag inappropriate content to maintain platform quality.
+                Approve or flag inappropriate content to maintain platform
+                quality.
               </p>
             </div>
             <div className="bg-amber-50 p-4 rounded-lg border border-amber-100">
-              <h3 className="font-medium text-amber-800 mb-2">Responding to Feedback</h3>
+              <h3 className="font-medium text-amber-800 mb-2">
+                Responding to Feedback
+              </h3>
               <p className="text-sm text-amber-700">
-                Show users you value their feedback and are committed to improvement.
+                Show users you value their feedback and are committed to
+                improvement.
               </p>
             </div>
             <div className="bg-green-50 p-4 rounded-lg border border-green-100">
-              <h3 className="font-medium text-green-800 mb-2">Highlighting Top Reviews</h3>
+              <h3 className="font-medium text-green-800 mb-2">
+                Highlighting Top Reviews
+              </h3>
               <p className="text-sm text-green-700">
                 Showcase helpful reviews on product pages to build trust.
               </p>
