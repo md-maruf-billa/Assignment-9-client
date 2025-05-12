@@ -4,11 +4,7 @@ import { cookies } from "next/headers";
 
 // get all category
 export const allCategory = async () => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/category`, {
-    next: {
-      tags: ["category"],
-    },
-  });
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/category`);
 
   return await res.json();
 };

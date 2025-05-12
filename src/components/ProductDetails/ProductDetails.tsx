@@ -537,8 +537,16 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
                                             )}
                                         </div>
 
-                                        <h4 className="font-semibold text-gray-900 mb-2">{review.title}</h4>
-                                        <p className="text-gray-700 mb-4">{review.description}</p>
+                                        <h4 className={`${user?.isPremium
+                                            ? "blur-none"
+                                            : review?.isPremium
+                                                ? "blur-sm"
+                                                : ""}`}>{review.title}</h4>
+                                        <p className={`text-gray-700 mb-4 ${user?.isPremium
+                                            ? "blur-none"
+                                            : review?.isPremium
+                                                ? "blur-sm"
+                                                : ""}`}>{review.description}</p>
 
                                         <div className="flex items-center space-x-4 mb-4">
                                             <button
@@ -562,6 +570,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
                                                 <span>{review?.ReviewComment.length}</span>
                                             </button>
                                         </div>
+
 
                                         {/* Comments Section */}
                                         {review.ReviewComment.length > 0 && (

@@ -17,6 +17,7 @@ export interface IUser {
 
   };
   isCompleteProfile:boolean;
+  isPremium:boolean;
   admin: any | null;
   company: any | null;
   createdAt: string;

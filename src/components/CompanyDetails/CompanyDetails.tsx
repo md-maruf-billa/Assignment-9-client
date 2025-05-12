@@ -19,8 +19,7 @@ import {useRouter} from "next/navigation";
 
 const CompanyDetails: React.FC<CompanyDetailsProps> = ({ companyData, isLoading = false }) => {
 
-    console.log(companyData);
-
+ 
     const [activeTab, setActiveTab] = useState<'products' | 'about'>('products');
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
     const router = useRouter();
@@ -536,21 +535,17 @@ const CompanyDetails: React.FC<CompanyDetailsProps> = ({ companyData, isLoading 
                                     </div>
 
                                     <div className="flex flex-col sm:flex-row gap-4">
-                                        <motion.button
-                                            whileHover={{ scale: 1.05 }}
-                                            whileTap={{ scale: 0.95 }}
-                                            className="flex-1 inline-flex items-center justify-center px-6 py-3 bg-amber-500 text-white rounded-md hover:bg-amber-600 transition-colors duration-200"
-                                        >
-                                            <FaShoppingCart className="mr-2" />
-                                            View Product
-                                        </motion.button>
-                                        <motion.button
-                                            whileHover={{ scale: 1.05 }}
-                                            whileTap={{ scale: 0.95 }}
-                                            className="flex-1 inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors duration-200"
-                                        >
-                                            Write a Review
-                                        </motion.button>
+                                        <Link href={`/product/${selectedProduct?.id}`} className={"flex-1 w-full"}>
+                                            <motion.button
+                                                whileHover={{ scale: 1.05 }}
+                                                whileTap={{ scale: 0.95 }}
+                                                className="flex-1 inline-flex items-center justify-center px-6 py-3 bg-amber-500 text-white rounded-md hover:bg-amber-600 transition-colors duration-200"
+                                            >
+                                                <FaShoppingCart className="mr-2" />
+                                                Write Review
+                                            </motion.button>
+                                        </Link>
+
                                     </div>
                                 </div>
                             </div>

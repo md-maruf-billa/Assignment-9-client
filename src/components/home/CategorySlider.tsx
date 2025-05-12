@@ -11,6 +11,7 @@ export interface ICategory {
 }
 
 export default function CategorySlider(categories: ICategory[]): JSX.Element {
+  console.log(categories);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: 'left' | 'right') => {
