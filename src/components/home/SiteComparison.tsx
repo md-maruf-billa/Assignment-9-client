@@ -1,37 +1,38 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import { motion } from 'framer-motion';
-import travel1 from '@/assets/Travel company-logo/travel-1.png';
-import travel2 from '@/assets/Travel company-logo/travel-2.png';
-import travel3 from '@/assets/Travel company-logo/travel-3.png';
-import travel4 from '@/assets/Travel company-logo/travel-4.png';
+import Image from "next/image";
+import { motion } from "framer-motion";
+import travel1 from "@/assets/Travel company-logo/travel-1.png";
+import travel2 from "@/assets/Travel company-logo/travel-2.png";
+import travel3 from "@/assets/Travel company-logo/travel-3.png";
+import travel4 from "@/assets/Travel company-logo/travel-4.png";
+import Link from "next/link";
 
 const travelCompanyData = [
   {
-    name: 'AARDY',
-    url: 'www.aardy.com',
+    name: "AARDY",
+    url: "www.aardy.com",
     logo: travel1,
     rating: 4.8,
     reviews: 4345,
   },
   {
-    name: 'Triplnsure101',
-    url: 'triplnsure101.com',
+    name: "Triplnsure101",
+    url: "triplnsure101.com",
     logo: travel2,
     rating: 4.8,
     reviews: 1667,
   },
   {
-    name: 'MexiPass International Insurance Services',
-    url: 'mexipass.com',
+    name: "MexiPass International Insurance Services",
+    url: "mexipass.com",
     logo: travel3,
     rating: 4.8,
     reviews: 450,
   },
   {
-    name: 'Travel Defenders',
-    url: 'traveldefenders.com',
+    name: "WyZ Tech",
+    url: "wyztech.com",
     logo: travel4,
     rating: 4.7,
     reviews: 11207,
@@ -40,8 +41,8 @@ const travelCompanyData = [
 
 const StarIcon = ({ filled }: { filled: boolean }) => (
   <svg
-    className={`w-4 h-4 ${filled ? 'text-green-500' : 'text-gray-300'}`}
-    fill={filled ? 'currentColor' : 'none'}
+    className={`w-4 h-4 ${filled ? "text-green-500" : "text-gray-300"}`}
+    fill={filled ? "currentColor" : "none"}
     viewBox="0 0 20 20"
   >
     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674h4.911c.969 0 1.371 1.24.588 1.81l-3.974 2.888 1.519 4.674c.3.921-.755 1.688-1.54 1.118L10 15.347l-3.974 2.888c-.784.57-1.838-.197-1.539-1.118l1.518-4.674-3.974-2.888c-.784-.57-.38-1.81.588-1.81h4.911l1.519-4.674z" />
@@ -53,11 +54,13 @@ export default function SiteComparison() {
     <div className="w-full  mx-auto px-4 py-8">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
         <h2 className="text-xl sm:text-2xl font-bold text-gray-800">
-          Best in Travel Insurance Company
+          Best Reviewed Company
         </h2>
-        <button className="text-sm sm:text-base border border-blue-600 text-blue-600 font-medium px-4 py-1.5 rounded-full transition hover:bg-blue-600 hover:text-white active:scale-95">
-          See more
-        </button>
+        <Link href="/company">
+          <button className="text-sm sm:text-base border border-blue-600 text-blue-600 font-medium px-4 py-1.5 rounded-full transition hover:bg-blue-600 hover:text-white active:scale-95">
+            See more
+          </button>
+        </Link>
       </div>
 
       <div className="flex gap-4 overflow-x-auto pb-4 scroll-smooth">

@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState, ReactNode } from 'react';
-import { Shield, PenLine, FileText, HelpCircle, Lock } from 'lucide-react';
-import Image from 'next/image';
+import { useState, ReactNode } from "react";
+import { Shield, PenLine, FileText, HelpCircle, Lock } from "lucide-react";
+import Image from "next/image";
 
 // AccordionItem component
 const AccordionItem = ({
@@ -28,7 +28,7 @@ const AccordionItem = ({
           {icon}
           {title}
         </div>
-        <span className="text-xl text-gray-500">{isOpen ? '−' : '+'}</span>
+        <span className="text-xl text-gray-500">{isOpen ? "−" : "+"}</span>
       </button>
       {isOpen && (
         <div className="p-4 border-t text-gray-700 bg-gray-50">{children}</div>
@@ -84,14 +84,6 @@ const FaqAccordion = () => {
                   customers. We use order tracking and email verification to
                   confirm purchase before allowing a review.
                 </p>
-                <p className="mb-2">
-                  <strong>Q:</strong> Can reviews be edited or removed?
-                </p>
-                <p>
-                  <strong>A:</strong> Users can edit their own reviews within 24
-                  hours of submission. We remove reviews only if they violate
-                  our community guidelines.
-                </p>
               </AccordionItem>
 
               <AccordionItem
@@ -105,13 +97,6 @@ const FaqAccordion = () => {
                   <strong>A:</strong> Simply log in, search for the product
                   you've purchased, and click "Write a Review." Verified
                   purchases will be labeled accordingly.
-                </p>
-                <p className="mb-2">
-                  <strong>Q:</strong> Can I leave anonymous reviews?
-                </p>
-                <p>
-                  <strong>A:</strong> Yes, you may choose to display your name
-                  or stay anonymous. However, verification is still required.
                 </p>
               </AccordionItem>
 
@@ -127,14 +112,6 @@ const FaqAccordion = () => {
                   — positive or negative — as long as it complies with our terms
                   and respectful conduct policy.
                 </p>
-                <p className="mb-2">
-                  <strong>Q:</strong> Will businesses see my personal info?
-                </p>
-                <p>
-                  <strong>A:</strong> No. Your private information is never
-                  shared with businesses. Only your review content and public
-                  profile (if enabled) are visible.
-                </p>
               </AccordionItem>
 
               <AccordionItem
@@ -147,13 +124,6 @@ const FaqAccordion = () => {
                 <p className="mb-4">
                   <strong>A:</strong> Reach out to our support team via the
                   "Contact Us" page. We usually respond within 24 hours.
-                </p>
-                <p className="mb-2">
-                  <strong>Q:</strong> Is the site mobile-friendly?
-                </p>
-                <p>
-                  <strong>A:</strong> Yes, our platform is fully responsive and
-                  works seamlessly across phones, tablets, and desktops.
                 </p>
               </AccordionItem>
 
@@ -168,14 +138,6 @@ const FaqAccordion = () => {
                   <strong>A:</strong> We use industry-standard encryption and
                   never share your personal information with third parties
                   without consent.
-                </p>
-                <p className="mb-2">
-                  <strong>Q:</strong> Can I delete my account?
-                </p>
-                <p>
-                  <strong>A:</strong> Yes, go to your profile settings and click
-                  "Delete Account." This will remove all your reviews and data
-                  from our system.
                 </p>
               </AccordionItem>
             </Accordion>
