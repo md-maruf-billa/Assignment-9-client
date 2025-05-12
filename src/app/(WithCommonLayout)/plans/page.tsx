@@ -6,10 +6,15 @@ import { FaCheck, FaStar, FaTimes} from "react-icons/fa";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { motion } from "framer-motion";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
+import {create_new_product_action} from "@/services/product";
+import {create_new_payment_intent} from "@/services/payment";
+import {router} from "next/client";
+import {useRouter} from "next/navigation";
 
 const Page = () => {
     const [activeFaq, setActiveFaq] = useState<number | null>(null);
     const [hoveredPlan, setHoveredPlan] = useState<number | null>(null);
+    const router = useRouter();
 
     const fadeIn = {
         hidden: { opacity: 0, y: 20 },
@@ -46,8 +51,8 @@ const Page = () => {
 
     const plans = [
         {
-            name: "Free",
-            price: "0",
+            name: "Standard",
+            price: "19",
             description: "Perfect for individuals and small businesses just getting started with review management.",
             features: [
                 { text: "Up to 10 reviews per month", included: true },
@@ -59,7 +64,7 @@ const Page = () => {
                 { text: "Custom branding", included: false },
                 { text: "Priority support", included: false }
             ],
-            cta: "Get Started",
+            cta: "Start 14-Day Trial",
             popular: false,
             color: "gray-700"
         },
@@ -123,6 +128,23 @@ const Page = () => {
             answer: "Absolutely! For larger organizations with specific needs, we offer custom enterprise plans. Please contact our sales team to discuss your requirements and get a tailored solution."
         }
     ];
+
+
+
+    // create_new_payment_intent
+    const handlePlanClick = async () => {
+
+        const res = await create_new_payment_intent();
+        console.log("res", res);
+        if (res.success) {
+            console.log("res.data", res.data.paymentUrl);
+            router.push(res.data.paymentUrl);
+        }
+        // Handle plan click logic here
+        console.log("Plan clicked:");
+    };
+
+
 
     const toggleFaq = (index: number) => {
         if (activeFaq === index) {
@@ -261,13 +283,13 @@ const Page = () => {
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                             >
-                                <Link
-                                    href="/"
+                                <button
+                                    onClick={() => handlePlanClick()}
                                     className={`inline-flex items-center justify-center w-full h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md ${plan.popular ? 'bg-amber-500 hover:bg-amber-600' : 'bg-gray-800 hover:bg-gray-900'} focus:shadow-outline focus:outline-none`}
                                 >
                                     {plan.cta}
                                     <FaArrowRightLong  className="ml-2" />
-                                </Link>
+                                </button>
                             </motion.div>
                         </motion.div>
                     ))}
