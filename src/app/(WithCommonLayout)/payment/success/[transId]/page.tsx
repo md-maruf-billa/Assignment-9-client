@@ -219,9 +219,9 @@ const PaymentSuccessPage = ({ params }: Props) => {
                                         <FaHome className="mr-2" />
                                         Return to Home
                                     </Link>
-                                    <Link href="/dashboard" className="px-6 py-3 bg-gray-900 hover:bg-gray-800 text-white rounded-md flex items-center justify-center transition-colors duration-200">
+                                    <Link href="/billing" className="px-6 py-3 bg-gray-900 hover:bg-gray-800 text-white rounded-md flex items-center justify-center transition-colors duration-200">
                                         <FaUserCircle className="mr-2" />
-                                        Go to Dashboard
+                                        Go to Billing
                                     </Link>
                                 </motion.div>
                             </div>
