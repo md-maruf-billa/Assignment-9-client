@@ -72,7 +72,7 @@ export default function SiteComparison({
   return (
     <div className="w-full  mx-auto px-4 py-8">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
-        <h2 className="text-xl sm:text-2xl font-bold text-gray-800">
+        <h2 className="text-xl font-semibold text-amber-500">
           Best Companies
         </h2>
         <Link href="/company">
@@ -82,7 +82,7 @@ export default function SiteComparison({
         </Link>
       </div>
 
-      <div className="flex gap-4 overflow-x-auto pb-4 scroll-smooth">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4  gap-6 overflow-x-auto pb-4 scroll-smooth">
         {companies.map((company, idx) => (
           <motion.div
             key={company.id}
