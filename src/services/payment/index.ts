@@ -20,7 +20,7 @@ export const create_new_payment_intent = async ()=>{
 
 export const get_user_payments = async ()=>{
     const accessToken = (await cookies()).get("accessToken")?.value;
-    const result = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/payment/my-payment`, {
+    const result = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/payment`, {
         method: "GET",
         headers: {
             "Authorization": accessToken!,

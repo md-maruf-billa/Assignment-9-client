@@ -76,7 +76,9 @@ function AdminHomePage() {
           setPremiumReviews(reviewsRes.data || []);
         }
         if (paymentsRes.success) {
-          setPayments(paymentsRes.data || []);
+          // Filter paid payments only
+          const paidPayments = paymentsRes.data.filter((payment: { status: string }) => payment.status === 'PAID');
+          setPayments(paidPayments);
         }
       } catch (err) {
         console.error("Error fetching data:", err);
@@ -89,10 +91,10 @@ function AdminHomePage() {
   }, []);
 
   // Calculate payment analytics
-  const totalRevenue = payments.reduce((sum, payment) => sum + payment.amount, 0);
-  const successfulPayments = payments.filter(p => p.status === 'PAID').length;
-  const pendingPayments = payments.filter(p => p.status === 'PENDING').length;
-  const failedPayments = payments.filter(p => p.status === 'FAILED').length;
+  const totalRevenue = payments.reduce((sum, payment: { amount: number }) => sum + payment.amount, 0);
+  const successfulPayments = payments.length; // All payments are PAID now
+  const pendingPayments = 0; // No pending payments
+  const failedPayments = 0; // No failed payments
 
   // Calculate review analytics
   const totalReviews = premiumReviews.length;
@@ -213,7 +215,100 @@ function AdminHomePage() {
             </div>
           </motion.div>
 
-         
+          {/* Quick Actions Box */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="bg-white rounded-lg shadow-sm p-6"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <p className="text-sm font-medium text-gray-500">Quick Actions</p>
+                <h3 className="text-xl font-bold text-gray-900 mt-1">Manage Content</h3>
+              </div>
+              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                <FaChartBar className="text-purple-600 text-xl" />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <Link
+                href="/dashboard/admin/payments"
+                className="flex items-center justify-center px-4 py-3 border border-transparent text-sm font-medium rounded-md text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500"
+              >
+                <FaMoneyBillWave className="mr-2" />
+                Payments
+              </Link>
+              <Link
+                href="/dashboard/admin/manageReviews"
+                className="flex items-center justify-center px-4 py-3 border border-transparent text-sm font-medium rounded-md text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500"
+              >
+                <FaComments className="mr-2" />
+                Reviews
+              </Link>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Payment Data Table */}
+        <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+          <h2 className="text-xl font-bold text-gray-900 mb-6">Recent Payments</h2>
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Transaction ID
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Amount
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Date
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {payments.slice(0, 5).map((payment) => (
+                  <tr key={payment.id}>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      {payment.transactionId}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      ${payment.amount.toFixed(2)}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                        payment.status === 'PAID' 
+                          ? 'bg-green-100 text-green-800'
+                          : payment.status === 'PENDING'
+                          ? 'bg-yellow-100 text-yellow-800'
+                          : 'bg-red-100 text-red-800'
+                      }`}>
+                        {payment.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {new Date(payment.createdAt).toLocaleDateString()}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {payments.length > 5 && (
+            <div className="mt-4 text-right">
+              <Link 
+                href="/dashboard/admin/payments" 
+                className="text-amber-600 hover:text-amber-700 text-sm font-medium"
+              >
+                View All Payments →
+              </Link>
+            </div>
+          )}
         </div>
 
         {/* Recent Activity */}
