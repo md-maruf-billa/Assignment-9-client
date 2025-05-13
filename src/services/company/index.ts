@@ -3,14 +3,15 @@
 import {cookies} from "next/headers";
 
 export const get_all_company = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/company`)
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/company`,{
+        cache: "no-store",
+    })
      return  await res.json()
 
 }
 
 // get company by id
 export const get_company_by_id = async (id: string) => {
-    console.log(id)
     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/company/${id}`,{
         method: "GET"
     })
