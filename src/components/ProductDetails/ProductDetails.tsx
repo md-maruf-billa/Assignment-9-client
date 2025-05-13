@@ -17,12 +17,14 @@ import {
     FaCheck,
     FaPaperPlane,
     FaRegComment, FaThumbsDown,
-    FaTrash
+    FaTrash,
+    FaCrown
 } from 'react-icons/fa';
 import {useUser} from "@/context/UserContext";
 import {create_review_action, create_voter_action, unvoteAction, getAllVotesAction} from "@/services/review";
 import {create_comment_action} from "@/services/comment";
 import {get_product_by_category_id_action} from "@/services/product";
+import Link from 'next/link';
 
 // Types for the API response
 interface ReviewComment {
@@ -597,9 +599,17 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
                                             </div>
 
                                             {review.isPremium && (
-                                                <span className="bg-amber-100 text-amber-800 text-xs font-medium px-2.5 py-0.5 rounded">
-                          Premium Review
-                        </span>
+                                                <div className="flex items-center gap-2">
+                                                    <span className="bg-amber-100 text-amber-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                                                        Premium Review
+                                                    </span>
+                                                    <Link 
+                                                        href="/plans" 
+                                                        className="inline-flex items-center px-2 py-1 text-xs font-medium text-white bg-amber-500 rounded-md hover:bg-amber-600 transition-colors duration-200"
+                                                    >
+                                                        Buy Premium
+                                                    </Link>
+                                                </div>
                                             )}
                                         </div>
 
