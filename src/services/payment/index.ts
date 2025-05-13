@@ -28,6 +28,16 @@ export const get_user_payments = async ()=>{
     })
     return await result.json();
 }
+export const get_my_payments = async ()=>{
+    const accessToken = (await cookies()).get("accessToken")?.value;
+    const result = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/payment/my-payment`, {
+        method: "GET",
+        headers: {
+            "Authorization": accessToken!,
+        }
+    })
+    return await result.json();
+}
 
 
 

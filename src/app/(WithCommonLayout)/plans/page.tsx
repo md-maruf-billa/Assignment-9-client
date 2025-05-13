@@ -135,13 +135,9 @@ const Page = () => {
     const handlePlanClick = async () => {
 
         const res = await create_new_payment_intent();
-        console.log("res", res);
         if (res.success) {
-            console.log("res.data", res.data.paymentUrl);
             router.push(res.data.paymentUrl);
         }
-        // Handle plan click logic here
-        console.log("Plan clicked:");
     };
 
 

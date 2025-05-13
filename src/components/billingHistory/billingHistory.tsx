@@ -49,7 +49,7 @@ const BillingHistory: React.FC<BillingHistoryProps> = ({ billingHistory }) => {
 
     // Filter and sort payments
     const filteredPayments = React.useMemo(() => {
-        if (!billingHistory.success || !billingHistory.data) return [];
+        if (!billingHistory?.success || !billingHistory?.data) return [];
 
         return [...billingHistory.data]
             .filter(payment =>
