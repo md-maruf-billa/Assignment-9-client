@@ -9,9 +9,7 @@ export default function SearchHero() {
   const [query, setQuery] = useState("");
 
   const handleSearch = () => {
-    if (query.trim()) {
-      alert(`Searching for: ${query}`);
-    }
+
   };
 
   return (
