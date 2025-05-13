@@ -139,6 +139,7 @@ const Page = () => {
         }
         const res = await create_new_payment_intent();
         if (res.success) {
+            toast.success(res.message || "Payment initialized successfully.");
             router.push(res.data.paymentUrl);
         }
     };
