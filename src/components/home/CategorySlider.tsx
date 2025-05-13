@@ -39,23 +39,23 @@ export default function CategorySlider(categories: ICategory[]): JSX.Element {
   return (
     <section className="py-10 px-4">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-semibold">What are you looking for?</h2>
+        <h2 className="text-xl font-semibold text-amber-500">What are you looking for?</h2>
         <div className="flex items-center gap-2">
           <button
             onClick={() => scroll('left')}
-            className="p-2 rounded-full border border-gray-300 hover:bg-gray-100"
+            className="p-2 rounded-full border border-gray-300 hover:bg-amber-500"
             aria-label="Scroll left"
           >
             <ChevronLeft size={18} />
           </button>
           <button
             onClick={() => scroll('right')}
-            className="p-2 rounded-full border border-gray-300 hover:bg-gray-100"
+            className="p-2 rounded-full border border-gray-300 hover:bg-amber-500"
             aria-label="Scroll right"
           >
             <ChevronRight size={18} />
           </button>
-          <button className="text-sm sm:text-base border border-blue-600 text-blue-600 font-medium px-4 py-1.5 rounded-full transition hover:bg-blue-600 hover:text-white active:scale-95">
+          <button className="text-sm sm:text-base border border-amber-500 text-amber-600 font-medium px-4 py-1.5 rounded-full transition hover:bg-amber-600 hover:text-white active:scale-95">
             See more
           </button>
         </div>
@@ -63,20 +63,20 @@ export default function CategorySlider(categories: ICategory[]): JSX.Element {
 
       <div
         ref={scrollRef}
-        className="flex overflow-x-auto scroll-smooth gap-5 scrollbar-hide"
+        className="flex overflow-x-auto scroll-smooth gap-8 scrollbar-hide"
         style={{ scrollSnapType: 'x mandatory' }}
       >
         {Object.values(categories).map((cat: ICategory) => (
           <div
             key={cat.id}
-            className="category-card flex-shrink-0 w-[70vw] sm:w-[40vw] md:w-[25vw] lg:w-[20vw] max-w-[225px] text-center scroll-snap-align-start flex flex-col items-center"
+            className="category-card flex-shrink-0 p-4 rounded-xl text-center scroll-snap-align-start flex flex-col items-center hover:border-amber-500 border"
           >
-            <div className="w-24 h-24 mb-2 relative">
+            <div className="w-24 h-24 mb-2 relative ">
               <Image
                 src={cat.categoryImage}
                 alt={cat.name}
                 layout="fill"
-                className="rounded-full object-cover hover:scale-105 transition-transform duration-300 grayscale-100 hover:grayscale-0"
+                className="rounded-md object-cover hover:scale-105 transition-transform duration-300 grayscale-100 hover:grayscale-0"
                 style={{ scrollSnapAlign: 'start' }}
               />
             </div>

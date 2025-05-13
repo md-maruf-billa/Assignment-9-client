@@ -69,9 +69,9 @@ export default function SiteReview({ products }: { products: Product[] }) {
   return (
     <div ref={sectionRef} className="mx-auto px-4 py-6 md:py-10">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-2">
-        <h2 className="text-2xl md:text-3xl font-bold">Best in Product</h2>
-        <Link href="/products">
-          <button className="text-sm sm:text-base border border-blue-600 text-blue-600 font-medium px-4 py-1.5 rounded-full transition hover:bg-blue-600 hover:text-white active:scale-95">
+        <h2 className="text-xl font-semibold text-amber-500">Best in Product</h2>
+        <Link href="/product">
+          <button className="text-sm sm:text-base border border-amber-600 text-amber-600 font-medium px-4 py-1.5 rounded-full transition hover:bg-blue-600 hover:text-white active:scale-95">
             See more
           </button>
         </Link>
@@ -82,7 +82,7 @@ export default function SiteReview({ products }: { products: Product[] }) {
           variants={staggerContainer}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8"
         >
           {products.slice(0,3).map((product) => (
             <motion.div

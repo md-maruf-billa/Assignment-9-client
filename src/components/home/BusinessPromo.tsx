@@ -14,7 +14,7 @@ export default function BusinessPromo() {
             Strengthen your reputation with real reviews on Review Hub.
           </p>
         </div>
-        <Button className="bg-black hover:bg-gray-800 text-white px-6 py-2 rounded-full">
+        <Button className="bg-amber-500 hover:bg-amber-600 text-white px-6 py-2 rounded-full">
           Get started
         </Button>
       </div>
