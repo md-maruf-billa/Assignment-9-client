@@ -6,15 +6,16 @@ import { FaCheck, FaStar, FaTimes} from "react-icons/fa";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { motion } from "framer-motion";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
-import {create_new_product_action} from "@/services/product";
 import {create_new_payment_intent} from "@/services/payment";
-import {router} from "next/client";
 import {useRouter} from "next/navigation";
+import {useUser} from "@/context/UserContext";
+import {toast} from "sonner";
 
 const Page = () => {
     const [activeFaq, setActiveFaq] = useState<number | null>(null);
     const [hoveredPlan, setHoveredPlan] = useState<number | null>(null);
     const router = useRouter();
+    const {user} = useUser()
 
     const fadeIn = {
         hidden: { opacity: 0, y: 20 },
@@ -133,7 +134,9 @@ const Page = () => {
 
     // create_new_payment_intent
     const handlePlanClick = async () => {
-
+        if(user?.isPremium){
+            return toast.error("You are already premium!");
+        }
         const res = await create_new_payment_intent();
         if (res.success) {
             router.push(res.data.paymentUrl);
