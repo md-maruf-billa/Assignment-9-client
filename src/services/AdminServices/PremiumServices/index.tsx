@@ -9,23 +9,20 @@ export const getAllPremiumReview = async (): Promise<{
 }> => {
   try {
     const accessToken = (await cookies()).get("accessToken")?.value;
-
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/review`,
-      {
-        next: {
-          tags: ["REVIEWS"],
-        },
-        method: "GET",
-        headers: {
-          Authorization: accessToken!,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    console.log("api call");
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/review`, {
+      next: {
+        tags: ["REVIEWS"],
+      },
+      method: "GET",
+      headers: {
+        Authorization: accessToken!,
+        "Content-Type": "application/json",
+      },
+    });
 
     const data = await res.json();
-    console.log(data)
+    console.log(data);
     return data;
   } catch (error: unknown) {
     return {
