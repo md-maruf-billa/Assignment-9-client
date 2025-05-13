@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { AdminResponse } from "@/types/company";
 import { useUser } from "@/context/UserContext";
 import Loading from "@/components/shared/loading";
@@ -8,9 +8,11 @@ import { getMe } from "@/services/AdminServices/GetMe";
 import { get_user_payments } from "@/services/payment";
 import { getAllPremiumReview } from "@/services/AdminServices/PremiumServices";
 import { IReview } from "./manageReviews/page";
-import { motion } from "framer-motion";
-import { FaChartBar, FaComments, FaMoneyBillWave, FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
+import {AnimatePresence, motion } from "framer-motion";
+import {FaChartBar, FaComments, FaMoneyBillWave, FaStar, FaStarHalfAlt, FaRegStar, FaPlus} from "react-icons/fa";
 import Link from "next/link";
+import { toast } from "sonner";
+import {createCategory} from "@/services/category";
 
 function AdminHomePage() {
   const [admin, setAdminData] = React.useState<AdminResponse>({
@@ -39,25 +41,11 @@ function AdminHomePage() {
     meta: null,
     success: false,
   });
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [error, setError] = React.useState(null);
+
   const [premiumReviews, setPremiumReviews] = React.useState<IReview[]>([]);
   const [payments, setPayments] = React.useState<any[]>([]);
   const [loading, setLoading] = React.useState(false);
-  const { user } = useUser();
 
-  // if(!user || user.role !== "ADMIN" ) {
-  //     return (
-  //         <div className="min-h-screen bg-[#FAF8F5] flex flex-col items-center justify-center p-4">
-  //             <FaBuilding className="text-gray-400 text-5xl mb-4" />
-  //             <h2 className="text-2xl font-bold text-gray-900 mb-2">Unauthorized Access</h2>
-  //             <Link href="/" className="inline-flex items-center px-6 py-3 bg-amber-500 text-white rounded-md">
-  //                 <FaArrowLeftLong className="mr-2" />
-  //                 Back to Home
-  //             </Link>
-  //         </div>
-  //     );
-  // }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -91,6 +79,7 @@ function AdminHomePage() {
   }, []);
 
   // Calculate payment analytics
+  const [isOpen, setIsOpen] = useState(false);
   const totalRevenue = payments.reduce((sum, payment: { amount: number }) => sum + payment.amount, 0);
   const successfulPayments = payments.length; // All payments are PAID now
   const pendingPayments = 0; // No pending payments
@@ -104,6 +93,38 @@ function AdminHomePage() {
   const averageRating = premiumReviews.length > 0 
     ? premiumReviews.reduce((sum, review) => sum + review.rating, 0) / premiumReviews.length 
     : 0;
+const [image,setImage] = useState<File | null>(null)
+
+  const toggleModal = () => setIsOpen(!isOpen);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const form = e.currentTarget;
+    const categoryName = (form.elements.namedItem("category_name") as HTMLInputElement)?.value;
+
+    if (!image || !categoryName) return toast.error("Please select a image and name!!");
+
+    const formData = new FormData();
+    formData.append("image", image);
+    formData.append("data", JSON.stringify({ name: categoryName }));
+
+    try {
+      const id = toast.loading("Category creating....")
+      const res = await createCategory(formData);
+      if (res?.success) {
+        toast.success("Category created successfully",{id});
+        setImage(null);
+        toggleModal();
+      } else {
+        toast.error(res?.message || "Failed to create category",{id});
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("An error occurred while creating the category");
+    }
+  };
+
 
   if (loading) {
     return <Loading />;
@@ -231,7 +252,7 @@ function AdminHomePage() {
                 <FaChartBar className="text-purple-600 text-xl" />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="flex flex-wrap justify-center gap-4">
               <Link
                 href="/dashboard/admin/payments"
                 className="flex items-center justify-center px-4 py-3 border border-transparent text-sm font-medium rounded-md text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500"
@@ -246,6 +267,84 @@ function AdminHomePage() {
                 <FaComments className="mr-2" />
                 Reviews
               </Link>
+              <>
+                <button
+                    onClick={toggleModal}
+                    className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-sm text-white rounded-md flex items-center gap-2 transition-colors duration-200"
+                >
+                  <FaPlus />
+                  Create Category
+                </button>
+
+                <AnimatePresence>
+                  {isOpen && (
+                      <>
+                        {/* Backdrop */}
+                        <motion.div
+                            key="backdrop"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0  bg-opacity-40 z-40"
+                            onClick={toggleModal}
+                        />
+
+                        {/* Modal */}
+                        <motion.div
+                            key="modal"
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.8, opacity: 0 }}
+                            transition={{ duration: 0.25 }}
+                            className="fixed inset-0 z-50 flex items-center justify-center"
+                        >
+                          <div className="bg-white rounded-md p-6 w-full max-w-md relative z-50 shadow-xl">
+                            <button
+                                onClick={toggleModal}
+                                className="absolute top-2 right-2 text-gray-500 hover:text-black text-xl"
+                            >
+                              ×
+                            </button>
+
+                            <h2 className="text-xl font-semibold mb-4 text-center">
+                              Create New Category
+                            </h2>
+
+                            <form
+                                onSubmit={handleSubmit}
+                                className="flex flex-col gap-4"
+                            >
+                              <input
+                                  type="text"
+                                  placeholder="Category Name"
+                                  className="border p-2 rounded-md"
+                                  name="category_name"
+                                  required
+                              />
+
+                              <input
+                                  type="file"
+                                  accept="image/*"
+                                  className="border p-2 rounded-md"
+                                  onChange={(e) => {
+                                    if (e.target.files) setImage(e.target.files[0]);
+                                  }}
+                                  required
+                              />
+
+                              <button
+                                  type="submit"
+                                  className="bg-yellow-400 text-white py-2 rounded-md hover:bg-yellow-500 ease-linear duration-300 transition"
+                              >
+                                 Create Category
+                              </button>
+                            </form>
+                          </div>
+                        </motion.div>
+                      </>
+                  )}
+                </AnimatePresence>
+              </>
             </div>
           </motion.div>
         </div>

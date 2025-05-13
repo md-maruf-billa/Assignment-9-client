@@ -4,7 +4,6 @@ import React from 'react';
 import CompanyDashboard from "@/components/CompanyDashboard/CompanyDashboard";
 import {CompanyResponse} from "@/types/company";
 import {get_company_by_id} from "@/services/company";
-import Loading from "@/components/shared/loading";
 import {FaBuilding} from "react-icons/fa";
 import Link from "next/link";
 import {FaArrowLeftLong} from "react-icons/fa6";
@@ -24,26 +23,20 @@ function CompanyHomePage() {
     const {user} = useUser();
 
 
-    const  id = user?.company?.id;
+
 
     React.useEffect(() => {
         const loadData = async () => {
-            try {
-                setIsLoading(true);
-                const result = await get_company_by_id(id as string);
-                setCompany(result);
-            } catch (error: any) {
-                setError(error);
-                console.error('Failed to load company:', error);
-            } finally {
-                setIsLoading(false);
-            }
+                const result = await get_company_by_id(user?.company?.id as string);
+                if(result?.success){
+                    setCompany(result);
+                    setIsLoading(false);
+                }
         };
         loadData();
-    }, [id]);
+    }, [user?.company?.id]);
 
-
-    if (isLoading) return <Loading />
+console.log(isLoading);
 
     if (error || !company) {
         return (
