@@ -50,3 +50,30 @@ export const getALlReview = async () => {
   });
   return await res.json();
 };
+
+export const approveReviewAction = async ({
+  reviewId,
+  status,
+}: {
+  reviewId: string;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+}) => {
+  const token = (await cookies()).get("accessToken")?.value;
+  console.log("Approving review with data:", { reviewId, status, token });
+  
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/review/approve-review`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token!,
+      },
+      body: JSON.stringify({ reviewId, status }),
+    }
+  );
+
+  const data = await res.json();
+  console.log("Review approval API response:", data);
+  return data;
+};

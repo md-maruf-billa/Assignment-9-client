@@ -1,8 +1,10 @@
 "use client";
 import { getAllPremiumReview } from "@/services/AdminServices/PremiumServices";
+import { approveReviewAction } from "@/services/review";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { FaImage, FaSearch } from "react-icons/fa";
+import { toast as sonnerToast } from "sonner";
 
 export interface IReview {
   id: string;
@@ -21,6 +23,7 @@ export interface IReview {
   downVotes: number;
   isDeleted: boolean;
   accountId: string | null;
+  status: "PENDING" | "APPROVED" | "REJECTED";
   category: {
     name: string;
   };
@@ -43,18 +46,51 @@ const ManageReviews = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [processingReview, setProcessingReview] = useState<string | null>(null);
   const itemsPerPage = 10;
 
   const fetchReviews = async () => {
     setLoading(true);
     try {
       const res = await getAllPremiumReview();
-      const reviews = res?.data?.filter((review: IReview) => review.isPremium);
-      setPremiumReviews(reviews || []);
+      console.log("Raw API response:", res);
+      console.log("Reviews data:", res?.data);
+      setPremiumReviews(res?.data || []);
     } catch (err) {
       console.error("Failed to fetch reviews:", err);
+      sonnerToast.error("Failed to fetch reviews");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleApproveReview = async (
+    reviewId: string,
+    status: "APPROVED" | "REJECTED"
+  ) => {
+    try {
+      setProcessingReview(reviewId);
+      console.log("Sending review approval request:", { reviewId, status });
+      const response = await approveReviewAction({ reviewId, status });
+      console.log("Review approval response:", response);
+
+      if (response.success) {
+        sonnerToast.success(`Review ${status.toLowerCase()} successfully`);
+        // Update the review status in the local state
+        setPremiumReviews((prevReviews) =>
+          prevReviews.map((review) =>
+            review.id === reviewId ? { ...review, status } : review
+          )
+        );
+      } else {
+        console.log('from');
+        sonnerToast.error(response.message || "Failed to update review status");
+      }
+    } catch (error) {
+      console.error("Error updating review:", error);
+      sonnerToast.error("Failed to update review status");
+    } finally {
+      setProcessingReview(null);
     }
   };
 
@@ -124,7 +160,7 @@ const ManageReviews = () => {
         <div className="bg-gray-900 p-6">
           <h1 className="text-2xl font-bold text-white">Manage Reviews</h1>
           <p className="text-gray-300 mt-1">
-            View or delete premium reviews submitted by users.
+            View and manage premium reviews submitted by users.
           </p>
         </div>
 
@@ -175,7 +211,13 @@ const ManageReviews = () => {
                       Category
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      Status
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                       Date
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      Actions
                     </th>
                   </tr>
                 </thead>
@@ -205,8 +247,51 @@ const ManageReviews = () => {
                         <td className="px-6 py-4 text-sm text-amber-600">
                           {review.category.name}
                         </td>
+                        <td className="px-6 py-4">
+                          <span
+                            className={`px-2 py-1 text-xs font-medium rounded-full ${
+                              review.status === "APPROVED"
+                                ? "bg-green-100 text-green-800"
+                                : review.status === "REJECTED"
+                                ? "bg-red-100 text-red-800"
+                                : "bg-yellow-100 text-yellow-800"
+                            }`}
+                          >
+                            {review.status}
+                          </span>
+                        </td>
                         <td className="px-6 py-4 text-sm text-gray-600">
                           {formatDate(review.createdAt)}
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex space-x-2">
+                            {review.status === "PENDING" && (
+                              <>
+                                <button
+                                  onClick={() =>
+                                    handleApproveReview(review.id, "APPROVED")
+                                  }
+                                  disabled={processingReview === review.id}
+                                  className="px-3 py-1 text-xs font-medium text-white bg-green-600 rounded hover:bg-green-700 disabled:opacity-50"
+                                >
+                                  {processingReview === review.id
+                                    ? "Processing..."
+                                    : "Approve"}
+                                </button>
+                                <button
+                                  onClick={() =>
+                                    handleApproveReview(review.id, "REJECTED")
+                                  }
+                                  disabled={processingReview === review.id}
+                                  className="px-3 py-1 text-xs font-medium text-white bg-red-600 rounded hover:bg-red-700 disabled:opacity-50"
+                                >
+                                  {processingReview === review.id
+                                    ? "Processing..."
+                                    : "Reject"}
+                                </button>
+                              </>
+                            )}
+                          </div>
                         </td>
                       </motion.tr>
                     ))}

@@ -81,11 +81,11 @@ interface Review {
     createdAt: string;
     updatedAt: string;
     isDeleted: boolean;
+    status: 'PENDING' | 'APPROVED' | 'REJECTED';
     ReviewComment: ReviewComment[];
     votes: Vote[];
     upVotes?: number;
     downVotes?: number;
-
 }
 
 interface Product {
@@ -128,6 +128,7 @@ interface ProductDetailsProps {
 
 const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,setRefatch }) => {
     const {user} = useUser()
+    console.log(user);
     // State for modals
     const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
     const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
@@ -177,10 +178,16 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
         });
     };
 
+    // Filter approved reviews
+    const approvedReviews = product?.reviews?.filter(review => review.status === 'APPROVED') || [];
+    
+    // Update the average rating calculation to use approved reviews
     const calculateAverageRating = (reviews: Review[]) => {
         if (!reviews || reviews.length === 0) return 0;
-        const sum = reviews.reduce((total, review) => total + review.rating, 0);
-        return sum / reviews.length;
+        const approvedReviews = reviews.filter(review => review.status === 'APPROVED');
+        if (approvedReviews.length === 0) return 0;
+        const sum = approvedReviews.reduce((total, review) => total + review.rating, 0);
+        return sum / approvedReviews.length;
     };
 
     const renderStarRating = (rating: number, size = 'text-xl') => {
@@ -260,7 +267,11 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
         }
         setIsPostingComment(prev => ({ ...prev, [reviewId]: true }));
         try {
-            const res = await create_comment_action({reviewId,content:data?.content});
+            const res = await create_comment_action({
+                reviewId,
+                accountId: user.id,
+                content: data?.content
+            });
             if(res.success){
                 toast.success('Comment added successfully!');
                 setRefatch(true)
@@ -359,7 +370,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
         );
     }
 
-    const averageRating = calculateAverageRating(product.reviews);
+    const averageRating = calculateAverageRating(approvedReviews);
 
     return (
         <div className="bg-[#FAF8F5] min-h-screen py-12">
@@ -382,11 +393,11 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
                                     className="object-cover"
                                 />
                             </div>
-                            {product.reviews.length > 0 && (
+                            {approvedReviews.length > 0 && (
                                 <div className="absolute top-4 right-4 bg-white px-3 py-1 rounded-full shadow-md flex items-center">
                                     <FaStar className="text-amber-400 mr-1" />
                                     <span className="font-bold">{averageRating.toFixed(1)}</span>
-                                    <span className="text-gray-500 text-sm ml-1">({product.reviews.length})</span>
+                                    <span className="text-gray-500 text-sm ml-1">({approvedReviews.length})</span>
                                 </div>
                             )}
                         </div>
@@ -396,11 +407,11 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
                             <h1 className="text-3xl font-bold text-gray-900 mb-2">{product.name}</h1>
 
                             <div className="flex items-center mb-4">
-                                {product.reviews.length > 0 ? (
+                                {approvedReviews.length > 0 ? (
                                     <>
                                         {renderStarRating(averageRating)}
                                         <span className="ml-2 text-gray-600">
-                      {averageRating.toFixed(1)} ({product.reviews.length} reviews)
+                      {averageRating.toFixed(1)} ({approvedReviews.length} reviews)
                     </span>
                                     </>
                                 ) : (
@@ -445,8 +456,8 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
                             <div>
                                 <h2 className="text-2xl font-bold text-gray-900">Customer Reviews</h2>
                                 <p className="text-gray-600">
-                                    {product.reviews.length > 0
-                                        ? `${product.reviews.length} reviews for this product`
+                                    {approvedReviews.length > 0
+                                        ? `${approvedReviews.length} reviews for this product`
                                         : 'Be the first to review this product'}
                                 </p>
                             </div>
@@ -454,20 +465,20 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
                         </div>
 
                         {/* Rating Summary */}
-                        {product.reviews.length > 0 && (
+                        {approvedReviews.length > 0 && (
                             <div className="bg-gray-50 p-6 rounded-lg mb-8">
                                 <div className="flex flex-col md:flex-row items-center">
                                     <div className="md:w-1/4 flex flex-col items-center mb-6 md:mb-0">
                                         <div className="text-5xl font-bold text-gray-900 mb-2">{averageRating.toFixed(1)}</div>
                                         {renderStarRating(averageRating, 'text-2xl')}
-                                        <p className="text-gray-600 mt-2">{product.reviews.length} reviews</p>
+                                        <p className="text-gray-600 mt-2">{approvedReviews.length} reviews</p>
                                     </div>
 
                                     <div className="md:w-3/4 space-y-2">
                                         {[5, 4, 3, 2, 1].map(rating => {
-                                            const count = product.reviews.filter(r => Math.floor(r.rating) === rating).length;
-                                            const percentage = product.reviews.length > 0
-                                                ? Math.round((count / product.reviews.length) * 100)
+                                            const count = approvedReviews.filter(r => Math.floor(r.rating) === rating).length;
+                                            const percentage = approvedReviews.length > 0
+                                                ? Math.round((count / approvedReviews.length) * 100)
                                                 : 0;
 
                                             return (
@@ -489,14 +500,14 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
                         )}
 
                         {/* Reviews List */}
-                        {product?.reviews?.length > 0 ? (
+                        {approvedReviews.length > 0 ? (
                             <motion.div
                                 variants={staggerContainer}
                                 initial="hidden"
                                 animate="visible"
                                 className="space-y-6"
                             >
-                                {product?.reviews?.map(review => (
+                                {approvedReviews.map(review => (
                                     <motion.div
                                         key={review.id}
                                         variants={reviewItem}
