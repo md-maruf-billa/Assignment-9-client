@@ -30,13 +30,14 @@ export const create_voter_action = async ({
 }) => {
   const token = (await cookies()).get("accessToken")?.value;
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/review/vote?reviewId=${reviewId}&type=${type}`,
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/vote/cast`,
     {
-      method: "PUT",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: token!,
       },
+      body: JSON.stringify({ reviewId, type }),
     }
   );
 
@@ -76,4 +77,36 @@ export const approveReviewAction = async ({
   const data = await res.json();
   console.log("Review approval API response:", data);
   return data;
+};
+
+export const unvoteAction = async (reviewId: string) => {
+  const token = (await cookies()).get("accessToken")?.value;
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/vote/unvote?reviewId=${reviewId}`,
+    {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token!,
+      },
+    }
+  );
+
+  return await res.json();
+};
+
+export const getAllVotesAction = async () => {
+  const token = (await cookies()).get("accessToken")?.value;
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/vote`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token!,
+      },
+    }
+  );
+
+  return await res.json();
 };

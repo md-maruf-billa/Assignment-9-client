@@ -16,10 +16,11 @@ import {
     FaCalendarAlt,
     FaCheck,
     FaPaperPlane,
-    FaRegComment, FaThumbsDown
+    FaRegComment, FaThumbsDown,
+    FaTrash
 } from 'react-icons/fa';
 import {useUser} from "@/context/UserContext";
-import {create_review_action, create_voter_action} from "@/services/review";
+import {create_review_action, create_voter_action, unvoteAction, getAllVotesAction} from "@/services/review";
 import {create_comment_action} from "@/services/comment";
 import {get_product_by_category_id_action} from "@/services/product";
 
@@ -60,8 +61,8 @@ interface ReviewComment {
 interface Vote {
     id: string;
     reviewId: string;
-    accountId: string;
-    type: 'UP' | 'DOWN';
+    accountEmail: string;
+    type: 'UPVOTE' | 'DOWNVOTE';
     createdAt: string;
     updatedAt: string;
     isDeleted: boolean;
@@ -139,7 +140,9 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
     const commentInputRefs = useRef<{ [key: string]: HTMLTextAreaElement | null }>({});
     const [commentExpanded, setCommentExpanded] = useState<{ [key: string]: boolean }>({});
     const [isPostingComment, setIsPostingComment] = useState<{ [key: string]: boolean }>({});
-// load related product
+    const [votes, setVotes] = useState<Vote[]>([]);
+
+    // load related product
     useEffect(() => {
         const fetchData = async ()=>{
             const res = await get_product_by_category_id_action(productData?.data?.categoryId as string);
@@ -148,7 +151,20 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
         fetchData()
     }, [productData?.data?.categoryId]);
 
-
+    // Fetch votes when component mounts
+    useEffect(() => {
+        const fetchVotes = async () => {
+            try {
+                const response = await getAllVotesAction();
+                if (response.success) {
+                    setVotes(response.data);
+                }
+            } catch (error) {
+                console.error('Error fetching votes:', error);
+            }
+        };
+        fetchVotes();
+    }, []);
 
     // Forms setup
     const {
@@ -290,22 +306,52 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
         }
     };
 
-    const handleVote = async (reviewId: string,type:string) => {
+    const handleVote = async (reviewId: string, type: string) => {
+        let newType = type === "UP" ? 'UPVOTE' : 'DOWNVOTE'
         if(!user?.email){
             toast.error('Please Login first!!');
             return;
         }
         try {
-           const res = await create_voter_action({reviewId, type})
+            const res = await create_voter_action({reviewId, type: newType})
             if(res.success){
                 toast.success('Vote recorded!');
+                // Refresh votes after successful vote
+                const votesResponse = await getAllVotesAction();
+                if (votesResponse.success) {
+                    setVotes(votesResponse.data);
+                }
                 setRefatch(true)
             }else{
-                toast.error(res.message);
+                toast.error(res.message || 'Failed to record vote');
             }
         } catch (error) {
             console.error('Error voting:', error);
             toast.error('Failed to record vote');
+        }
+    };
+
+    const handleUnvote = async (reviewId: string) => {
+        if(!user?.email){
+            toast.error('Please Login first!!');
+            return;
+        }
+        try {
+            const res = await unvoteAction(reviewId);
+            if(res.success){
+                toast.success('Vote removed!');
+                // Refresh votes after successful unvote
+                const votesResponse = await getAllVotesAction();
+                if (votesResponse.success) {
+                    setVotes(votesResponse.data);
+                }
+                setRefatch(true);
+            } else {
+                toast.error(res.message || 'Failed to remove vote');
+            }
+        } catch (error) {
+            console.error('Error removing vote:', error);
+            toast.error('Failed to remove vote');
         }
     };
 
@@ -351,6 +397,15 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
             y: 0,
             transition: { duration: 0.3 }
         }
+    };
+
+    // Helper function to get vote counts for a review
+    const getVoteCounts = (reviewId: string) => {
+        const reviewVotes = votes.filter(vote => vote.reviewId === reviewId && !vote.isDeleted);
+        return {
+            upVotes: reviewVotes.filter(vote => vote.type === 'UPVOTE').length,
+            downVotes: reviewVotes.filter(vote => vote.type === 'DOWNVOTE').length
+        };
     };
 
     if (isLoading) {
@@ -559,19 +614,30 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
                                                 ? "blur-sm"
                                                 : ""}`}>{review.description}</p>
 
-                                        <div className="flex items-center space-x-4 mb-4">
+                                        <div className="flex items-center space-x-4">
                                             <button
-                                                onClick={() => handleVote(review.id,"up")}
-                                                className="flex items-center text-gray-500 hover:text-amber-500 transition-colors duration-200"
+                                                onClick={() => handleVote(review.id, 'UP')}
+                                                className="flex items-center text-green-500 hover:text-green-600"
                                             >
                                                 <FaThumbsUp className="mr-1" />
-                                                <span>{review?.upVotes}</span>
-                                            </button>  <button
-                                                onClick={() => handleVote(review.id,"down")}
-                                                className="flex items-center text-gray-500 hover:text-amber-500 transition-colors duration-200"
+                                                <span>{getVoteCounts(review.id).upVotes}</span>
+                                            </button>
+                                            <button
+                                                onClick={() => handleVote(review.id, 'DOWN')}
+                                                className="flex items-center text-red-500 hover:text-red-600"
                                             >
                                                 <FaThumbsDown className="mr-1" />
-                                                <span>{review?.downVotes}</span>
+                                                <span>{getVoteCounts(review.id).downVotes}</span>
+                                            </button>
+                                            <button
+                                                onClick={() => handleUnvote(review.id)}
+                                                className="flex items-center text-gray-500 hover:text-red-500 group relative"
+                                                title="Remove your vote"
+                                            >
+                                                <FaTrash className="mr-1" />
+                                                <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                                    Remove vote
+                                                </span>
                                             </button>
                                             <button
                                                 onClick={() => toggleCommentInput(review.id)}
