@@ -16,12 +16,15 @@ import {
     FaCalendarAlt,
     FaCheck,
     FaPaperPlane,
-    FaRegComment, FaThumbsDown
+    FaRegComment, FaThumbsDown,
+    FaTrash,
+    FaCrown
 } from 'react-icons/fa';
 import {useUser} from "@/context/UserContext";
-import {create_review_action, create_voter_action} from "@/services/review";
+import {create_review_action, create_voter_action, unvoteAction, getAllVotesAction} from "@/services/review";
 import {create_comment_action} from "@/services/comment";
 import {get_product_by_category_id_action} from "@/services/product";
+import Link from 'next/link';
 
 // Types for the API response
 interface ReviewComment {
@@ -60,8 +63,8 @@ interface ReviewComment {
 interface Vote {
     id: string;
     reviewId: string;
-    accountId: string;
-    type: 'UP' | 'DOWN';
+    accountEmail: string;
+    type: 'UPVOTE' | 'DOWNVOTE';
     createdAt: string;
     updatedAt: string;
     isDeleted: boolean;
@@ -81,11 +84,11 @@ interface Review {
     createdAt: string;
     updatedAt: string;
     isDeleted: boolean;
+    status: 'PENDING' | 'APPROVED' | 'REJECTED';
     ReviewComment: ReviewComment[];
     votes: Vote[];
     upVotes?: number;
     downVotes?: number;
-
 }
 
 interface Product {
@@ -128,6 +131,7 @@ interface ProductDetailsProps {
 
 const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,setRefatch }) => {
     const {user} = useUser()
+    console.log(user);
     // State for modals
     const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
     const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
@@ -138,7 +142,9 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
     const commentInputRefs = useRef<{ [key: string]: HTMLTextAreaElement | null }>({});
     const [commentExpanded, setCommentExpanded] = useState<{ [key: string]: boolean }>({});
     const [isPostingComment, setIsPostingComment] = useState<{ [key: string]: boolean }>({});
-// load related product
+    const [votes, setVotes] = useState<Vote[]>([]);
+
+    // load related product
     useEffect(() => {
         const fetchData = async ()=>{
             const res = await get_product_by_category_id_action(productData?.data?.categoryId as string);
@@ -147,7 +153,20 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
         fetchData()
     }, [productData?.data?.categoryId]);
 
-
+    // Fetch votes when component mounts
+    useEffect(() => {
+        const fetchVotes = async () => {
+            try {
+                const response = await getAllVotesAction();
+                if (response.success) {
+                    setVotes(response.data);
+                }
+            } catch (error) {
+                console.error('Error fetching votes:', error);
+            }
+        };
+        fetchVotes();
+    }, []);
 
     // Forms setup
     const {
@@ -177,10 +196,16 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
         });
     };
 
+    // Filter approved reviews
+    const approvedReviews = product?.reviews?.filter(review => review.status === 'APPROVED') || [];
+    
+    // Update the average rating calculation to use approved reviews
     const calculateAverageRating = (reviews: Review[]) => {
         if (!reviews || reviews.length === 0) return 0;
-        const sum = reviews.reduce((total, review) => total + review.rating, 0);
-        return sum / reviews.length;
+        const approvedReviews = reviews.filter(review => review.status === 'APPROVED');
+        if (approvedReviews.length === 0) return 0;
+        const sum = approvedReviews.reduce((total, review) => total + review.rating, 0);
+        return sum / approvedReviews.length;
     };
 
     const renderStarRating = (rating: number, size = 'text-xl') => {
@@ -260,7 +285,11 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
         }
         setIsPostingComment(prev => ({ ...prev, [reviewId]: true }));
         try {
-            const res = await create_comment_action({reviewId,content:data?.content});
+            const res = await create_comment_action({
+                reviewId,
+                accountId: user.id,
+                content: data?.content
+            });
             if(res.success){
                 toast.success('Comment added successfully!');
                 setRefatch(true)
@@ -279,22 +308,52 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
         }
     };
 
-    const handleVote = async (reviewId: string,type:string) => {
+    const handleVote = async (reviewId: string, type: string) => {
+        let newType = type === "UP" ? 'UPVOTE' : 'DOWNVOTE'
         if(!user?.email){
             toast.error('Please Login first!!');
             return;
         }
         try {
-           const res = await create_voter_action({reviewId, type})
+            const res = await create_voter_action({reviewId, type: newType})
             if(res.success){
                 toast.success('Vote recorded!');
+                // Refresh votes after successful vote
+                const votesResponse = await getAllVotesAction();
+                if (votesResponse.success) {
+                    setVotes(votesResponse.data);
+                }
                 setRefatch(true)
             }else{
-                toast.error(res.message);
+                toast.error(res.message || 'Failed to record vote');
             }
         } catch (error) {
             console.error('Error voting:', error);
             toast.error('Failed to record vote');
+        }
+    };
+
+    const handleUnvote = async (reviewId: string) => {
+        if(!user?.email){
+            toast.error('Please Login first!!');
+            return;
+        }
+        try {
+            const res = await unvoteAction(reviewId);
+            if(res.success){
+                toast.success('Vote removed!');
+                // Refresh votes after successful unvote
+                const votesResponse = await getAllVotesAction();
+                if (votesResponse.success) {
+                    setVotes(votesResponse.data);
+                }
+                setRefatch(true);
+            } else {
+                toast.error(res.message || 'Failed to remove vote');
+            }
+        } catch (error) {
+            console.error('Error removing vote:', error);
+            toast.error('Failed to remove vote');
         }
     };
 
@@ -342,6 +401,15 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
         }
     };
 
+    // Helper function to get vote counts for a review
+    const getVoteCounts = (reviewId: string) => {
+        const reviewVotes = votes.filter(vote => vote.reviewId === reviewId && !vote.isDeleted);
+        return {
+            upVotes: reviewVotes.filter(vote => vote.type === 'UPVOTE').length,
+            downVotes: reviewVotes.filter(vote => vote.type === 'DOWNVOTE').length
+        };
+    };
+
     if (isLoading) {
         return (
             <div className="flex justify-center items-center h-64">
@@ -359,7 +427,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
         );
     }
 
-    const averageRating = calculateAverageRating(product.reviews);
+    const averageRating = calculateAverageRating(approvedReviews);
 
     return (
         <div className="bg-[#FAF8F5] min-h-screen py-12">
@@ -382,11 +450,11 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
                                     className="object-cover"
                                 />
                             </div>
-                            {product.reviews.length > 0 && (
+                            {approvedReviews.length > 0 && (
                                 <div className="absolute top-4 right-4 bg-white px-3 py-1 rounded-full shadow-md flex items-center">
                                     <FaStar className="text-amber-400 mr-1" />
                                     <span className="font-bold">{averageRating.toFixed(1)}</span>
-                                    <span className="text-gray-500 text-sm ml-1">({product.reviews.length})</span>
+                                    <span className="text-gray-500 text-sm ml-1">({approvedReviews.length})</span>
                                 </div>
                             )}
                         </div>
@@ -396,11 +464,11 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
                             <h1 className="text-3xl font-bold text-gray-900 mb-2">{product.name}</h1>
 
                             <div className="flex items-center mb-4">
-                                {product.reviews.length > 0 ? (
+                                {approvedReviews.length > 0 ? (
                                     <>
                                         {renderStarRating(averageRating)}
                                         <span className="ml-2 text-gray-600">
-                      {averageRating.toFixed(1)} ({product.reviews.length} reviews)
+                      {averageRating.toFixed(1)} ({approvedReviews.length} reviews)
                     </span>
                                     </>
                                 ) : (
@@ -445,8 +513,8 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
                             <div>
                                 <h2 className="text-2xl font-bold text-gray-900">Customer Reviews</h2>
                                 <p className="text-gray-600">
-                                    {product.reviews.length > 0
-                                        ? `${product.reviews.length} reviews for this product`
+                                    {approvedReviews.length > 0
+                                        ? `${approvedReviews.length} reviews for this product`
                                         : 'Be the first to review this product'}
                                 </p>
                             </div>
@@ -454,20 +522,20 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
                         </div>
 
                         {/* Rating Summary */}
-                        {product.reviews.length > 0 && (
+                        {approvedReviews.length > 0 && (
                             <div className="bg-gray-50 p-6 rounded-lg mb-8">
                                 <div className="flex flex-col md:flex-row items-center">
                                     <div className="md:w-1/4 flex flex-col items-center mb-6 md:mb-0">
                                         <div className="text-5xl font-bold text-gray-900 mb-2">{averageRating.toFixed(1)}</div>
                                         {renderStarRating(averageRating, 'text-2xl')}
-                                        <p className="text-gray-600 mt-2">{product.reviews.length} reviews</p>
+                                        <p className="text-gray-600 mt-2">{approvedReviews.length} reviews</p>
                                     </div>
 
                                     <div className="md:w-3/4 space-y-2">
                                         {[5, 4, 3, 2, 1].map(rating => {
-                                            const count = product.reviews.filter(r => Math.floor(r.rating) === rating).length;
-                                            const percentage = product.reviews.length > 0
-                                                ? Math.round((count / product.reviews.length) * 100)
+                                            const count = approvedReviews.filter(r => Math.floor(r.rating) === rating).length;
+                                            const percentage = approvedReviews.length > 0
+                                                ? Math.round((count / approvedReviews.length) * 100)
                                                 : 0;
 
                                             return (
@@ -489,14 +557,14 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
                         )}
 
                         {/* Reviews List */}
-                        {product?.reviews?.length > 0 ? (
+                        {approvedReviews.length > 0 ? (
                             <motion.div
                                 variants={staggerContainer}
                                 initial="hidden"
                                 animate="visible"
                                 className="space-y-6"
                             >
-                                {product?.reviews?.map(review => (
+                                {approvedReviews.map(review => (
                                     <motion.div
                                         key={review.id}
                                         variants={reviewItem}
@@ -531,9 +599,17 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
                                             </div>
 
                                             {review.isPremium && (
-                                                <span className="bg-amber-100 text-amber-800 text-xs font-medium px-2.5 py-0.5 rounded">
-                          Premium Review
-                        </span>
+                                                <div className="flex items-center gap-2">
+                                                    <span className="bg-amber-100 text-amber-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                                                        Premium Review
+                                                    </span>
+                                                    <Link 
+                                                        href="/plans" 
+                                                        className="inline-flex items-center px-2 py-1 text-xs font-medium text-white bg-amber-500 rounded-md hover:bg-amber-600 transition-colors duration-200"
+                                                    >
+                                                        Buy Premium
+                                                    </Link>
+                                                </div>
                                             )}
                                         </div>
 
@@ -548,36 +624,47 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
                                                 ? "blur-sm"
                                                 : ""}`}>{review.description}</p>
 
-                                        <div className="flex items-center space-x-4 mb-4">
+                                        <div className="flex items-center space-x-4">
                                             <button
-                                                onClick={() => handleVote(review.id,"up")}
-                                                className="flex items-center text-gray-500 hover:text-amber-500 transition-colors duration-200"
+                                                onClick={() => handleVote(review.id, 'UP')}
+                                                className="flex items-center text-green-500 hover:text-green-600"
                                             >
                                                 <FaThumbsUp className="mr-1" />
-                                                <span>{review?.upVotes}</span>
-                                            </button>  <button
-                                                onClick={() => handleVote(review.id,"down")}
-                                                className="flex items-center text-gray-500 hover:text-amber-500 transition-colors duration-200"
+                                                <span>{getVoteCounts(review.id).upVotes}</span>
+                                            </button>
+                                            <button
+                                                onClick={() => handleVote(review.id, 'DOWN')}
+                                                className="flex items-center text-red-500 hover:text-red-600"
                                             >
                                                 <FaThumbsDown className="mr-1" />
-                                                <span>{review?.downVotes}</span>
+                                                <span>{getVoteCounts(review.id).downVotes}</span>
+                                            </button>
+                                            <button
+                                                onClick={() => handleUnvote(review.id)}
+                                                className="flex items-center text-gray-500 hover:text-red-500 group relative"
+                                                title="Remove your vote"
+                                            >
+                                                <FaTrash className="mr-1" />
+                                                <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                                    Remove vote
+                                                </span>
                                             </button>
                                             <button
                                                 onClick={() => toggleCommentInput(review.id)}
                                                 className="flex items-center text-gray-500 hover:text-amber-500 transition-colors duration-200"
                                             >
                                                 <FaComment className="mr-1" />
-                                                <span>{review?.ReviewComment.length}</span>
+                                                <span>{review?.ReviewComment?.length}</span>
                                             </button>
                                         </div>
 
 
                                         {/* Comments Section */}
-                                        {review.ReviewComment.length > 0 && (
+                                        {review?.ReviewComment?.length > 0 && (
                                             <div className="bg-gray-50 p-4 rounded-md mb-4">
                                                 <h5 className="font-medium text-gray-900 mb-3">Comments</h5>
                                                 <div className="space-y-4">
-                                                    {review.ReviewComment.map(comment => (
+                                                    {review?.ReviewComment?.map(comment => (
                                                         <div key={comment.id} className="flex space-x-3 items-center">
                                                             <div className="flex-shrink-0">
                                                                 {comment.account.user?.profileImage ? (

@@ -74,7 +74,7 @@ export default function UserMenu({ setIsLoading, user }: { setIsLoading: Dispatc
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem><Link href={"/my-account/profile"}>Profile</Link></DropdownMenuItem>
-        <DropdownMenuItem>Billing</DropdownMenuItem>
+        <DropdownMenuItem><Link href={"/billing"}>Billing</Link></DropdownMenuItem>
         <DropdownMenuItem>Team</DropdownMenuItem>
         <DropdownMenuItem>Subscription</DropdownMenuItem>
         <DropdownMenuSeparator />

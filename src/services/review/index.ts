@@ -30,13 +30,14 @@ export const create_voter_action = async ({
 }) => {
   const token = (await cookies()).get("accessToken")?.value;
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/review/vote?reviewId=${reviewId}&type=${type}`,
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/vote/cast`,
     {
-      method: "PUT",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: token!,
       },
+      body: JSON.stringify({ reviewId, type }),
     }
   );
 
@@ -48,5 +49,64 @@ export const getALlReview = async () => {
     method: "GET",
     cache: "no-store",
   });
+  return await res.json();
+};
+
+export const approveReviewAction = async ({
+  reviewId,
+  status,
+}: {
+  reviewId: string;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+}) => {
+  const token = (await cookies()).get("accessToken")?.value;
+  console.log("Approving review with data:", { reviewId, status, token });
+  
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/review/approve-review`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token!,
+      },
+      body: JSON.stringify({ reviewId, status }),
+    }
+  );
+
+  const data = await res.json();
+  console.log("Review approval API response:", data);
+  return data;
+};
+
+export const unvoteAction = async (reviewId: string) => {
+  const token = (await cookies()).get("accessToken")?.value;
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/vote/unvote?reviewId=${reviewId}`,
+    {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token!,
+      },
+    }
+  );
+
+  return await res.json();
+};
+
+export const getAllVotesAction = async () => {
+  const token = (await cookies()).get("accessToken")?.value;
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/vote`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token!,
+      },
+    }
+  );
+
   return await res.json();
 };
