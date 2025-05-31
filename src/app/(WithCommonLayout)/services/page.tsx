@@ -121,7 +121,7 @@ const Page = () => {
     return (
         <div className="bg-[#FAF8F5] min-h-screen overflow-hidden">
             {/* Hero Section with Parallax Effect */}
-            <div className="relative px-4 py-20 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-28">
+            <div className="relative py-20 mx-auto container">
                 <motion.div
                     className="absolute inset-0 -z-10 opacity-10"
                     initial={{ opacity: 0 }}
@@ -249,7 +249,7 @@ const Page = () => {
 
             {/* Features Section with Counter Animation */}
             <motion.div
-                className="container mx-auto max-w-5xl flex gap-12 flex-wrap items-start justify-center md:justify-between py-16 px-4"
+                className="container mx-auto flex gap-12 flex-wrap items-start justify-center md:justify-between py-16"
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, amount: 0.3 }}
@@ -303,7 +303,7 @@ const Page = () => {
 
             {/* Specialized Services Section with Staggered Animation */}
             <motion.div
-                className="container relative flex flex-col justify-between h-full max-w-6xl px-10 mx-auto xl:px-0 py-16 "
+                className="container relative flex flex-col justify-between h-full mx-auto xl:px-0 py-16 "
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, amount: 0.1 }}

@@ -6,7 +6,7 @@ import { FaArrowRightLong } from 'react-icons/fa6';
 
 const PartnerCompany = () => {
   return (
-    <div className="relative z-10 text-center bg-black text-white rounded-2xl pt-16 pb-16 mb-16">
+    <div className="relative z-10 text-center bg-white rounded-2xl pt-16 pb-16 mb-16">
       <motion.h3
         className="text-2xl font-bold mb-4"
         initial={{ opacity: 0, y: 20 }}

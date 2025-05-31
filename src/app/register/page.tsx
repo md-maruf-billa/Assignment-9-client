@@ -43,9 +43,9 @@ const Register = () => {
         {/* Header Section */}
         <header className="flex flex-col md:flex-row items-center justify-evenly gap-10 md:gap-36 mx-auto w-full py-6 md:py-10">
           {/* Logo and Brand Name */}
-          <Link href="/" className="flex items-center space-x-2">
+          <Link href="/" className="flex items-center space-x-2 text-amber-500">
             <GoCodeReview size={40} />
-            <span className="font-bold text-3xl text-gray-800">ReviewHub</span>
+            <span className="font-bold text-3xl ">ReviewHub</span>
           </Link>
 
           {/* Trustpilot Review Snippet */}
@@ -184,7 +184,7 @@ const Register = () => {
               {/* Login Button */}
               <button
                 type="submit"
-                className="w-full bg-gray-900 text-white py-3 px-4 rounded-md font-semibold hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition duration-200 flex items-center justify-center"
+                className="w-full bg-amber-500 text-white py-3 px-4 rounded-md font-semibold hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition duration-200 flex items-center justify-center"
               >
                 Register to ReviewHub
                 <FaArrowRightLong className="ml-4" />
@@ -195,7 +195,7 @@ const Register = () => {
               Already have an account?{" "}
               <Link
                 href="/login"
-                className="font-medium text-gray-900 hover:underline"
+                className="font-medium text-gray-900 hover:underline hover:text-amber-400"
               >
                 Login now.
               </Link>

@@ -38,9 +38,9 @@ function Login() {
             <div className="min-h-screen bg-[#FAF8F5] flex flex-col font-sans">
                 <header className="flex flex-col md:flex-row items-center justify-evenly gap-10 md:gap-36 mx-auto w-full py-6 md:py-16">
 
-                    <Link href={"/"} className="flex items-center space-x-2">
+                    <Link href={"/"} className="flex items-center space-x-2 text-amber-500">
                         <GoCodeReview size={40} />
-                        <span className="font-bold text-3xl text-gray-800">ReviewHub</span>
+                        <span className="font-bold text-3xl ">ReviewHub</span>
                     </Link>
 
                     <div className="text-right max-w-xs">
@@ -134,7 +134,7 @@ function Login() {
                                     <label htmlFor="remember-me" className="text-sm text-gray-700 cursor-pointer">Remember
                                         me</label>
                                 </div>
-                                <Link href="/forget-password" className="text-sm font-medium text-black-600 hover:underline">
+                                <Link href="/forget-password" className="text-sm font-medium text-black-600 hover:underline  hover:text-amber-500">
                                     Forgot password?
                                 </Link>
                             </div>
@@ -142,7 +142,7 @@ function Login() {
                             {/* Login Button */}
                             <button
                                 type="submit"
-                                className="w-full bg-gray-900 text-white py-3 px-4 rounded-md font-semibold hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition duration-200 flex items-center justify-center"
+                                className="w-full bg-amber-500 text-white py-3 px-4 rounded-md font-semibold hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition duration-200 flex items-center justify-center"
                             >
                                 Login to ReviewHub
                                 <FaArrowRightLong className="ml-3" />
@@ -151,7 +151,7 @@ function Login() {
 
                         <div className="mt-12">
                             Don&apos;t have an account yet?{' '}
-                            <Link href="/register" className="font-medium text-gray-900 hover:underline">
+                            <Link href="/register" className="font-medium text-gray-900 hover:underline hover:text-amber-500">
                                 Create a New account
                             </Link>
                         </div>

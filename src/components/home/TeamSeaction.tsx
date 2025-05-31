@@ -1,100 +1,67 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import { Facebook, Github, Linkedin, Globe } from 'lucide-react'; // Globe used for portfolio
-import { get_all_team_members_action } from "@/services/team";
-import {JSX} from "react";
+import {Facebook, Github, Globe, Linkedin} from 'lucide-react'; // Globe used for portfolio
+import {get_all_team_members_action} from "@/services/team";
 
 // Define types based on your Zod schema
 interface TeamMember {
-  id: string;
-  name: string;
-  title: string;
-  profileImage?: string;
-  description: string;
-  gitHub: string;
-  linkedIn: string;
-  facebook: string;
-  portfolio: string;
+    id: string;
+    name: string;
+    title: string;
+    profileImage?: string;
+    description: string;
+    gitHub: string;
+    linkedIn: string;
+    facebook: string;
+    portfolio: string;
 }
-
-// Social icon component
-const SocialIcon = ({ platform, url }: { platform: string; url: string }) => {
-  const iconSize = 18;
-
-  const icons: Record<string, JSX.Element> = {
-    github: <Github size={iconSize} />,
-    linkedin: <Linkedin size={iconSize} />,
-    facebook: <Facebook size={iconSize} />,
-    portfolio: <Globe size={iconSize} />,
-  };
-
-  return (
-      <Link
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-gray-600 hover:text-primary transition-colors"
-          aria-label={`${platform} profile`}
-      >
-        {icons[platform]}
-      </Link>
-  );
-};
-
-// Team member card component
-const TeamMemberCard = ({ member }: { member: TeamMember }) => {
-  return (
-      <div className="flex flex-col bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:shadow-lg hover:-translate-y-1">
-        <div className="relative h-64 w-full">
-          <Image
-              src={member.profileImage || '/placeholder.svg'}
-              alt={member.name}
-              fill
-              className="object-cover"
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          />
-        </div>
-        <div className="p-6 flex flex-col flex-grow">
-          <h3 className="text-xl font-bold">{member.name}</h3>
-          <p className="text-primary font-medium mb-2">{member.title}</p>
-          <div className="mt-2 mb-4 flex-grow">
-            <blockquote className="italic text-gray-600 border-l-4 border-primary pl-4 py-1">
-              "{member.description}"
-            </blockquote>
-          </div>
-
-          <div className="flex space-x-4 mt-auto">
-            {member.gitHub && <SocialIcon platform="github" url={member.gitHub} />}
-            {member.linkedIn && <SocialIcon platform="linkedin" url={member.linkedIn} />}
-            {member.facebook && <SocialIcon platform="facebook" url={member.facebook} />}
-            {member.portfolio && <SocialIcon platform="portfolio" url={member.portfolio} />}
-          </div>
-        </div>
-      </div>
-  );
-};
 
 // Main team section component
 export default async function TeamSection() {
-  const { data } = await get_all_team_members_action();
+    const {data} = await get_all_team_members_action();
 
-  return (
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Meet Our Team</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Our diverse team of talented professionals is dedicated to
-              delivering exceptional results and driving innovation.
-            </p>
-          </div>
+    return (
+        <section className="py-16 bg-gray-50 my-10">
+            <div className="container mx-auto px-4">
+                <div className="text-center mb-12">
+                    <h2 className="text-3xl md:text-4xl font-bold mb-4">Meet Our Team</h2>
+                    <p className="text-gray-600 max-w-2xl mx-auto">
+                        Our diverse team of talented professionals is dedicated to
+                        delivering exceptional results and driving innovation.
+                    </p>
+                </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {data?.map((member: TeamMember) => (
-                <TeamMemberCard key={member.id} member={member} />
-            ))}
-          </div>
-        </div>
-      </section>
-  );
+                <div className="grid grid-cols-1 gap-8 mt-8 xl:mt-16 md:grid-cols-2 xl:grid-cols-4">
+                    {data?.map((member: TeamMember) => (
+                        <div
+                            key={member.id}
+                            className="flex flex-col items-center p-8 transition-colors duration-300 transform border cursor-pointer rounded-xl">
+                            <img className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300"
+                                 src={member?.profileImage}
+                                 alt=""/>
+
+                            <h1 className="mt-4 text-2xl font-semibold text-gray-700 capitalize">{member?.name}</h1>
+
+                            <p className="mt-2 text-gray-500 capitalize ">{member?.title}</p>
+
+                            <div className="flex items-center gap-6 mt-5">
+                                <a href={member?.gitHub} target="_blank" rel="noopener noreferrer">
+                                    <Github className="size-5" />
+                                </a>
+                                <a href={member?.linkedIn} target="_blank" rel="noopener noreferrer">
+                                    <Linkedin className="size-5" />
+                                </a>
+                                <a href={member?.facebook} target="_blank" rel="noopener noreferrer">
+                                    <Facebook className="size-5" />
+                                </a>
+                                <a href={member?.portfolio} target="_blank" rel="noopener noreferrer">
+                                    <Globe className="size-5" />
+                                </a>
+                            </div>
+                        </div>
+
+
+                    ))}
+                </div>
+            </div>
+        </section>
+    );
 }

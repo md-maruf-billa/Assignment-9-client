@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 
 export default function BusinessPromo() {
   return (
-    <section className="bg-[#ffe6eb] py-6 px-4 sm:px-8 mt-10 rounded-2xl">
+    <section className="bg-white py-6 px-2 sm:px-8 mt-10 rounded-2xl">
       <div className=" mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
         <div>
           <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-1">
@@ -14,7 +14,7 @@ export default function BusinessPromo() {
             Strengthen your reputation with real reviews on Review Hub.
           </p>
         </div>
-        <Button className="bg-amber-500 hover:bg-amber-600 text-white px-6 py-2 rounded-full">
+        <Button className="bg-amber-500 hover:bg-amber-600 ">
           Get started
         </Button>
       </div>
