@@ -5,7 +5,7 @@ import { ArrowRight } from 'lucide-react';
 
 export default function WriteReviewBanner() {
   return (
-    <div className="w-full py-6 relative flex items-center justify-center">
+    <div className="w-full py-2 relative flex items-center justify-center">
       {/* Horizontal line */}
       <div className="absolute top-1/2 left-0 w-full h-px bg-gray-200" />
 
@@ -14,7 +14,7 @@ export default function WriteReviewBanner() {
         <span>Bought something recently?</span>
         <Link
           href="/write-review"
-          className="text-blue-600 hover:underline flex items-center gap-1"
+          className="text-amber-500 hover:underline flex items-center gap-1"
         >
           Write a review
           <ArrowRight size={14} />

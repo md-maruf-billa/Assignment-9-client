@@ -157,7 +157,7 @@ const Page = () => {
     return (
         <div className="bg-[#FAF8F5] min-h-screen overflow-hidden">
             {/* Hero Section */}
-            <div className="relative px-4 py-20 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-28">
+            <div className="relative container py-20 mx-auto lg:py-28">
                 <motion.div
                     className="absolute inset-0 -z-10 opacity-10"
                     initial={{ opacity: 0 }}
@@ -298,7 +298,7 @@ const Page = () => {
 
             {/* Features Comparison */}
             <motion.div
-                className="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20 bg-white"
+                className="px-4 py-16 mx-auto container lg:py-20 bg-white"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}

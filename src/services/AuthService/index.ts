@@ -64,12 +64,9 @@ export const login_user_action = async (userData: {
 
 export const get_current_user_action = async () => {
   const accessToken = (await cookies()).get("accessToken")?.value;
-  if (!accessToken) {
-    throw new Error("Access token not found");
-  }
   const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/me`, {
     headers: {
-      "Authorization": accessToken,
+      "Authorization": accessToken!,
       "Content-Type": "application/json"
     },
     cache: "no-store",

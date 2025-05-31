@@ -72,9 +72,9 @@ export default function RecentReview({
   const totalPages = Math.ceil(reviews?.length / reviewsPerPage);
 
   return (
-    <div className="w-full mb-10" ref={sectionRef}>
+    <div className="w-full mb-10 my-20" ref={sectionRef}>
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-        <h2 className="text-xl font-semibold text-amber-500">Recent Reviews</h2>
+        <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold text-amber-500">Recent Reviews</h2>
         <div className="flex gap-2">
           <Button
             variant="outline"

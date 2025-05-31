@@ -163,7 +163,7 @@ const BlogsPage = () => {
     return (
         <div className="bg-[#FAF8F5] min-h-screen overflow-hidden">
             {/* Hero Section */}
-            <div className="relative px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
+            <div className="relative px-4 py-16 mx-auto container lg:py-20">
                 <motion.div
                     className="absolute inset-0 -z-10 opacity-10"
                     initial={{ opacity: 0 }}
@@ -222,7 +222,7 @@ const BlogsPage = () => {
             </div>
 
             {/* Search and Filter Section */}
-            <div className="px-4 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 mb-12">
+            <div className="mx-auto container mb-12">
                 <motion.div
                     className="flex flex-col md:flex-row justify-between items-center gap-6 bg-white p-6 rounded-lg shadow-sm"
                     initial={{ opacity: 0, y: 20 }}
@@ -263,10 +263,10 @@ const BlogsPage = () => {
             </div>
 
             {/* Blog Grid */}
-            <div className="px-4 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 pb-20">
+            <div className="mx-auto container pb-20">
                 {filteredBlogs.length > 0 ? (
                     <motion.div
-                        className="grid gap-8 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1"
+                        className="grid gap-8 lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1"
                         variants={staggerContainer}
                         initial="hidden"
                         animate="visible"
@@ -435,7 +435,7 @@ const BlogsPage = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.8 }}
             >
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
+                <div className="container mx-auto">
                     <motion.div
                         className="bg-white p-8 md:p-12 rounded-xl shadow-sm relative overflow-hidden"
                         initial={{ opacity: 0, y: 20 }}

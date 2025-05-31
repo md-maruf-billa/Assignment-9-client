@@ -79,7 +79,7 @@ const Companies: React.FC<CompaniesProps> = ({companiesData}) => {
 
     return (
         <div className="bg-[#FAF8F5] py-12 overflow-hidden">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="container mx-auto">
                 {/* Header Section with Animation */}
                 <motion.div
                     className="max-w-3xl mx-auto text-center mb-12"

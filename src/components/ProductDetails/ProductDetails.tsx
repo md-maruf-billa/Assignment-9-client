@@ -431,7 +431,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
 
     return (
         <div className="bg-[#FAF8F5] min-h-screen py-12">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+            <div className="container mx-auto sm:px-6">
                 <motion.div
                     initial="hidden"
                     animate="visible"
@@ -447,7 +447,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
                                     src={product.imageUrl || 'https://via.placeholder.com/600x600?text=No+Image'}
                                     alt={product.name}
                                     fill
-                                    className="object-cover"
+                                    className="object-contain"
                                 />
                             </div>
                             {approvedReviews.length > 0 && (
@@ -811,7 +811,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productData, isLoading,
 
                 {/* Related Products Section - Placeholder */}
                 <div className="mt-16">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-8">You Might Also Like</h2>
+                    <h2 className="text-2xl font-bold text-amber-500 mb-8">You Might Also Like</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         {relatedProducts?.map((item) => (
                             <div key={item.id} className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-300">

@@ -42,7 +42,7 @@ export default function SearchHero() {
             onChange={(e) => setQuery(e.target.value)}
             className="flex-grow border-none focus:ring-0 focus-visible:ring-0"
           />
-          <Button size="icon" onClick={handleSearch}>
+          <Button className="text-amber-500"  variant={"outline"} size="icon" onClick={handleSearch}>
             <Search className="h-4 w-4" />
           </Button>
         </div>
