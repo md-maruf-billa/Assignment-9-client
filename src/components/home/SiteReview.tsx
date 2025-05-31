@@ -87,7 +87,7 @@ export default function SiteReview({products}: { products: Product[] }) {
                     animate={isInView ? "visible" : "hidden"}
                     className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8"
                 >
-                    {products.slice(0, 3).map((product) => (
+                    {products.slice(0, 8).map((product) => (
                         <motion.div
                             key={product.id}
                             variants={cardVariants}

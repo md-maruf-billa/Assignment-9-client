@@ -17,12 +17,25 @@ export const create_new_product_action = async (payload:any)=>{
     return await result.json();
 }
 
-export const get_all_products_action = async ()=>{
-    const result = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/product/`,{
-        cache:"no-store",
-    })
+export const get_all_products_action = async (payload: { searchTerm?: string; selectedCategory?: string }) => {
+    const params = new URLSearchParams();
+
+    if (payload.searchTerm) {
+        params.append("searchTerm", payload.searchTerm);
+    }
+
+    if (payload.selectedCategory && payload.selectedCategory !== "all") {
+        params.append("category", payload.selectedCategory);
+    }
+
+    const url = `${process.env.NEXT_PUBLIC_SERVER_URL}/product/?${params.toString()}`;
+
+    const result = await fetch(url, {
+        cache: "no-store",
+    });
+
     return await result.json();
-}
+};
 
 
 export const update_product_action = async (id:string,payload:any)=>{

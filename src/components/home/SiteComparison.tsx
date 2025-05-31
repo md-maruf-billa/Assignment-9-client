@@ -69,7 +69,6 @@ export default function SiteComparison({
 
     const defaultCompanyImage =
         "https://images.unsplash.com/photo-1560179707-f14e90ef3623?q=80&w=2073&auto=format&fit=crop";
-
     return (
         <div className="w-full  mx-auto py-12">
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">

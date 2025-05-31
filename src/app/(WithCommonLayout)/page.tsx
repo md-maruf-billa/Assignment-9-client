@@ -19,7 +19,7 @@ import {getALlReview} from "@/services/review";
 const HomePage = async () => {
     const [categoriesRes, productRes, companyRes, reviewRes] = await Promise.all([
         allCategory(),
-        get_all_products_action(),
+        get_all_products_action({}),
         get_all_company(),
         getALlReview()
     ]);
