@@ -57,7 +57,7 @@ const ManageProductsPage = () => {
     const [categories, setCategories] = useState<ICategory[]>([]);
     useEffect(() => {
         const fetchProduct = async ()=>{
-            const res = await get_all_products_action()
+            const res = await get_all_products_action({})
             setProducts(res.data)
         }
 
@@ -266,20 +266,21 @@ const ManageProductsPage = () => {
             );
         }
 
-        // Apply sorting
-        if (sortConfig) {
+        if (sortConfig && sortConfig.key) {
             filteredProducts.sort((a, b) => {
+                const aValue = a[sortConfig.key as keyof Product] as string | number;
+                const bValue = b[sortConfig.key as keyof Product] as string | number;
 
-                if (a[sortConfig.key as keyof Product] < b[sortConfig.key as keyof Product]) {
+                if (aValue < bValue) {
                     return sortConfig.direction === 'ascending' ? -1 : 1;
                 }
-
-                if (a[sortConfig.key as keyof Product] > b[sortConfig.key as keyof Product]) {
+                if (aValue > bValue) {
                     return sortConfig.direction === 'ascending' ? 1 : -1;
                 }
                 return 0;
             });
         }
+
 
         return filteredProducts;
     }, [products, selectedCategory, searchTerm, sortConfig]);
